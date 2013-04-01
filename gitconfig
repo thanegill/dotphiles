@@ -1,0 +1,5 @@
+[user]
+	name = Thane Gill
+	email = me@thanegill.com
+[core]
+	excludesfile = ~/.gitignore_global
