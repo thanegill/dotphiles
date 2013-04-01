@@ -7,6 +7,7 @@ ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="nettuts"
 
+# export EDITOR="$HOME/.scripts/editor.sh" #TODO
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -52,5 +53,5 @@ alias byword='open -a "/Applications/Byword.app"'
 alias l='ls -Alh'
 
 # Open config files
-alias zshconfig='subl ~/.zshrc'
-alias ohmyzsh='subl ~/.oh-my-zsh'
+alias zshconfig='subl -w ~/.zshrc'
+alias ohmyzsh='subl -w ~/.oh-my-zsh'
