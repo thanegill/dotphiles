@@ -3,3 +3,27 @@
 	email = me@thanegill.com
 [core]
 	excludesfile = ~/.gitignore_global
+[color]
+    #Use colors in Git commands that are capable of colored output when outputting to the terminal
+    ui = auto
+    branch = auto
+    diff = auto
+    status = auto
+# [color "branch"]
+#     current = yellow reverse
+#     local = yellow
+#     remote = green
+# [color "diff"]
+#     meta = yellow bold
+#     frag = magenta bold
+#     old = red bold
+#     new = green bold
+# [color "status"]
+#     added = green
+#     changed = yellow
+#     untracked = cyan
+[merge]
+    # Include summaries of merged commits in newly created merge commit messages
+    log = true
+[alias]
+    st = status -s
