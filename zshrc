@@ -54,12 +54,41 @@ export PATH="~/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share
 #   Custom Aliases   #
 # ------------------ #
 
-alias rake='noglob rake'
-alias byword='open -a "/Applications/Byword.app"'
+# http://brettterpstra.com/2013/03/31/a-few-more-of-my-favorite-shell-aliases/
+# http://brettterpstra.com/2013/03/14/more-command-line-handiness/
 
-# List direcory contents
+# Open Apps
+alias byword='open -a "/Applications/Byword.app"'
+alias ql="qlmanage -p &>/dev/null"
+alias finder="open ."
+
+# List direcory contents - ls
 alias l='ls -Alh'
+alias lt='ls -At1 && echo "------Oldest--"'
+alias ltr='ls -Art1 && echo "------Newest--"'
+
+# cd to the path of the front Finder window
+cdf() {
+    target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+    if [ "$target" != "" ]; then
+        cd "$target"; pwd
+    else
+        echo 'No Finder window found' >&2
+    fi
+}
+
+# Make executable
+alias ax="chmod a+x"
+
+# Get your current public IP
+alias ip="curl icanhazip.com"
+
+# list TODO/FIX lines from the current project
+alias todos="ack -n --nogroup '(TODO|FIX(ME)?):'"
 
 # Open config files
 alias zshconfig='subl -w ~/.zshrc'
 alias ohmyzsh='subl -w ~/.oh-my-zsh'
+
+# ZSH Fixes
+alias rake='noglob rake'
