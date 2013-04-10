@@ -8,6 +8,12 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="psophis"
 THEME_RUBY=false
 
+MY_ZSH_THEME=$ZSH_THEME; ZSH_THEME=''
+
+# ZSH_CUSTOM=~/.oh-my-zsh/custom/themes
+# source $ZSH/oh-my-zsh.sh
+
+
 # export EDITOR="$HOME/.scripts/editor.sh" #TODO
 
 # Set to this to use case-sensitive completion
@@ -32,6 +38,7 @@ plugins=(git pip brew django ruby sublime ruby osx rvm rake)
 
 source $ZSH/oh-my-zsh.sh
 
+source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 # Customize to your needs...
 export PATH="~/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:/usr/local/git/bin"
 
