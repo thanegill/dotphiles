@@ -17,7 +17,7 @@ hash git >/dev/null && /usr/bin/env git clone --recursive https://github.com/pso
 #Install theme
 echo "\033[0;34mInstalling theme...\033[0m"
 mkdir -p ~/.dotfiles/oh-my-zsh/custom/themes/
-cd $_ 
+cd ~/.dotfiles/oh-my-zsh/custom/themes/
 curl -O https://gist.github.com/psophis/5297937/raw/psophis.zsh-theme
 
 

@@ -50,6 +50,12 @@ export PATH="~/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM
 
 
+# --------------------- #
+#   Directory Aliases   #
+# --------------------- #
+
+
+
 # ------------------ #
 #   Custom Aliases   #
 # ------------------ #
@@ -71,7 +77,7 @@ alias ltr='ls -Art1 && echo "------Newest--"'
 cdf() {
     target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
     if [ "$target" != "" ]; then
-        cd "$target"; pwd
+        cd "$target"; unset target
     else
         echo 'No Finder window found' >&2
     fi
