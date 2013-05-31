@@ -90,7 +90,7 @@ alias ax="chmod a+x"
 alias ip="curl icanhazip.com"
 
 # list TODO/FIX lines from the current project
-alias todos="ack -n --nogroup '(TODO|FIX(ME)?):'"
+alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
 
 # Open config files
 alias zshconfig='subl -w ~/.zshrc'
