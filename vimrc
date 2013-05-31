@@ -36,6 +36,7 @@ au BufRead,BufNewFile *.mdown,*.mkdn,*.md,*.mkd,*.mdwn,*.mdtxt,*.mdtext set ft=m
 "    -> Colors and Fonts
 "    -> Files and backups
 "    -> Text, tab and indent related
+"    -> neocomplcache.vim
 "    -> Visual mode related
 "    -> Moving around, tabs and buffers
 "    -> Status line
