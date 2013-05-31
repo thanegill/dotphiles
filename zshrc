@@ -11,8 +11,6 @@ THEME_RUBY=false
 MY_ZSH_THEME=$ZSH_THEME; ZSH_THEME=''
 
 # ZSH_CUSTOM=~/.oh-my-zsh/custom/themes
-# source $ZSH/oh-my-zsh.sh
-
 
 # export EDITOR="$HOME/.scripts/editor.sh" #TODO
 
