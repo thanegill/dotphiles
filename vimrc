@@ -1,11 +1,3 @@
-" Pathogen
-call pathogen#incubate()
-call pathogen#helptags() " generate helptags for everything in 'runtimepath'
-
-au BufRead,BufNewFile *.ada set ft=ada
-au BufRead,BufNewFile *.mdown,*.mkdn,*.md,*.mkd,*.mdwn,*.mdtxt,*.mdtext set ft=mkd
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maintainer: 
 "       Amir Salihefendic
@@ -31,12 +23,12 @@ au BufRead,BufNewFile *.mdown,*.mkdn,*.md,*.mkd,*.mdwn,*.mdtxt,*.mdtext set ft=m
 "       http://amix.dk/vim/vimrc.txt
 "
 " Sections:
+"    -> Pathogen
 "    -> General
 "    -> VIM user interface
 "    -> Colors and Fonts
 "    -> Files and backups
 "    -> Text, tab and indent related
-"    -> neocomplcache.vim
 "    -> Visual mode related
 "    -> Moving around, tabs and buffers
 "    -> Status line
@@ -47,6 +39,12 @@ au BufRead,BufNewFile *.mdown,*.mkdn,*.md,*.mkd,*.mdwn,*.mdtxt,*.mdtext set ft=m
 "    -> Helper functions
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pathogen
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call pathogen#incubate()
+call pathogen#helptags() " generate helptags for everything in 'runtimepath'
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -182,9 +180,9 @@ set si "Smart indent
 set wrap "Wrap lines
 
 
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Visual mode related
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :call VisualSelection('f')<CR>
@@ -246,9 +244,9 @@ autocmd BufReadPost *
 set viminfo^=%
 
 
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Status line
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Always show the status line
 set laststatus=2
 
