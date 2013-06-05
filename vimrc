@@ -24,6 +24,7 @@
 "
 " Sections:
 "    -> Pathogen
+"    -> Bundle Settings
 "    -> General
 "    -> VIM user interface
 "    -> Colors and Fonts
@@ -46,6 +47,14 @@
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#incubate()
 call pathogen#helptags() " generate helptags for everything in 'runtimepath'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Bundle Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"vim-markdown
+let g:vim_markdown_folding_disabled=1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
