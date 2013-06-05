@@ -19,3 +19,6 @@
 [submodule "vim/bundle/vim-pathogen"]
 	path = vim/bundle/vim-pathogen
 	url = git://github.com/tpope/vim-pathogen.git
+[submodule "bin/cellar/speedtest-cli"]
+	path = bin/cellar/speedtest-cli
+	url = git://github.com/sivel/speedtest-cli.git
