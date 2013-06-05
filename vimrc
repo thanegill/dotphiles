@@ -41,8 +41,9 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Pathogen
+" => Pathogen
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#incubate()
 call pathogen#helptags() " generate helptags for everything in 'runtimepath'
 

@@ -39,7 +39,7 @@ source $ZSH/oh-my-zsh.sh
 
 source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 # Customize to your needs...
-export PATH="~/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:/usr/local/git/bin:/usr/local/gnat/bin"
+export PATH="$HOME/.dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:/usr/local/git/bin:/usr/local/gnat/bin"
 
 
 # -------------- #
