@@ -27,3 +27,4 @@
     log = true
 [alias]
     st = status -s
+    subup = submodule update --recursive --init
