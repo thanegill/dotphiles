@@ -1,6 +1,6 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sections:
-"    -> Pathogen
+"    -> Vundle
 "    -> Bundle Settings
 "    -> General
 "    -> VIM user interface
@@ -18,13 +18,33 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Pathogen
+" => Vundle
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Required
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-call pathogen#incubate()
-call pathogen#helptags() " generate helptags for everything in 'runtimepath'
+" Let Vundle manage Vundle
+Bundle 'gmarik/vundle'
 
+
+"" Original repos on github
+Bundle 'jiangmiao/auto-pairs'
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'msanders/snipmate.vim'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'tpope/vim-fugitive'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'tpope/vim-markdown'
+
+"" Vim-scripts repos
+" Bundle 'FuzzyFinder'
+'
+"" Non-github repos
+" Bundle 'git://git.wincent.com/command-t.git'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Bundle Settings
@@ -40,15 +60,9 @@ let NERDRemoveExtraSpaces=1
 let NERDSpaceDelims=1
 
 
-"" vim-gutter ""
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Used for lots of fancy vim stuff
-set nocompatible
 
 " Optimize for fast terminal connections
 set ttyfast
