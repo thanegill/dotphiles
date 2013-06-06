@@ -34,6 +34,12 @@ call pathogen#helptags() " generate helptags for everything in 'runtimepath'
 let g:vim_markdown_folding_disabled=1
 
 
+"" NERDcommenter ""
+let NERDCommentWholeLinesInVMode=1
+let NERDRemoveExtraSpaces=1
+let NERDSpaceDelims=1
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

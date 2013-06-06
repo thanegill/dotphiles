@@ -22,3 +22,6 @@
 [submodule "bin/cellar/speedtest-cli"]
 	path = bin/cellar/speedtest-cli
 	url = git://github.com/sivel/speedtest-cli.git
+[submodule "vim/bundle/nerdcommenter"]
+	path = vim/bundle/nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter.git
