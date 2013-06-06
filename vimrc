@@ -40,6 +40,9 @@ let NERDRemoveExtraSpaces=1
 let NERDSpaceDelims=1
 
 
+"" vim-gutter ""
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -169,6 +172,7 @@ syntax enable
 let g:solarized_termcolors=256
 colorscheme solarized
 set background=dark
+highlight clear SignColumn
 
 " Set extra options when running in GUI mode
 if has("gui_running")
