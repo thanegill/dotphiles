@@ -12,6 +12,8 @@ MY_ZSH_THEME=$ZSH_THEME; ZSH_THEME=''
 
 # ZSH_CUSTOM=~/.oh-my-zsh/custom/themes
 
+
+
 # export EDITOR="$HOME/.scripts/editor.sh" #TODO
 export EDITOR=vim
 
