@@ -1,4 +1,6 @@
 config
 vim/.netrwhist
 vim/backups/
-vim/bundle/
+vim/bundle/*
+!vim/bundle/vundle/*
+
