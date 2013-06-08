@@ -172,8 +172,6 @@ def linkfiles():
         if goodfiletolink(file):
             filestolink.append(file)
 
-    print filestolink
-
     for file in filestolink:
         if os.path.islink(_homedir + "." + file):
             os.remove(_homedir + "." + file)
@@ -185,6 +183,7 @@ def linkfiles():
         os.symlink(_dotfilesdir + file, _homedir + "." + file)
         print e_success.format("Symlinked \"" + _dotfilesdir + file + "\" to \"" + _homedir + "." + file + "\"")
 
+
 if __name__ == '__main__':
     installgit()
     initialize()
@@ -193,6 +192,8 @@ if __name__ == '__main__':
     linkfiles()
     chsh()
     os.system("source " + _homedir + ".zshrc")
+
+    os.system("vim +BundleInstall +qall")
 
     # Update existing sudo time stamp if set, otherwise do nothing.
     # while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
