@@ -71,7 +71,7 @@ def installgit():
             # It's easiest to get Git via Homebrew, so get that first.
             if not cmdExists("brew"):
                 print e_arrow.format("Installing Homebrew")
-                os.system("ruby -e \"$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)\"")      
+                os.system("ruby -e \"$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)\"")
             # If Homebrew was installed, install Git.
             if cmdExists("brew"):
                 print e_arrow.format("Updating Brew")
@@ -80,7 +80,7 @@ def installgit():
                 os.system("brew installed git")
         # Ubuntu
         elif "ubuntu" in platform.platform().lower() or "debian" in platform.platform().lower():
-            print e_arrow("Installing Git")
+            print e_arrow.format("Installing Git")
             os.system("sudo apt-get -qq install git-core")
 
         # CentOS or Fedora
@@ -180,7 +180,7 @@ def linkfiles():
               (os.path.isdir(os.path.join(_homedir, "." + file)))):
                 # Backup file, not symlink or directory
                 os.rename(os.path.join(_homedir, "." + file), os.path.join(_homedir, "." + file, ".backup"))
-                print e_arrow.format("File \"%s\" has been backed up to \"%s\"." % 
+                print e_arrow.format("File \"%s\" has been backed up to \"%s\"." %
                   (os.path.join(_homedir, "." + file), os.path.join(_homedir, "." + file, ".backup")))
 
             os.symlink(os.path.join(_dotfilesdir, file), os.path.join(_homedir, "." + file))
