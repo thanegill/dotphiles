@@ -48,14 +48,19 @@ def query_yes_no(question, default="yes"):
 
     while True:
         sys.stdout.write(question + prompt)
-        choice = raw_input().lower()
-        if default is not None and choice == '':
-            return valid[default]
-        elif choice in valid:
-            return valid[choice]
+        try:
+            choice = raw_input().lower()
+        except EOFError:
+            if default is not None:
+                return valid[default]
         else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "\
-                             "(or 'y' or 'n').\n")
+            if default is not None and choice == '':
+                return valid[default]
+            elif choice in valid:
+                return valid[choice]
+            else:
+                sys.stdout.write("Please respond with 'yes' or 'no' "\
+                                 "(or 'y' or 'n').\n")
 
 
 def installgit():
@@ -81,12 +86,12 @@ def installgit():
         # Ubuntu
         elif "ubuntu" in platform.platform().lower() or "debian" in platform.platform().lower():
             print e_arrow.format("Installing Git")
-            os.system("sudo apt-get -qq install git-core")
+            os.system("sudo apt-get -qy install git-core")
 
         # CentOS or Fedora
         elif "centos" in platform.platform().lower() or "fedora" in platform.platform().lower():
             print e_arrow("Installing Git")
-            os.system("sudo yum install git")
+            os.system("sudo yum -qy install git")
 
     # If Git isn't installed by now, something exploded. We gots to quit!
     if not cmdExists("git"):
