@@ -133,7 +133,6 @@ def installtheme(themedest="oh-my-zsh/custom/themes/"):
 
 
 def chsh():
-    #TODO ask if want to change
     if "zsh" not in os.environ["SHELL"]:
         if cmdExists("zsh"):
             print ("Enter password to change shell to ZSH.")
@@ -194,11 +193,48 @@ def linkfiles():
         else:
             print "Ignoreing \"%s\"" % file
 
+def installzsh():
+  """Install ZSH """
+
+
+def install(toinstall):
+  """Install binary based on OS"""
+
+    # Ensure that we can actually, like, compile anything.
+    if "darwin" in platform.platform().lower() and not cmdExists(toinstall):
+        print e_error.format("The XCode Command Line Tools must be installed first.")
+        exit(1)
+
+    if not cmdExists(toinstall):
+        # OSX
+        if "darwin" in platform.platform().lower():
+            # Install homebrew.
+            if not cmdExists("brew"):
+                print e_arrow.format("Installing Homebrew")
+                os.system("ruby -e \"$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)\"")
+            # If Homebrew was installed, install.
+            if cmdExists("brew"):
+                print e_arrow.format("Updating Brew")
+                os.system("brew update")
+                print e_arrow.format("Installing %s" % toinstall)
+                os.system("brew install %s" % toinstall)
+        # Ubuntu or Debian
+        elif "ubuntu" in platform.platform().lower() or "debian" in platform.platform().lower():
+            print e_arrow.format("Installing %s" % toinstall)
+            os.system("sudo apt-get -qy install %s" % toinstall)
+
+        # CentOS or Fedora
+        elif "centos" in platform.platform().lower() or "fedora" in platform.platform().lower():
+            print e_arrow("Installing %s" % toinstall)
+            os.system("sudo yum -qy install %s" % toinstall)
+
+
 if __name__ == '__main__':
     installgit()
     initialize()
     installtheme()
     linkfiles()
+    installzsh()
     chsh()
 
     if query_yes_no("Install Vim plugins now?"):
