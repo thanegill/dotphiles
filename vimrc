@@ -34,15 +34,19 @@ Bundle 'gmarik/vundle'
 Bundle 'jiangmiao/auto-pairs'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdcommenter'
-Bundle 'msanders/snipmate.vim'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-markdown'
 
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle "garbas/vim-snipmate"
+Bundle "honza/vim-snippets"
+
 "" Vim-scripts repos
 " Bundle 'FuzzyFinder'
-'
+
 "" Non-github repos
 " Bundle 'git://git.wincent.com/command-t.git'
 
@@ -227,9 +231,9 @@ set undofile
 
 " Use spaces instead of tabs
 set expandtab
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 
 set smarttab
 
