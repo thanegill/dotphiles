@@ -172,17 +172,14 @@ def goodfiletolink(file):
 
 def linkfiles():
 
-    # filestolink = []
     for file in os.listdir(_dotfilesdir):
         if goodfiletolink(file):
-            # filestolink.append(file)
-    # for file in filestolink:
             if os.path.islink(os.path.join(_homedir, "." + file)):
                 os.remove(os.path.join(_homedir, "." + file))
             elif (os.path.isfile(os.path.join(_homedir, "." + file))
               and not os.path.islink(os.path.join(_homedir, "." + file)) or
               (os.path.isdir(os.path.join(_homedir, "." + file)))):
-                # Backup file, not symlink or directory
+                # Backup file if not symlink or directory
                 os.rename(os.path.join(_homedir, "." + file), os.path.join(_homedir, "." + file, ".backup"))
                 print e_arrow.format("File \"%s\" has been backed up to \"%s\"." %
                   (os.path.join(_homedir, "." + file), os.path.join(_homedir, "." + file, ".backup")))
@@ -192,10 +189,6 @@ def linkfiles():
               (os.path.join(_dotfilesdir, file), os.path.join(_homedir, "." + file)))
         else:
             print "Ignoreing \"%s\"" % file
-
-def installzsh():
-  """Install ZSH """
-
 
 def install(toinstall):
     """Install binary based on OS"""
@@ -228,15 +221,15 @@ def install(toinstall):
             print e_arrow.format("Installing %s" % toinstall)
             os.system("sudo yum -qy install %s" % toinstall)
     else:
-        print e_arrow.format("%s already installed" % toinstall)
+        print e_arrow.format("%s was already installed" % toinstall)
 
 if __name__ == '__main__':
     install("git")
-    # initialize()
-    # installtheme()
-    # linkfiles()
+    initialize()
+    installtheme()
+    linkfiles()
     install("zsh")
-    # chsh()
+    chsh()
 
     if query_yes_no("Install Vim plugins now?"):
         os.system("vim +BundleInstall +qall")
