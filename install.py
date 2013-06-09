@@ -48,19 +48,21 @@ def query_yes_no(question, default="yes"):
 
     while True:
         sys.stdout.write(question + prompt)
-        try:
-            choice = raw_input().lower()
-        except EOFError:
-            if default is not None:
-                return valid[default]
+        sys.stdin = open('/dev/tty')
+
+        # try:
+        choice = raw_input().lower()
+        # except EOFError:
+            # if default is not None:
+                # return valid[default]
+        # else:
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
         else:
-            if default is not None and choice == '':
-                return valid[default]
-            elif choice in valid:
-                return valid[choice]
-            else:
-                sys.stdout.write("Please respond with 'yes' or 'no' "\
-                                 "(or 'y' or 'n').\n")
+            sys.stdout.write("Please respond with 'yes' or 'no' "\
+                             "(or 'y' or 'n').\n")
 
 
 def installgit():
@@ -136,6 +138,7 @@ def chsh():
     if "zsh" not in os.environ["SHELL"]:
         if cmdExists("zsh"):
             print ("Enter password to change shell to ZSH.")
+            sys.stdin = open('/dev/tty')
             if os.system("chsh -s `which zsh`") is not 0:
                 print e_error.format("Shell not changed to ZSH. Try manually")
             else:
@@ -219,7 +222,7 @@ def install(toinstall):
         # CentOS or Fedora
         elif "centos" in platform.platform().lower() or "fedora" in platform.platform().lower():
             print e_arrow.format("Installing %s" % toinstall)
-            os.system("sudo yum -qy install %s" % toinstall)
+            os.system("sudo yum -q -y install %s" % toinstall)
     else:
         print e_arrow.format("%s was already installed" % toinstall)
 
@@ -231,10 +234,10 @@ if __name__ == '__main__':
     install("zsh")
     chsh()
 
-    if query_yes_no("Install Vim plugins now?"):
+    if query_yes_no("Install Vim plugins now?", "yes"):
         os.system("vim +BundleInstall +qall")
 
-    os.system("/usr/bin/env zsh")
-    os.system("source " + _homedir + ".zshrc")
+    os.system("`which env` zsh")
+    os.system("source " + os.path.join(_homedir, ".zshrc"))
 
     print e_success.format("All done! Your dotfiles are now installed!")
