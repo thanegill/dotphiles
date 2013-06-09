@@ -90,7 +90,7 @@ def installgit():
 
         # CentOS or Fedora
         elif "centos" in platform.platform().lower() or "fedora" in platform.platform().lower():
-            print e_arrow("Installing Git")
+            print e_arrow.format("Installing Git")
             os.system("sudo yum -qy install git")
 
     # If Git isn't installed by now, something exploded. We gots to quit!
@@ -198,10 +198,10 @@ def installzsh():
 
 
 def install(toinstall):
-  """Install binary based on OS"""
+    """Install binary based on OS"""
 
     # Ensure that we can actually, like, compile anything.
-    if "darwin" in platform.platform().lower() and not cmdExists(toinstall):
+    if "darwin" in platform.platform().lower() and not cmdExists("gcc"):
         print e_error.format("The XCode Command Line Tools must be installed first.")
         exit(1)
 
@@ -225,17 +225,18 @@ def install(toinstall):
 
         # CentOS or Fedora
         elif "centos" in platform.platform().lower() or "fedora" in platform.platform().lower():
-            print e_arrow("Installing %s" % toinstall)
+            print e_arrow.format("Installing %s" % toinstall)
             os.system("sudo yum -qy install %s" % toinstall)
-
+    else:
+        print e_arrow.format("%s already installed" % toinstall)
 
 if __name__ == '__main__':
-    installgit()
-    initialize()
-    installtheme()
-    linkfiles()
-    installzsh()
-    chsh()
+    install("git")
+    # initialize()
+    # installtheme()
+    # linkfiles()
+    install("zsh")
+    # chsh()
 
     if query_yes_no("Install Vim plugins now?"):
         os.system("vim +BundleInstall +qall")
