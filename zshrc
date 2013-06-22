@@ -16,8 +16,6 @@ MY_ZSH_THEME=$ZSH_THEME; ZSH_THEME=''
 
 # ZSH_CUSTOM=~/.oh-my-zsh/custom/themes
 
-
-
 # export EDITOR="$HOME/.scripts/editor.sh" #TODO
 export EDITOR=vim
 
@@ -39,12 +37,19 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git pip brew django ruby sublime ruby osx rvm rake)
+plugins=(git brew pip django ruby sublime osx rvm rake vagrant)
 
+# Source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
+# Source custom theme
 source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
-# Customize to your needs...
+
+
+# -------------- #
+#      PATH      #
+# -------------- #
+
 export PATH="$HOME/.dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:/usr/local/git/bin:/usr/local/gnat/bin"
 
 
@@ -52,51 +57,35 @@ export PATH="$HOME/.dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbi
 #   Ruby Stuff   #
 # -------------- #
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM
+# Load RVM if it exists
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 
-# ---------------------------- #
-#   python virtualenvwrapper   #
-# ---------------------------- #
+# ---------------------- #
+#    virtualenvwrapper   #
+# ---------------------- #
 
-WORKON_HOME=~/.virtualenv/
+export WORKON_HOME=~/.virtualenvs
 
 # http://hmarr.com/2010/jan/19/making-virtualenv-play-nice-with-git/
 
-# Automatically activate Git projects' virtual environments based on the
-# directory name of the project. Virtual environment name can be overridden
-# by placing a .venv file in the project root with a virtualenv name in it
+source /usr/local/share/python/virtualenvwrapper_lazy.sh
 
-function workon_cwd {
-    # Check that this is a Git repo
-    GIT_DIR=`git rev-parse --git-dir 2> /dev/null`
-    if [ $? == 0 ]; then
-        # Find the repo root and check for virtualenv name override
-        GIT_DIR=`\cd $GIT_DIR; pwd`
-        PROJECT_ROOT=`dirname "$GIT_DIR"`
-        ENV_NAME=`basename "$PROJECT_ROOT"`
-        if [ -f "$PROJECT_ROOT/.venv" ]; then
-            ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
-        fi
-        # Activate the environment only if it is not already active
-        if [ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]; then
-            if [ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]; then
-                workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
-            fi
-        fi
-    elif [ $CD_VIRTUAL_ENV ]; then
-        # We've just left the repo, deactivate the environment
-        # Note: this only happens if the virtualenv was activated automatically
-        deactivate && unset CD_VIRTUAL_ENV
-    fi
-}
+# source ~/.autoenv/activate.sh
 
-# New cd function that does the virtualenv magic
-function venv_cd {
-    cd "$@" && workon_cwd
-}
+## Tying to pip’s virtualenv support
+# Via http://becomingguru.com/:
+# Add this to your shell login script to make pip use the same directory for virtualenvs as virtualenvwrapper:
 
-alias cd="venv_cd"
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+
+# and Via Nat:
+# in addition to what becomingguru said, this line is key:
+
+export PIP_RESPECT_VIRTUALENV=true
+
+# That makes pip detect an active virtualenv and install to it, without having to pass it the -E parameter.
+
 
 # ------------------ #
 #   Custom Aliases   #
@@ -112,8 +101,8 @@ alias finder="open ."
 
 # List direcory contents - ls
 alias l='ls -Alh'
-alias lt='ls -At1 && echo "------Oldest--"'
-alias ltr='ls -Art1 && echo "------Newest--"'
+alias lt='echo "--Newest--" && ls -Alht && echo "--Oldest--"'
+alias ltr='echo "--Oldest--" && ls -Alhrt && echo "--Newest--"'
 
 # cd to the path of the front Finder window
 cdf() {
@@ -136,7 +125,6 @@ alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
 
 # Open config files
 alias zshconfig='subl -w ~/.zshrc'
-alias ohmyzsh='subl -w ~/.oh-my-zsh'
 
 # ZSH Fixes
 alias rake='noglob rake'
