@@ -50,7 +50,7 @@ source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 #      PATH      #
 # -------------- #
 
-export PATH="$HOME/.dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:/usr/local/git/bin:/usr/local/gnat/bin"
+export PATH="$HOME/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 
 # -------------- #
@@ -69,9 +69,17 @@ export WORKON_HOME=~/.virtualenvs
 
 # http://hmarr.com/2010/jan/19/making-virtualenv-play-nice-with-git/
 
-source /usr/local/share/python/virtualenvwrapper_lazy.sh
-
-# source ~/.autoenv/activate.sh
+# Load virtualenvwrapper is it and virtualenv exists otherwise try and install
+if [[ -s "/usr/local/bin/virtualenvwrapper_lazy.sh" ]] && ( whence virtualenv &> /dev/null ); then
+    source /usr/local/bin/virtualenvwrapper_lazy.sh
+else
+    if ( whence pip &> /dev/null ); then
+        echo "Installing virtualenv and virtuallenvwarpper"
+        pip install -q virtualenv virtualenvwrapper
+    else
+        echo "pip not installed"
+    fi
+fi
 
 ## Tying to pip’s virtualenv support
 # Via http://becomingguru.com/:

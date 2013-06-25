@@ -13,7 +13,7 @@ _dotfilesdir = os.path.join(_homedir, ".dotfiles")
 _dotfilesignore = os.path.join(_dotfilesdir, ".dotfilesignore")
 
 _theme = "psophis.zsh-theme"
-_themepath = os.path.join("init", _theme)
+_themepath = os.path.join(_dotfilesdir, "lib", _theme)
 
 
 e_arrow   = "\033[1;33m{0}\033[0m"

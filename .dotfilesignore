@@ -4,3 +4,4 @@ init/
 install*
 bin/
 oh-my-zsh/
+lib/
