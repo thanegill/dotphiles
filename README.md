@@ -4,5 +4,5 @@ My personal dot files.
 
 ## Installation
 
-    curl -fsSL https://raw.github.com/psophis/dotfiles/master/install.py | python
+    curl -fsSL http://psophis.com/dotfiles | python
 
