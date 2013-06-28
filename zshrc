@@ -74,8 +74,7 @@ if [[ -s "/usr/local/bin/virtualenvwrapper_lazy.sh" ]] && ( whence virtualenv &>
     source /usr/local/bin/virtualenvwrapper_lazy.sh
 else
     if ( whence pip &> /dev/null ); then
-        echo "Installing virtualenv and virtuallenvwarpper"
-        pip install -q virtualenv virtualenvwrapper
+        echo "virtualenv and or virtuallenvwarpper not installed"
     else
         echo "pip not installed"
     fi
