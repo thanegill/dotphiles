@@ -2,7 +2,7 @@
     name = Thane Gill
     email = me@thanegill.com
 [core]
-    excludesfile = ~/.gitignore_global
+    excludesfile = ~/.dotfiles/gitignore_global
 [color]
     # Use colors in Git commands that are capable of colored output when outputting to the terminal */
     ui = auto
