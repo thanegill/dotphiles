@@ -235,7 +235,7 @@ if __name__ == '__main__':
     chsh()
 
     if query_yes_no("Install Vim plugins now?", "yes"):
-        os.system("vim +BundleInstall +qall")
+        os.system("vim -c \"execute \"BundleInstall\" | q | q\"")
 
     os.system("`which env` zsh")
     os.system("source " + os.path.join(_homedir, ".zshrc"))
