@@ -14,6 +14,8 @@
     log = true
 [alias]
     st = status -s
+    cm = commit
+    co = checkout
 
     # Update all submoduals
     subup = submodule update --recursive --init
