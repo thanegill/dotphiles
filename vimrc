@@ -39,6 +39,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-markdown'
 Bundle 'davidhalter/jedi-vim'
+Bundle 'mhinz/vim-startify'
 
 Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
@@ -55,15 +56,26 @@ Bundle "honza/vim-snippets"
 " => Bundle Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"" vim-markdown ""
+"" vim-markdown
 let g:vim_markdown_folding_disabled=1
 
 
-"" NERDcommenter ""
+"" NERDcommenter
 let NERDCommentWholeLinesInVMode=1
 let NERDRemoveExtraSpaces=1
 let NERDSpaceDelims=1
 
+"" Startify
+let g:startify_skiplist = [
+    \ 'COMMIT_EDITMSG',
+    \ ]
+let g:startify_show_files = 1
+let g:startify_show_files_number = 10
+let g:startify_show_sessions = 1
+let g:startify_bookmarks = [
+    \ '~/.vimrc',
+    \ '~/.zshrc'
+    \ ]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General

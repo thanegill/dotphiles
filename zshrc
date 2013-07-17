@@ -37,7 +37,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew pip django ruby sublime osx rvm rake vagrant)
+plugins=(git brew python pip django ruby sublime osx rvm rake vagrant)
 
 # Source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -52,6 +52,7 @@ source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 
 export PATH="$HOME/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
+export PYTHONPATH=\"$(brew --prefix)/lib/python2.7/site-packages:\$PYTHONPATH\"
 
 # -------------- #
 #   Ruby Stuff   #
@@ -70,7 +71,7 @@ export WORKON_HOME=~/.virtualenvs
 # http://hmarr.com/2010/jan/19/making-virtualenv-play-nice-with-git/
 
 # Load virtualenvwrapper is it and virtualenv exists otherwise try and install
-if [[ -s "/usr/local/bin/virtualenvwrapper_lazy.sh" ]] && ( whence virtualenv &> /dev/null ); then
+if ( whence virtualenv &> /dev/null ) && ( whence virtualenv &> /dev/null ); then
     source /usr/local/bin/virtualenvwrapper_lazy.sh
 else
     if ( whence pip &> /dev/null ); then
@@ -100,6 +101,10 @@ export PIP_RESPECT_VIRTUALENV=true
 
 # http://brettterpstra.com/2013/03/31/a-few-more-of-my-favorite-shell-aliases/
 # http://brettterpstra.com/2013/03/14/more-command-line-handiness/
+
+
+# Shortcuts
+alias vi='vim'
 
 # Open Apps
 alias byword='open -a "/Applications/Byword.app"'
@@ -131,7 +136,7 @@ alias ip="curl icanhazip.com"
 alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
 
 # Open config files
-alias zshconfig='subl -w ~/.zshrc'
+alias zshconfig='subl -n -w ~/.zshrc'
 
 # ZSH Fixes
 alias rake='noglob rake'
