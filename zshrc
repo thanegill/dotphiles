@@ -126,6 +126,9 @@ cdf() {
     fi
 }
 
+# Recursively delete `.DS_Store` files
+alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
+
 # Make executable
 alias ax="chmod a+x"
 
