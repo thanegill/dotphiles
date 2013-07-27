@@ -52,7 +52,11 @@ source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 
 export PATH="$HOME/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-export PYTHONPATH=\"$(brew --prefix)/lib/python2.7/site-packages:\$PYTHONPATH\"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
+else
+    export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
+fi
 
 # -------------- #
 #   Ruby Stuff   #
