@@ -72,7 +72,7 @@ export WORKON_HOME=~/.virtualenvs
 
 # Load virtualenvwrapper is it and virtualenv exists otherwise try and install
 if ( whence virtualenv &> /dev/null ) && ( whence virtualenv &> /dev/null ); then
-    source /usr/local/bin/virtualenvwrapper_lazy.sh
+    source `whence virtualenvwrapper_lazy.sh`
 else
     if ( whence pip &> /dev/null ); then
         echo "virtualenv and or virtuallenvwarpper not installed"
