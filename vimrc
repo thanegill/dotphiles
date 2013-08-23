@@ -14,6 +14,7 @@
 "    -> Vimgrep searching and cope displaying
 "    -> Spell checking
 "    -> Misc
+"    -> GUI VIM
 "    -> Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -450,6 +451,24 @@ map <leader>q :e ~/buffer<cr>
 map <leader>pp :setlocal paste!<cr>
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => GUI VIM (MacVIM, GVIM, etc..)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if has("gui_running")
+  " GUI is running or is about to start.
+  " Set window size.
+  set lines=70 columns=110
+else
+    " disabled for now
+    " This is console Vim.
+    "if exists("+lines")
+        "set lines=50
+    "endif
+    "if exists("+columns")
+        "set columns=100
+    "endif
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
