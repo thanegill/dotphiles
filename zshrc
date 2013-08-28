@@ -37,7 +37,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew python pip django ruby sublime osx rvm rake vagrant)
+plugins=(git brew python pip django ruby osx rvm rake vagrant)
 
 # Source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -109,6 +109,9 @@ export PIP_RESPECT_VIRTUALENV=true
 
 # Shortcuts
 alias vi='vim'
+
+alias st=subl
+alias stt='st .'
 
 # Open Apps
 alias byword='open -a "/Applications/Byword.app"'
