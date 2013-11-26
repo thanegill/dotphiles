@@ -18,9 +18,11 @@
 "    -> Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Vundle
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " Required
 set nocompatible
 filetype off
@@ -30,20 +32,25 @@ call vundle#rc()
 " Let Vundle manage Vundle
 Bundle 'gmarik/vundle'
 
-
 "" Original repos on github
 Bundle 'jiangmiao/auto-pairs'
-Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-markdown'
 Bundle 'mhinz/vim-startify'
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
-Bundle "garbas/vim-snipmate"
-Bundle "honza/vim-snippets"
+Bundle 'bling/vim-airline'
+Bundle 'jmcantrell/vim-virtualenv'
+Bundle 'tpope/vim-surround'
+Bundle 'bronson/vim-trailing-whitespace'
+
+"" Disabled plugins for refernecei
+" Bundle 'MarcWeber/vim-addon-mw-utils'
+" Bundle 'tomtom/tlib_vim'
+" Bundle 'kien/ctrlp.vim'
+" Bundle 'garbas/vim-snipmate'
+" Bundle 'honza/vim-snippets'
 
 "" Vim-scripts repos
 " Bundle 'FuzzyFinder'
@@ -76,12 +83,35 @@ let g:startify_bookmarks = [
     \ '~/.zshrc'
     \ ]
 
+
+
+"" VIM-Airline
+let g:airline_thme = 'solarized'
+
+" if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" let g:airline_powerline_font=0
+
+"Remove seperator symbols
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+
+" Enable/disable virtualenv integration
+let g:airline#extensions#virtualenv#enabled = 1
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Optimize for fast terminal connections
 set ttyfast
+
+" Set key mapping timeout to remove mode switch in a terminal
+set timeout timeoutlen=3000 ttimeoutlen=50
 
 " Sets how many lines of history VIM has to remember
 set history=700
@@ -107,9 +137,15 @@ nmap <leader>w :w!<cr>
 set hidden
 
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" Mousei "
+if has("mouse")
+        set mouse=a
+    endif
 
 " Line number
 set number
@@ -117,9 +153,7 @@ set number
 " Set lines to the cursor - when moving vertically using j/k
 set so=5
 
-
 "" Completion ""
-
 set wildmode=list:longest
 
 " Enable ctrl-n and ctrl-p to scroll thru matches
@@ -171,7 +205,7 @@ set lazyredraw
 " For regular expressions turn magic on
 set magic
 
-" Show matching brackets when text indicator is over them 
+" Show matching brackets when text indicator is over them
 set showmatch
 
 " How many tenths of a second to blink when matching brackets
@@ -182,8 +216,6 @@ set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
-
-
 
 " Show current mode down the bottom
 set showmode
@@ -199,7 +231,7 @@ syntax enable
 
 "" Solarized
 
-let g:solarized_termcolors=256
+" let g:solarized_termcolors=256
 colorscheme solarized
 set background=dark
 highlight clear SignColumn
@@ -246,9 +278,7 @@ set expandtab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-
 set smarttab
-
 set autoindent
 set smartindent
 
@@ -304,11 +334,15 @@ map <c-space> ?
 " Disable highlight when <leader><cr> is pressed
 map <silent> <leader><cr> :noh<cr>
 
+" Move lines up/down
+nmap <C-j> :m+<cr>
+nmap <C-k> :m-2<cr>
+
 " Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+" map <C-k> <C-W>k
+" map <C-j> <C-W>j
+" map <C-h> <C-W>h
+" map <C-l> <C-W>l
 
 " Close the current buffer
 map <leader>bd :Bclose<cr>
@@ -338,11 +372,12 @@ try
 catch
 endtry
 
-" Return to last edit position when opening files (You want this!)
+" Return to last edit position when opening files
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
+
 " Remember info about open buffers on close
 set viminfo^=%
 
@@ -355,7 +390,7 @@ set viminfo^=%
 set laststatus=2
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD\ %{getcwd()}\ \ Line\ %l\,\ Column\ %c
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -365,27 +400,17 @@ set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ 
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
-" Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
-nmap <M-j> mz:m+<cr>`z
-nmap <M-k> mz:m-2<cr>`z
-vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
-
-if has("mac") || has("macunix")
-  nmap <D-j> <M-j>
-  nmap <D-k> <M-k>
-  vmap <D-j> <M-j>
-  vmap <D-k> <M-k>
-endif
-
-" Delete trailing white space on save, useful for Python and CoffeeScript ;)
+" Delete trailing
 func! DeleteTrailingWS()
   exe "normal mz"
   %s/\s\+$//ge
   exe "normal `z"
 endfunc
+
 autocmd BufWrite *.py :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
+autocmd BufWrite *.sh :call DeleteTrailingWS()
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -406,19 +431,15 @@ vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 
 " Do :help cope if you are unsure what cope is. It's super useful!
 "
-" When you search with vimgrep, display your results in cope by doing:
-"   <leader>cc
-"
-" To go to the next search result do:
-"   <leader>n
-"
-" To go to the previous search results do:
-"   <leader>p
-"
+" When you search with vimgrep, display your results in cope by doing <leader>cc
 map <leader>cc :botright cope<cr>
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+"
+" To go to the next search result do <leader>n
 map <leader>n :cn<cr>
+" To go to the previous search results do <leader>p
 map <leader>p :cp<cr>
+
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -440,7 +461,7 @@ map <leader>s? z=
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+" noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " Quickly open a buffer for scripbble
 map <leader>q :e ~/buffer<cr>
