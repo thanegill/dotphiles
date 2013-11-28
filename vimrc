@@ -12,7 +12,7 @@
 "    -> Status line
 "    -> Editing mappings
 "    -> Vimgrep searching and cope displaying
-"    -> Spell checking
+
 "    -> Misc
 "    -> GUI VIM
 "    -> Helper functions
@@ -44,8 +44,11 @@ Bundle 'bling/vim-airline'
 Bundle 'jmcantrell/vim-virtualenv'
 Bundle 'tpope/vim-surround'
 Bundle 'bronson/vim-trailing-whitespace'
+Bundle 'scrooloose/nerdtree'
+Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'terryma/vim-multiple-cursors'
 
-"" Disabled plugins for refernecei
+"" Disabled plugins for refernece
 " Bundle 'MarcWeber/vim-addon-mw-utils'
 " Bundle 'tomtom/tlib_vim'
 " Bundle 'kien/ctrlp.vim'
@@ -80,32 +83,41 @@ let g:startify_show_files_number = 10
 let g:startify_show_sessions = 1
 let g:startify_bookmarks = [
     \ '~/.vimrc',
-    \ '~/.zshrc'
+    \ '~/.zshrc',
+    \ '~/.tmux.conf'
     \ ]
-
 
 
 "" VIM-Airline
 let g:airline_thme = 'solarized'
 
-" if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-" let g:airline_powerline_font=0
-
 "Remove seperator symbols
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 
-
 " Enable/disable virtualenv integration
 let g:airline#extensions#virtualenv#enabled = 1
+" let g:airline_powerline_fonts = 1
 
+
+"" NERDTree
+
+" Show hidden files
+let NERDTreeShowHidden=1
+
+" Close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
+    \ && b:NERDTreeType == "primary") | q | endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+" Highlight lines that are over 80 charaters long TODO
+" http://stackoverflow.com/a/235970
+"highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
+"match OverLength /\%>80v.\+/
 
 " Optimize for fast terminal connections
 set ttyfast
@@ -137,15 +149,17 @@ nmap <leader>w :w!<cr>
 set hidden
 
 
+" Toggle  NERDTree
+map <leader>nn :NERDTreeToggle<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"" Mousei "
+"" Mouse ""
 if has("mouse")
-        set mouse=a
-    endif
+    set mouse=a
+endif
 
 " Line number
 set number
@@ -256,12 +270,9 @@ set ffs=unix,dos,mac
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" Turn backup off
-
 set noswapfile
 set nobackup
 set nowb
-
-"" Persistent Undo
 
 " Keep undo history across sessions, by storing in file.
 silent !mkdir ~/.vim/backups > /dev/null 2>&1
@@ -323,26 +334,53 @@ vnoremap <silent> # :call VisualSelection('b')<CR>
 " => Moving around, tabs, windows and buffers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
+" Disable arrow keys
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+" Disable Backspace in normal/visual mode
+nnoremap <BS> <Nop>
+nnoremap <Del> <Nop>
+vnoremap <BS> <Nop>
+vnoremap <Del> <Nop>
+
+" Disable Return in normal/visual mode
+nnoremap <cr> <Nop>
+vnoremap <cr> <Nop>
+
+" Indent/unindent lines
+nnoremap <Tab> >>_
+nnoremap <S-Tab> <<_
+inoremap <S-Tab> <C-d>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+
+" Move lines up/down
+" http://vim.wikia.com/wiki/Moving_lines_up_or_down#Mappings_to_move_lines
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
 " Treat long lines as break lines (useful when moving around in them)
-map j gj
 map k gk
+map j gj
 
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
 map <space> /
 map <c-space> ?
 
 " Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :noh<cr>
-
-" Move lines up/down
-nmap <C-j> :m+<cr>
-nmap <C-k> :m-2<cr>
-
-" Smart way to move between windows
-" map <C-k> <C-W>k
-" map <C-j> <C-W>j
-" map <C-h> <C-W>h
-" map <C-l> <C-W>l
+map <silent> <leader><cr> :nohlsearch<cr>
 
 " Close the current buffer
 map <leader>bd :Bclose<cr>
@@ -432,14 +470,13 @@ vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 " Do :help cope if you are unsure what cope is. It's super useful!
 "
 " When you search with vimgrep, display your results in cope by doing <leader>cc
-map <leader>cc :botright cope<cr>
+map <leader>bc :botright cope<cr>
 "
 " To go to the next search result do <leader>n
 map <leader>n :cn<cr>
+
 " To go to the previous search results do <leader>p
 map <leader>p :cp<cr>
-
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -449,10 +486,16 @@ map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
 
-" Shortcuts using <leader>
+" Spell check forword
 map <leader>sn ]s
+
+"Spell check Backwards
 map <leader>sp [s
+
+" Add to custom dictionary
 map <leader>sa zg
+
+" Suggest replacements
 map <leader>s? z=
 
 
@@ -463,8 +506,15 @@ map <leader>s? z=
 " Remove the Windows ^M - when the encodings gets messed up
 " noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
-" Quickly open a buffer for scripbble
+" Quickly open a buffer for scribble
 map <leader>q :e ~/buffer<cr>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Copy paste
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
