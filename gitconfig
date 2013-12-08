@@ -1,17 +1,24 @@
 [user]
     name = Thane Gill
     email = me@thanegill.com
+
 [core]
     excludesfile = ~/.dotfiles/gitignore_global
+
+    # http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/
+    trustctime = false
+
 [color]
     # Use colors in Git commands that are capable of colored output when outputting to the terminal */
     ui = auto
     branch = auto
     diff = auto
     status = auto
+
 [merge]
     # Include summaries of merged commits in newly created merge commit messages
     log = true
+
 [alias]
     st = status -s
     cm = commit

@@ -36,7 +36,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew python pip django ruby sublime osx rvm rake vagrant)
+plugins=(brew cloudapp colored-man cp django gem git postgres python pip ruby rsync osx rvm rake sublime screen vagrant web-search)
 
 # Source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -49,7 +49,7 @@ source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 #      PATH      #
 # -------------- #
 
-export PATH="$HOME/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$HOME/.dotfiles/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
@@ -57,6 +57,8 @@ else
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
 fi
 
+
+export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
 
 # -------------- #
 #   Ruby Stuff   #
@@ -75,10 +77,10 @@ export WORKON_HOME=~/.virtualenvs
 # http://hmarr.com/2010/jan/19/making-virtualenv-play-nice-with-git/
 
 # Load virtualenvwrapper is it and virtualenv exists otherwise try and install
-if ( whence virtualenv &> /dev/null ) && ( whence virtualenv &> /dev/null ); then
+if [ $(whence virtualenv) ] && [  $(whence virtualenvwrapper.sh) ]; then
     source `whence virtualenvwrapper_lazy.sh`
 else
-    if ( whence pip &> /dev/null ); then
+    if [ $(whence pip) ]; then
         echo "virtualenv and or virtuallenvwarpper not installed"
     else
         echo "pip not installed"
@@ -149,10 +151,15 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
 fi
 
-# List direcory contents
-alias l='ls -Alh'
-alias lt='echo "--Newest--" && ls -Alht && echo "--Oldest--"'
-alias ltr='echo "--Oldest--" && ls -Alhrt && echo "--Newest--"'
+# List direcory contents - ls
+if [[ $(whence -cp ls) = "/bin/ls" ]]; then
+    alias l='ls -Alh'
+    alias lt='echo "--Newest--" && ls -Alht && echo "--Oldest--"'
+    alias ltr='echo "--Oldest--" && ls -Alhrt && echo "--Newest--"'
+else
+    alias ls='ls --color=always --classify'
+    alias l='ls --color=always --almost-all --format=long --human-readable --sort=none'
+fi 
 
 # Make executable
 alias ax="chmod a+x"
@@ -166,5 +173,3 @@ alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
 # Open config files
 alias zshconfig='$EDITOR ~/.zshrc'
 
-# ZSH Fixes
-alias rake='noglob rake'
