@@ -16,7 +16,6 @@ MY_ZSH_THEME=$ZSH_THEME; ZSH_THEME=''
 
 # ZSH_CUSTOM=~/.oh-my-zsh/custom/themes
 
-# export EDITOR="$HOME/.scripts/editor.sh" #TODO
 export EDITOR=vim
 
 # Set to this to use case-sensitive completion
@@ -58,6 +57,7 @@ else
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
 fi
 
+
 # -------------- #
 #   Ruby Stuff   #
 # -------------- #
@@ -66,9 +66,9 @@ fi
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 
-# ---------------------- #
-#    virtualenvwrapper   #
-# ---------------------- #
+# --------------------- #
+#   virtualenvwrapper   #
+# --------------------- #
 
 export WORKON_HOME=~/.virtualenvs
 
@@ -106,32 +106,53 @@ export PIP_RESPECT_VIRTUALENV=true
 # http://brettterpstra.com/2013/03/31/a-few-more-of-my-favorite-shell-aliases/
 # http://brettterpstra.com/2013/03/14/more-command-line-handiness/
 
-
 # Shortcuts
 alias vi='vim'
 
-# Open Apps
-alias byword='open -a "/Applications/Byword.app"'
-alias ql="qlmanage -p &>/dev/null"
-alias finder="open ."
+# OSX Specific alises
+if [[ "$OSTYPE" == "darwin"* ]]; then
 
-# List direcory contents - ls
+    function trash() {
+        local trash_dir="${HOME}/.Trash"
+        local temp_ifs=$IFS
+        IFS=$'\n'
+        for item in "$@"; do
+            if [[ -e "$item" ]]; then
+                item_name="$(basename $item)"
+                if [[ -e "${trash_dir}/${item_name}" ]]; then
+                    mv -f "$item" "${trash_dir}/${item_name} $(date "+%H-%M-%S")"
+                else
+                    mv -f "$item" "${trash_dir}/"
+                fi
+            fi
+        done
+        IFS=$temp_ifs
+    }
+
+    # Open Apps
+    alias byword='open -a "/Applications/Byword.app"'
+    alias ql="qlmanage -p &>/dev/null"
+    alias finder="open ."
+
+    # Recursively delete `.DS_Store` files
+    alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
+
+    # cd to the path of the front Finder window
+    cdf() {
+        target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+        if [ "$target" != "" ]; then
+            cd "$target"; unset target
+        else
+            echo 'No Finder window found' >&2
+        fi
+    }
+
+fi
+
+# List direcory contents
 alias l='ls -Alh'
 alias lt='echo "--Newest--" && ls -Alht && echo "--Oldest--"'
 alias ltr='echo "--Oldest--" && ls -Alhrt && echo "--Newest--"'
-
-# cd to the path of the front Finder window
-cdf() {
-    target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
-    if [ "$target" != "" ]; then
-        cd "$target"; unset target
-    else
-        echo 'No Finder window found' >&2
-    fi
-}
-
-# Recursively delete `.DS_Store` files
-alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 
 # Make executable
 alias ax="chmod a+x"
@@ -143,7 +164,7 @@ alias ip="curl icanhazip.com"
 alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
 
 # Open config files
-alias zshconfig='subl -n -w ~/.zshrc'
+alias zshconfig='$EDITOR ~/.zshrc'
 
 # ZSH Fixes
 alias rake='noglob rake'

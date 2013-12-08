@@ -191,7 +191,7 @@ def linkfiles():
             print e_success.format("Symlinked \"%s\" to \"%s\"." %
               (os.path.join(_dotfilesdir, file), os.path.join(_homedir, "." + file)))
         else:
-            print "Ignoreing \"%s\"" % file
+            print "Ignoring \"%s\"" % file
 
 def install(toinstall):
     """Install binary based on OS"""
