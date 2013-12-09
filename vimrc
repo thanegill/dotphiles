@@ -11,9 +11,8 @@
 "    -> Moving around, tabs and buffers
 "    -> Status line
 "    -> Editing mappings
-"    -> Vimgrep searching and cope displaying
-
-"    -> Misc
+"    -> Search
+"    -> Copy paste
 "    -> GUI VIM
 "    -> Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -35,18 +34,17 @@ Bundle 'gmarik/vundle'
 "" Original repos on github
 Bundle 'jiangmiao/auto-pairs'
 Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'bling/vim-airline'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-markdown'
+Bundle 'terryma/vim-multiple-cursors'
 Bundle 'mhinz/vim-startify'
-Bundle 'bling/vim-airline'
-Bundle 'jmcantrell/vim-virtualenv'
 Bundle 'tpope/vim-surround'
 Bundle 'bronson/vim-trailing-whitespace'
-Bundle 'scrooloose/nerdtree'
-Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'terryma/vim-multiple-cursors'
+Bundle 'jmcantrell/vim-virtualenv'
 
 "" Disabled plugins for refernece
 " Bundle 'MarcWeber/vim-addon-mw-utils'
@@ -97,7 +95,6 @@ let g:airline_right_sep = ''
 
 " Enable/disable virtualenv integration
 let g:airline#extensions#virtualenv#enabled = 1
-" let g:airline_powerline_fonts = 1
 
 
 "" NERDTree
@@ -115,9 +112,11 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
 
 
 " Highlight lines that are over 80 charaters long TODO
-" http://stackoverflow.com/a/235970
-"highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
-"match OverLength /\%>80v.\+/
+" http://stackoverflow.com/a/10993757
+augroup vimrc_autocmds
+  autocmd BufEnter * highlight OverLength ctermbg=darkred ctermfg=white guibg=#592929
+  autocmd BufEnter * match OverLength /\%81v.*/
+augroup END
 
 " Optimize for fast terminal connections
 set ttyfast
@@ -135,19 +134,16 @@ filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
 
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
+" Leader
 let mapleader = ","
 let g:mapleader = ","
 
 " Fast saving
 nmap <leader>w :w!<cr>
 
-" This makes vim act like all other editors, buffers can
-" exist in the background without being in a window.
+" Buffers can exist in the background without being in a window.
 " http://items.sjbach.com/319/configuring-vim-right
 set hidden
-
 
 " Toggle  NERDTree
 map <leader>nn :NERDTreeToggle<cr>
@@ -242,10 +238,7 @@ set showmode
 " Enable syntax highlighting
 syntax enable
 
-
-"" Solarized
-
-" let g:solarized_termcolors=256
+set t_Co=256
 colorscheme solarized
 set background=dark
 highlight clear SignColumn
@@ -254,7 +247,6 @@ highlight clear SignColumn
 if has("gui_running")
     set guioptions-=T
     set guioptions+=e
-    set t_Co=256
     set guitablabel=%M\ %t
 endif
 
@@ -320,6 +312,7 @@ set foldnestmax=3
 " Don't fold by default
 set nofoldenable
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Visual mode related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -333,7 +326,6 @@ vnoremap <silent> # :call VisualSelection('b')<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Moving around, tabs, windows and buffers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 
 " Disable arrow keys
 inoremap <Up> <Nop>
@@ -375,20 +367,13 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 map k gk
 map j gj
 
-" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-map <space> /
-map <c-space> ?
-
-" Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :nohlsearch<cr>
-
 " Close the current buffer
-map <leader>bd :Bclose<cr>
+map <leader>bx :Bclose<cr>
 
 " Close all the buffers
-map <leader>ba :1,1000 bd!<cr>
+map <leader>bxa :1,1000 bd!<cr>
 
-" Useful mappings for managing tabs
+" Tab management
 map <leader>tc :tabnew<cr>
 map <leader>tn :tabnext<cr>
 map <leader>tp :tabprevious<cr>
@@ -407,14 +392,13 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 try
   set switchbuf=useopen,usetab,newtab
   set stal=2
-catch
 endtry
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
 
 " Remember info about open buffers on close
 set viminfo^=%
@@ -427,7 +411,7 @@ set viminfo^=%
 " Always show the status line
 set laststatus=2
 
-" Format the status line
+" Format the status line TODO: replicate Vim-AirLine
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD\ %{getcwd()}\ \ Line\ %l\,\ Column\ %c
 
 
@@ -445,38 +429,49 @@ func! DeleteTrailingWS()
   exe "normal `z"
 endfunc
 
+" Delete trailing whitespace
+map <leader>dw :call DeleteTrailingWS()<cr>
+
+
 autocmd BufWrite *.py :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
 autocmd BufWrite *.sh :call DeleteTrailingWS()
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Search
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => vimgrep searching and cope displaying
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
+map <space> /
+map <c-space> ?
+
+" Disable search highlight
+map <silent> <leader><space> :nohlsearch<cr>
+
+" To go to the next search result do <leader>n
+map <leader>n :cn<cr>
+
+" To go to the previous search results do <leader>p
+map <leader>p :cp<cr>
 
 " When you press gv you vimgrep after the selected text
-vnoremap <silent> gv :call VisualSelection('gv')<CR>
+" vnoremap <silent> gv :call VisualSelection('gv')<CR>
 
 " Open vimgrep and put the cursor in the right position
-map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+" map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
 
 " Vimgreps in the current file
-map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
+" map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right>
+"   \<right><right><right><right><right>
 
 " When you press <leader>r you can search and replace the selected text
 vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 
 " Do :help cope if you are unsure what cope is. It's super useful!
 "
-" When you search with vimgrep, display your results in cope by doing <leader>cc
-map <leader>bc :botright cope<cr>
-"
-" To go to the next search result do <leader>n
-map <leader>n :cn<cr>
-
-" To go to the previous search results do <leader>p
-map <leader>p :cp<cr>
+" When you search with vimgrep, display your results in cope
+" map <leader>bc :botright cope<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -500,24 +495,16 @@ map <leader>s? z=
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Remove the Windows ^M - when the encodings gets messed up
-" noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
-" Quickly open a buffer for scribble
-map <leader>q :e ~/buffer<cr>
-
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Copy paste
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
+
+" set clipboard^=unnamed
+if $TMUX == ''
+    set clipboard+=unnamed
+endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -538,6 +525,7 @@ else
         "set columns=100
     "endif
 endif
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
@@ -599,3 +587,4 @@ function! <SID>BufcloseCloseIt()
      execute("bdelete! ".l:currentBufNum)
    endif
 endfunction
+

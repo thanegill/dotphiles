@@ -7,13 +7,7 @@ import fnmatch
 import shutil
 import subprocess
 import fileinput
-
-_homedir = os.path.expanduser("~")
-_dotfilesdir = os.path.join(_homedir, ".dotfiles")
-_dotfilesignore = os.path.join(_dotfilesdir, ".dotfilesignore")
-
-_theme = "psophis.zsh-theme"
-_themepath = os.path.join(_dotfilesdir, "lib", _theme)
+import argparse
 
 
 e_arrow   = "\033[1;33m{0}\033[0m"
@@ -26,7 +20,7 @@ def cmdExists(cmd):
     return subprocess.call("type " + cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
 
 
-def query_yes_no(question, default="yes"):
+def queryyesno(question, default="yes"):
     """Ask a yes/no question via raw_input() and return their answer.
 
     "question" is a string that is presented to the user.
@@ -101,36 +95,41 @@ def installgit():
         exit(1)
 
 
-def initialize():
-    if not os.path.isdir(_dotfilesdir):
+def initialize(update=False):
+    if not os.path.isdir(flags.dotfilesdir):
+        print e_arrow.format("Downloading dotfiles...")
+        os.system("git clone --recursive https://github.com/psophis/dotfiles ~/.dotfiles")
+    elif update:
+        shutil.rmtree(flags.dotfilesdir)
+        print e_success.format("Old dotfiles removed")
         print e_arrow.format("Downloading dotfiles...")
         os.system("git clone --recursive https://github.com/psophis/dotfiles ~/.dotfiles")
     else:
         print e_error.format("Dotfile directory aleady exists")
-        if query_yes_no("Do you want to back it up and continue?", "yes"):
-            os.rename(_dotfilesdir, os.path.join(_homedir, ".dotfiles.backup"))
+        if queryyesno("Do you want to back it up and continue?", "yes"):
+            os.rename(flags.dotfilesdir, os.path.join(flags.homedir, ".dotfiles.backup"))
             print "Backup created at \"~/.dotfiles.backup\""
             initialize()
         else:
-            if query_yes_no("Delete old dotfiles instead?", "no"):
-                shutil.rmtree(_dotfilesdir)
+            if queryyesno("Delete old dotfiles instead?", "no"):
+                shutil.rmtree(flags.dotfilesdir)
                 print e_success.format("Old dotfiles removed")
                 initialize()
             else:
                 exit(0)
 
 def installtheme(themedest="oh-my-zsh/custom/themes/"):
-    if os.path.isdir(os.path.join(_dotfilesdir, themedest)):
+    if os.path.isdir(os.path.join(flags.dotfilesdir, themedest)):
         # ~/.dotfiles/oh-my-zsh/custom/themes exists
-        if os.path.isfile(os.path.join(_dotfilesdir, themedest, _theme)):
+        if os.path.isfile(os.path.join(flags.dotfilesdir, themedest, flags.theme)):
             # theme already there, remove it
-            os.remove(os.path.join(_dotfilesdir, themedest, _theme))
+            os.remove(os.path.join(flags.dotfilesdir, themedest, flags.theme))
 
-        os.symlink(os.path.join(_dotfilesdir, _themepath), os.path.join(_dotfilesdir, themedest, _theme))
+        os.symlink(os.path.join(flags.dotfilesdir, flags.themepath), os.path.join(flags.dotfilesdir, themedest, flags.theme))
 
         print e_success.format("Installed ZSH theme")
     else:
-        os.mkdir(os.path.join(_dotfilesdir, themedest))
+        os.mkdir(os.path.join(flags.dotfilesdir, themedest))
         installtheme()
 
 
@@ -152,8 +151,8 @@ def getignored():
 
     filestoignore = []
 
-    if os.path.isfile(_dotfilesignore):
-        for line in fileinput.input(_dotfilesignore):
+    if os.path.isfile(flags.dotfilesignore):
+        for line in fileinput.input(flags.dotfilesignore):
             if line.startswith('#') or not line:
                 continue
             else:
@@ -174,22 +173,21 @@ def goodfiletolink(file):
     return True
 
 def linkfiles():
-
-    for file in os.listdir(_dotfilesdir):
+    for file in os.listdir(flags.dotfilesdir):
         if goodfiletolink(file):
-            if os.path.islink(os.path.join(_homedir, "." + file)):
-                os.remove(os.path.join(_homedir, "." + file))
-            elif (os.path.isfile(os.path.join(_homedir, "." + file))
-              and not os.path.islink(os.path.join(_homedir, "." + file)) or
-              (os.path.isdir(os.path.join(_homedir, "." + file)))):
+            if os.path.islink(os.path.join(flags.homedir, "." + file)):
+                os.remove(os.path.join(flags.homedir, "." + file))
+            elif (os.path.isfile(os.path.join(flags.homedir, "." + file))
+              and not os.path.islink(os.path.join(flags.homedir, "." + file)) or
+              (os.path.isdir(os.path.join(flags.homedir, "." + file)))):
                 # Backup file if not symlink or directory
-                os.rename(os.path.join(_homedir, "." + file), os.path.join(_homedir, "." + file, ".backup"))
+                os.rename(os.path.join(flags.homedir, "." + file), os.path.join(flags.homedir, "." + file, ".backup"))
                 print e_arrow.format("File \"%s\" has been backed up to \"%s\"." %
-                  (os.path.join(_homedir, "." + file), os.path.join(_homedir, "." + file, ".backup")))
+                  (os.path.join(flags.homedir, "." + file), os.path.join(flags.homedir, "." + file, ".backup")))
 
-            os.symlink(os.path.join(_dotfilesdir, file), os.path.join(_homedir, "." + file))
+            os.symlink(os.path.join(flags.dotfilesdir, file), os.path.join(flags.homedir, "." + file))
             print e_success.format("Symlinked \"%s\" to \"%s\"." %
-              (os.path.join(_dotfilesdir, file), os.path.join(_homedir, "." + file)))
+              (os.path.join(flags.dotfilesdir, file), os.path.join(flags.homedir, "." + file)))
         else:
             print "Ignoreing \"%s\"" % file
 
@@ -198,8 +196,9 @@ def install(toinstall):
 
     # Ensure that we can actually, like, compile anything.
     if "darwin" in platform.platform().lower() and not cmdExists("gcc"):
-        print e_error.format("The XCode Command Line Tools must be installed first.")
-        exit(1)
+        if os.system("xcode-select --install") is not 0:
+            print e_error.format("Xcode command line tools failed to insall please insall\n manually with \"xcode-select --install\"")
+            exit(1)
 
     if not cmdExists(toinstall):
         # OSX
@@ -214,6 +213,7 @@ def install(toinstall):
                 os.system("brew update")
                 print e_arrow.format("Installing %s" % toinstall)
                 os.system("brew install %s" % toinstall)
+
         # Ubuntu or Debian
         elif "ubuntu" in platform.platform().lower() or "debian" in platform.platform().lower():
             print e_arrow.format("Installing %s" % toinstall)
@@ -226,7 +226,22 @@ def install(toinstall):
     else:
         print e_arrow.format("%s was already installed" % toinstall)
 
-if __name__ == '__main__':
+
+
+def updatedotfiles():
+
+    install("git")
+    initialize()
+    installtheme()
+    linkfiles()
+    # http://qntm.org/bash
+    # http://stackoverflow.com/questions/5997029/escape-double-quotes-for-json-in-python
+    os.system('vim -c "execute \\"BundleInstall\!\\" | q | q"')
+
+    print e_success.format("All done! Your dotfiles are now updated!")
+
+def installdotfiles():
+
     install("git")
     initialize()
     installtheme()
@@ -234,10 +249,52 @@ if __name__ == '__main__':
     install("zsh")
     chsh()
 
-    if query_yes_no("Install Vim plugins now?", "yes"):
-        os.system("vim -c \"execute \"BundleInstall\" | q | q\"")
+    if queryyesno("Install Vim plugins now?", "yes"):
+        # http://qntm.org/bash
+        # http://stackoverflow.com/questions/5997029/escape-double-quotes-for-json-in-python
+        os.system('vim -c "execute \\"BundleInstall\\" | q | q"')
 
     os.system("`which env` zsh")
-    os.system("source " + os.path.join(_homedir, ".zshrc"))
+    os.system("source " + os.path.join(flags.homedir, ".zshrc"))
 
     print e_success.format("All done! Your dotfiles are now installed!")
+
+
+if __name__ == '__main__':
+
+
+    class Flags(object):
+        installflag = True
+        updateflag = False
+        homedir = os.path.expanduser("~")
+        dotfilesdir = os.path.join(homedir, ".dotfiles")
+        dotfilesignore = os.path.join(dotfilesdir, ".dotfilesignore")
+
+        theme = "psophis.zsh-theme"
+        themepath = os.path.join(dotfilesdir, "lib", theme)
+
+
+    flags = Flags()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--install', '-i', dest='installflag', action='store_true',
+            help='New instalation of dotfiles (Default)')
+    parser.add_argument('--update', '-u', dest='updateflag', action='store_true',
+            help='Upgrate current instalation (will overwite files!)')
+    parser.add_argument('--home', dest='homedir', action='store', metavar='PATH',
+            type=os.path.join, help='Home directory to install dotfiles to. Can be any directory. (Default "~/")')
+    parser.add_argument('--name', dest='dotfilesdir', action='store', metavar='name',
+            type=os.path.join, help='Directory name for dotfiles. (Default ".dotfiles")')
+    parser.add_argument('--ignore', dest='dotfilesignore', action='store', metavar='PATH',
+            type=file, help='File to use as ingore list. Like a .gitignore. (Default ".dotfilesignore")')
+    parser.add_argument('--theme', dest='theme', action='store', metavar='PATH',
+            type=file, help='Theme file path. (Default .dotfilespsophis.zsh-theme')
+
+    args = parser.parse_args(namespace=flags)
+
+    print vars(flags)
+
+    if flags.updateflag:
+        updatedotfiles()
+    else:
+        installdotfiles()

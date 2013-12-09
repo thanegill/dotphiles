@@ -6,7 +6,7 @@
 ZSH=$HOME/.dotfiles/oh-my-zsh
 
 # Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
+# Look in ~/.dotfiles/oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="psophis"
@@ -14,7 +14,7 @@ THEME_RUBY=false
 
 MY_ZSH_THEME=$ZSH_THEME; ZSH_THEME=''
 
-# ZSH_CUSTOM=~/.oh-my-zsh/custom/themes
+# ZSH_CUSTOM=~/.dotfiles/oh-my-zsh/custom/themes
 
 # export EDITOR="$HOME/.scripts/editor.sh" #TODO
 export EDITOR=vim
@@ -31,13 +31,34 @@ export EDITOR=vim
 # Uncomment following line if you want to disable autosetting terminal title.
 # DISABLE_AUTO_TITLE="true"
 
-# Uncomment following line if you want red dots to be displayed while waiting for completion
+# Uncomment following line if you want red dots to
+# be displayed while waiting for completion
 COMPLETION_WAITING_DOTS="true"
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(brew cloudapp colored-man cp django gem git postgres python pip ruby rsync osx rvm rake sublime screen vagrant web-search)
+# Which plugins would you like to load?
+# (plugins can be found in ~/.dotfiles/oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.dotfiles/oh-my-zsh/custom/plugins/
+plugins=(\
+brew \
+cloudapp \
+colored-man \
+cp \
+django \
+gem \
+git \
+postgres \
+python \
+pip \
+ruby \
+rsync \
+osx \
+rvm \
+rake \
+sublime \
+screen \
+vagrant \
+web-search \
+)
 
 # Source oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -90,16 +111,16 @@ fi
 
 ## Tying to pip’s virtualenv support
 # Via http://becomingguru.com/:
-# Add this to your shell login script to make pip use the same directory for virtualenvs as virtualenvwrapper:
-
+# Add this to your shell login script to make pip use the same
+# directory for virtualenvs as virtualenvwrapper:
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
 
 # and Via Nat:
 # in addition to what becomingguru said, this line is key:
-
 export PIP_RESPECT_VIRTUALENV=true
 
-# That makes pip detect an active virtualenv and install to it, without having to pass it the -E parameter.
+# That makes pip detect an active virtualenv and install to it,
+# without having to pass it the -E parameter.
 
 
 # ------------------ #
@@ -108,7 +129,6 @@ export PIP_RESPECT_VIRTUALENV=true
 
 # http://brettterpstra.com/2013/03/31/a-few-more-of-my-favorite-shell-aliases/
 # http://brettterpstra.com/2013/03/14/more-command-line-handiness/
-
 
 # Shortcuts
 alias vi='vim'
@@ -126,7 +146,7 @@ if [[ $(whence -cp ls) = "/bin/ls" ]]; then
 else
     alias ls='ls --color=always --classify'
     alias l='ls --color=always --almost-all --format=long --human-readable --sort=none'
-fi 
+fi
 
 # cd to the path of the front Finder window
 cdf() {
@@ -149,7 +169,4 @@ alias ip="curl icanhazip.com"
 
 # list TODO/FIX lines from the current project
 alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
-
-# Open config files
-alias zshconfig='subl -n -w ~/.zshrc'
 
