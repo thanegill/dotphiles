@@ -70,16 +70,17 @@ source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 #      PATH      #
 # -------------- #
 
-export PATH="$HOME/.dotfiles/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PATH="$HOME/.dotfiles/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
+    export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
 else
+    export PATH="$HOME/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
 fi
 
 
-export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
 
 # -------------- #
 #   Ruby Stuff   #
