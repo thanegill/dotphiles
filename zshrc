@@ -3,7 +3,7 @@
 # -------------------- #
 
 # Path to your oh-my-zsh configuration.
-ZSH=$HOME/.dotfiles/lib
+ZSH=$HOME/.dotphiles/lib
 
 
 export EDITOR=vim
@@ -25,8 +25,8 @@ export EDITOR=vim
 COMPLETION_WAITING_DOTS="true"
 
 # Which plugins would you like to load?
-# (plugins can be found in ~/.dotfiles/oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.dotfiles/oh-my-zsh/custom/plugins/
+# (plugins can be found in ~/.dotphiles/oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.dotphiles/oh-my-zsh/custom/plugins/
 plugins=(\
 brew \
 colored-man \
@@ -41,32 +41,30 @@ vagrant \
 )
 
 # Source oh-my-zsh
-source $HOME/.dotfiles/lib/oh-my-zsh.sh
+source $HOME/.dotphiles/lib/oh-my-zsh.sh
 
 # Theme options
 THEME_RUBY=false
 
 # Load theme
-source "$HOME/.dotfiles/lib/psophis.zsh-theme"
+source "$HOME/.dotphiles/lib/psophis.zsh-theme"
 
 
 # -------------- #
 #      PATH      #
 # -------------- #
 
-
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # OSX
     export GOPATH=/usr/local/Cellar/go/1.2/
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
     export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
-    export PATH="$HOME/.dotfiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export PATH="$HOME/.dotphiles/bin:$GOPATH:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 else
     # Non-OSX
-    export PATH="$HOME/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export PATH="$HOME/.dotphiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
 fi
-
 
 
 # -------------- #
@@ -108,7 +106,6 @@ else
         echo "pip not installed"
     fi
 fi
-
 
 
 # ------------------ #

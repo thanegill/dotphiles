@@ -1,0 +1,7 @@
+# Filed to be linked at init or when `dotphiles link` is run.
+# <~/source file> <destination> destiniation defaults to `~.<filename>`
+~/.dotphiles/zshrc
+~/.dotphiles/vimrc
+~/.dotphiles/vim/
+~/.dotphiles/tmux.conf
+~/.dotphiles/gitconfig

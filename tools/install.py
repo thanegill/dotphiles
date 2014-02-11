@@ -96,40 +96,40 @@ def installgit():
 
 
 def initialize(update=False):
-    if not os.path.isdir(flags.dotfilesdir):
-        print e_arrow.format("Downloading dotfiles...")
-        os.system("git clone --recursive https://github.com/psophis/dotfiles ~/.dotfiles")
+    if not os.path.isdir(flags.dotphilesdir):
+        print e_arrow.format("Downloading dotphiles...")
+        os.system("git clone --recursive https://github.com/psophis/dotphiles ~/.dotphiles")
     elif update:
-        shutil.rmtree(flags.dotfilesdir)
-        print e_success.format("Old dotfiles removed")
-        print e_arrow.format("Downloading dotfiles...")
-        os.system("git clone --recursive https://github.com/psophis/dotfiles ~/.dotfiles")
+        shutil.rmtree(flags.dotphilesdir)
+        print e_success.format("Old dotphiles removed")
+        print e_arrow.format("Downloading dotphiles...")
+        os.system("git clone --recursive https://github.com/psophis/dotphiles ~/.dotphiles")
     else:
         print e_error.format("Dotfile directory aleady exists")
         if queryyesno("Do you want to back it up and continue?", "yes"):
-            os.rename(flags.dotfilesdir, os.path.join(flags.homedir, ".dotfiles.backup"))
-            print "Backup created at \"~/.dotfiles.backup\""
+            os.rename(flags.dotphilesdir, os.path.join(flags.homedir, ".dotphiles.backup"))
+            print "Backup created at \"~/.dotphiles.backup\""
             initialize()
         else:
-            if queryyesno("Delete old dotfiles instead?", "no"):
-                shutil.rmtree(flags.dotfilesdir)
-                print e_success.format("Old dotfiles removed")
+            if queryyesno("Delete old dotphiles instead?", "no"):
+                shutil.rmtree(flags.dotphilesdir)
+                print e_success.format("Old dotphiles removed")
                 initialize()
             else:
                 exit(0)
 
 def installtheme(themedest="oh-my-zsh/custom/themes/"):
-    if os.path.isdir(os.path.join(flags.dotfilesdir, themedest)):
-        # ~/.dotfiles/oh-my-zsh/custom/themes exists
-        if os.path.isfile(os.path.join(flags.dotfilesdir, themedest, flags.theme)):
+    if os.path.isdir(os.path.join(flags.dotphilesdir, themedest)):
+        # ~/.dotphiles/oh-my-zsh/custom/themes exists
+        if os.path.isfile(os.path.join(flags.dotphilesdir, themedest, flags.theme)):
             # theme already there, remove it
-            os.remove(os.path.join(flags.dotfilesdir, themedest, flags.theme))
+            os.remove(os.path.join(flags.dotphilesdir, themedest, flags.theme))
 
-        os.symlink(os.path.join(flags.dotfilesdir, flags.themepath), os.path.join(flags.dotfilesdir, themedest, flags.theme))
+        os.symlink(os.path.join(flags.dotphilesdir, flags.themepath), os.path.join(flags.dotphilesdir, themedest, flags.theme))
 
         print e_success.format("Installed ZSH theme")
     else:
-        os.mkdir(os.path.join(flags.dotfilesdir, themedest))
+        os.mkdir(os.path.join(flags.dotphilesdir, themedest))
         installtheme()
 
 
@@ -151,8 +151,8 @@ def getignored():
 
     filestoignore = []
 
-    if os.path.isfile(flags.dotfilesignore):
-        for line in fileinput.input(flags.dotfilesignore):
+    if os.path.isfile(flags.dotphilesignore):
+        for line in fileinput.input(flags.dotphilesignore):
             if line.startswith('#') or not line:
                 continue
             else:
@@ -173,7 +173,7 @@ def goodfiletolink(file):
     return True
 
 def linkfiles():
-    for file in os.listdir(flags.dotfilesdir):
+    for file in os.listdir(flags.dotphilesdir):
         if goodfiletolink(file):
             if os.path.islink(os.path.join(flags.homedir, "." + file)):
                 os.remove(os.path.join(flags.homedir, "." + file))
@@ -185,9 +185,9 @@ def linkfiles():
                 print e_arrow.format("File \"%s\" has been backed up to \"%s\"." %
                   (os.path.join(flags.homedir, "." + file), os.path.join(flags.homedir, "." + file, ".backup")))
 
-            os.symlink(os.path.join(flags.dotfilesdir, file), os.path.join(flags.homedir, "." + file))
+            os.symlink(os.path.join(flags.dotphilesdir, file), os.path.join(flags.homedir, "." + file))
             print e_success.format("Symlinked \"%s\" to \"%s\"." %
-              (os.path.join(flags.dotfilesdir, file), os.path.join(flags.homedir, "." + file)))
+              (os.path.join(flags.dotphilesdir, file), os.path.join(flags.homedir, "." + file)))
         else:
             print "Ignoring \"%s\"" % file
 
@@ -228,7 +228,7 @@ def install(toinstall):
 
 
 
-def updatedotfiles():
+def updatedotphiles():
 
     install("git")
     initialize()
@@ -238,9 +238,9 @@ def updatedotfiles():
     # http://stackoverflow.com/questions/5997029/escape-double-quotes-for-json-in-python
     os.system('vim -c "execute \\"BundleInstall\!\\" | q | q"')
 
-    print e_success.format("All done! Your dotfiles are now updated!")
+    print e_success.format("All done! Your dotphiles are now updated!")
 
-def installdotfiles():
+def installdotphiles():
 
     install("git")
     initialize()
@@ -257,7 +257,7 @@ def installdotfiles():
     os.system("`which env` zsh")
     os.system("source " + os.path.join(flags.homedir, ".zshrc"))
 
-    print e_success.format("All done! Your dotfiles are now installed!")
+    print e_success.format("All done! Your dotphiles are now installed!")
 
 
 if __name__ == '__main__':
@@ -267,34 +267,34 @@ if __name__ == '__main__':
         installflag = True
         updateflag = False
         homedir = os.path.expanduser("~")
-        dotfilesdir = os.path.join(homedir, ".dotfiles")
-        dotfilesignore = os.path.join(dotfilesdir, ".dotfilesignore")
+        dotphilesdir = os.path.join(homedir, ".dotphiles")
+        dotphilesignore = os.path.join(dotphilesdir, ".dotphilesignore")
 
         theme = "psophis.zsh-theme"
-        themepath = os.path.join(dotfilesdir, "lib", theme)
+        themepath = os.path.join(dotphilesdir, "lib", theme)
 
 
     flags = Flags()
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--install', '-i', dest='installflag', action='store_true',
-            help='New instalation of dotfiles (Default)')
+            help='New instalation of dotphiles (Default)')
     parser.add_argument('--update', '-u', dest='updateflag', action='store_true',
             help='Upgrate current instalation (will overwite files!)')
     parser.add_argument('--home', dest='homedir', action='store', metavar='PATH',
-            type=os.path.join, help='Home directory to install dotfiles to. Can be any directory. (Default "~/")')
-    parser.add_argument('--name', dest='dotfilesdir', action='store', metavar='name',
-            type=os.path.join, help='Directory name for dotfiles. (Default ".dotfiles")')
-    parser.add_argument('--ignore', dest='dotfilesignore', action='store', metavar='PATH',
-            type=file, help='File to use as ingore list. Like a .gitignore. (Default ".dotfilesignore")')
+            type=os.path.join, help='Home directory to install dotphiles to. Can be any directory. (Default "~/")')
+    parser.add_argument('--name', dest='dotphilesdir', action='store', metavar='name',
+            type=os.path.join, help='Directory name for dotphiles. (Default ".dotphiles")')
+    parser.add_argument('--ignore', dest='dotphilesignore', action='store', metavar='PATH',
+            type=file, help='File to use as ingore list. Like a .gitignore. (Default ".dotphilesignore")')
     parser.add_argument('--theme', dest='theme', action='store', metavar='PATH',
-            type=file, help='Theme file path. (Default .dotfilespsophis.zsh-theme')
+            type=file, help='Theme file path. (Default .dotphilespsophis.zsh-theme')
 
     args = parser.parse_args(namespace=flags)
 
     print vars(flags)
 
     if flags.updateflag:
-        updatedotfiles()
+        updatedotphiles()
     else:
-        installdotfiles()
+        installdotphiles()
