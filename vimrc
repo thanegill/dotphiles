@@ -79,6 +79,7 @@ let g:startify_skiplist = [
 let g:startify_show_files = 1
 let g:startify_show_files_number = 10
 let g:startify_show_sessions = 1
+let g:startify_change_to_vcs_root = 1
 let g:startify_bookmarks = [
     \ '~/.vimrc',
     \ '~/.zshrc',

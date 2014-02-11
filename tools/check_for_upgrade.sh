@@ -1,33 +1,31 @@
 #!/bin/sh
 
 function _current_epoch() {
-  # echo $(($(date +%s) / 60 / 60 / 24))
-  echo $(($(date +%s))) 
+  echo $(($(date +%s) / 60 / 60 / 24))
 }
 
-function _update_dotfiles_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" > ~/.dotfiles/tmp/dotfiles-update
+function _update_zsh_update() {
+  echo "LAST_EPOCH=$(_current_epoch)" > ~/.zsh-update
 }
 
-function _upgrade_dotfiles() {
-  # /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
+function _upgrade_zsh() {
+  /usr/bin/env ZSH=$ZSH /bin/sh $ZSH/tools/upgrade.sh
   # update the zsh file
-  echo "Updated"
-  _update_dotfiles_update
+  _update_zsh_update
 }
 
-epoch_target=$UPDATE_DOTFILES_DAYS
+epoch_target=$UPDATE_ZSH_DAYS
 if [[ -z "$epoch_target" ]]; then
   # Default to old behavior
-  epoch_target=7
+  epoch_target=13
 fi
 
-if [ -f ~/.dotfiles/tmp/dotfiles-update ]
+if [ -f ~/.zsh-update ]
 then
-  . ~/.dotfiles/tmp/dotfiles-update
+  . ~/.zsh-update
 
   if [[ -z "$LAST_EPOCH" ]]; then
-    _update_dotfiles_update && return 0;
+    _update_zsh_update && return 0;
   fi
 
   epoch_diff=$(($(_current_epoch) - $LAST_EPOCH))
@@ -35,20 +33,20 @@ then
   then
     if [ "$DISABLE_UPDATE_PROMPT" = "true" ]
     then
-      _upgrade_dotfiles
+      _upgrade_zsh
     else
-      echo "[Dotfiles] Would you like to check for updates?"
-      echo "Type Y to update dotfiles: \c"
+      echo "[Oh My Zsh] Would you like to check for updates?"
+      echo "Type Y to update oh-my-zsh: \c"
       read line
       if [ "$line" = Y ] || [ "$line" = y ]; then
-        _upgrade_dotfiles
+        _upgrade_zsh
       else
-        _update_dotfiles_update
+        _update_zsh_update
       fi
     fi
   fi
 else
-  # create the ditfile file
-  _update_dotfiles_update
+  # create the zsh file
+  _update_zsh_update
 fi
 

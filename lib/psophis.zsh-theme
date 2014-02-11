@@ -1,7 +1,39 @@
+#! /bin/zsh/
 ZSH_THEME_GIT_PROMPT_PREFIX="[git:"
 ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}✘"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}✔"
+
+# Checks if working tree is dirty (From git plugin)
+function parse_git_dirty() {
+  local SUBMODULE_SYNTAX=''
+  local GIT_STATUS=''
+  local CLEAN_MESSAGE='nothing to commit (working directory clean)'
+  if [[ "$(command git config --get oh-my-zsh.hide-status)" != "1" ]]; then
+    if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+          SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+    fi
+    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+        GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} -uno 2> /dev/null | tail -n1)
+    else
+        GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
+    fi
+    if [[ -n $GIT_STATUS ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    else
+      echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    fi
+  else
+    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  fi
+}
+
+# From git plugin
+function current_branch() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+  ref=$(git rev-parse --short HEAD 2> /dev/null) || return
+  echo ${ref#refs/heads/}
+}
 
 #Customized git status, oh-my-zsh currently does not allow render dirty status before branch
 function git_custom_status() {

@@ -3,18 +3,8 @@
 # -------------------- #
 
 # Path to your oh-my-zsh configuration.
-ZSH=$HOME/.dotfiles/oh-my-zsh
+ZSH=$HOME/.dotfiles/lib
 
-# Set name of the theme to load.
-# Look in ~/.dotfiles/oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="psophis"
-THEME_RUBY=false
-
-MY_ZSH_THEME=$ZSH_THEME; ZSH_THEME=''
-
-# ZSH_CUSTOM=~/.dotfiles/oh-my-zsh/custom/themes
 
 export EDITOR=vim
 
@@ -39,31 +29,25 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.dotfiles/oh-my-zsh/custom/plugins/
 plugins=(\
 brew \
-cloudapp \
 colored-man \
-cp \
 django \
-gem \
-git \
-postgres \
 python \
 pip \
 ruby \
 rsync \
-osx \
-rvm \
 rake \
 sublime \
-screen \
 vagrant \
-web-search \
 )
 
 # Source oh-my-zsh
-source $ZSH/oh-my-zsh.sh
+source $HOME/.dotfiles/lib/oh-my-zsh.sh
 
-# Source custom theme
-source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
+# Theme options
+THEME_RUBY=false
+
+# Load theme
+source "$HOME/.dotfiles/lib/psophis.zsh-theme"
 
 
 # -------------- #
@@ -72,10 +56,13 @@ source "$ZSH_CUSTOM/themes/$MY_ZSH_THEME.zsh-theme"
 
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    export PATH="$HOME/.dotfiles/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    # OSX
+    export GOPATH=/usr/local/Cellar/go/1.2/
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
     export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
+    export PATH="$HOME/.dotfiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 else
+    # Non-OSX
     export PATH="$HOME/.dotfiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
 fi
@@ -94,13 +81,26 @@ fi
 #   virtualenvwrapper   #
 # --------------------- #
 
-export WORKON_HOME=~/.virtualenvs
-
 # http://hmarr.com/2010/jan/19/making-virtualenv-play-nice-with-git/
 
 # Load virtualenvwrapper is it and virtualenv exists otherwise try and install
 if [ $(whence virtualenv) ] && [  $(whence virtualenvwrapper.sh) ]; then
+    export WORKON_HOME=~/.virtualenvs
+
     source `whence virtualenvwrapper_lazy.sh`
+
+    ## Tying to pip’s virtualenv support
+    # Via http://becomingguru.com/:
+    # Add this to your shell login script to make pip use the same
+    # directory for virtualenvs as virtualenvwrapper:
+    export PIP_VIRTUALENV_BASE=$WORKON_HOME
+
+    # and Via Nat:
+    # in addition to what becomingguru said, this line is key:
+    export PIP_RESPECT_VIRTUALENV=true
+
+    # That makes pip detect an active virtualenv and install to it,
+    # without having to pass it the -E parameter.
 else
     if [ $(whence pip) ]; then
         echo "virtualenv and or virtuallenvwarpper not installed"
@@ -109,18 +109,6 @@ else
     fi
 fi
 
-## Tying to pip’s virtualenv support
-# Via http://becomingguru.com/:
-# Add this to your shell login script to make pip use the same
-# directory for virtualenvs as virtualenvwrapper:
-export PIP_VIRTUALENV_BASE=$WORKON_HOME
-
-# and Via Nat:
-# in addition to what becomingguru said, this line is key:
-export PIP_RESPECT_VIRTUALENV=true
-
-# That makes pip detect an active virtualenv and install to it,
-# without having to pass it the -E parameter.
 
 
 # ------------------ #
@@ -155,7 +143,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
     # Open Apps
     alias byword='open -a "/Applications/Byword.app"'
-    alias ql="qlmanage -p &>/dev/null"
+    alias quicklook="qlmanage -p &>/dev/null"
+    alias ql="quicklook"
     alias finder="open ."
 
     # Recursively delete `.DS_Store` files
