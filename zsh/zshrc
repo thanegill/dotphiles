@@ -3,7 +3,7 @@
 # -------------------- #
 
 # Path to your oh-my-zsh configuration.
-ZSH=$HOME/.dotphiles/lib
+ZSH=$HOME/.dotphiles/zsh
 
 
 export EDITOR=vim
@@ -41,13 +41,13 @@ vagrant \
 )
 
 # Source oh-my-zsh
-source $HOME/.dotphiles/lib/oh-my-zsh.sh
+source $HOME/.dotphiles/zsh/oh-my-zsh.sh
 
 # Theme options
 THEME_RUBY=false
 
 # Load theme
-source "$HOME/.dotphiles/lib/psophis.zsh-theme"
+source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
 
 
 # -------------- #
@@ -59,7 +59,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     export GOPATH=/usr/local/Cellar/go/1.2/
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
     export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
-    export PATH="$HOME/.dotphiles/bin:$GOPATH:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export PATH="$HOME/.dotphiles/bin:$GOPATH:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 else
     # Non-OSX
     export PATH="$HOME/.dotphiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
