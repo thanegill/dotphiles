@@ -10,13 +10,14 @@ import fileinput
 import argparse
 
 
-e_arrow   = "\033[1;33m{0}\033[0m"
 e_success = "\033[1;32m{0}\033[0m"
+e_arrow   = "\033[1;34m{0}\033[0m"
+e_warning = "\033[1;33m{0}\033[0m"
 e_error   = "\033[1;31m{0}\033[0m"
 
 
 def cmdExists(cmd):
-    return subprocess.call("type " + cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
+    return subprocess.call(("type %s" % cmd), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) is 0
 
 
 def queryyesno(question, default="yes"):
@@ -58,7 +59,7 @@ def queryyesno(question, default="yes"):
                              "(or 'y' or 'n').\n")
 
 
-def install(toinstall):
+def installbin(toinstall):
     """Install binary based on OS"""
 
     # Ensure that we can actually, like, compile anything.
@@ -94,49 +95,12 @@ def install(toinstall):
         print e_arrow.format("%s was already installed" % toinstall)
 
 
-def initialize(update=False):
-    if not os.path.isdir(flags.dotphilesdir):
-        print e_arrow.format("Downloading dotphiles...")
-        os.system("git clone --recursive https://github.com/psophis/dotphiles ~/.dotphiles")
-    elif update:
-        shutil.rmtree(flags.dotphilesdir)
-        print e_success.format("Old dotphiles removed")
-        print e_arrow.format("Downloading dotphiles...")
-        os.system("git clone --recursive https://github.com/psophis/dotphiles ~/.dotphiles")
-    else:
-        print e_error.format("Dotfile directory aleady exists")
-        if queryyesno("Do you want to back it up and continue?", "yes"):
-            os.rename(flags.dotphilesdir, os.path.join(flags.homedir, ".dotphiles.backup"))
-            print "Backup created at \"~/.dotphiles.backup\""
-            initialize()
-        else:
-            if queryyesno("Delete old dotphiles instead?", "no"):
-                shutil.rmtree(flags.dotphilesdir)
-                print e_success.format("Old dotphiles removed")
-                initialize()
-            else:
-                exit(0)
-
-def chsh():
-    if "zsh" not in os.environ["SHELL"]:
-        if cmdExists("zsh"):
-            print ("Enter password to change shell to ZSH.")
-            sys.stdin = open('/dev/tty')
-            if os.system("chsh -s `which zsh`") is not 0:
-                print e_error.format("Shell not changed to ZSH. Try manually")
-            else:
-                print e_success.format("Changed shell to \"" + os.environ["SHELL"] + "\"" )
-        else:
-            print e_error.format("ZSH not installed, please install.")
-    else:
-        print e_arrow.format("Shell is aleady ZSH.")
-
-
-def getlinkphiles(linkphilesfile):
+def __getlinkphiles(linkphilesfile):
     # Get files to link
+    linkphilesfile = os.path.normpath(os.path.expanduser(linkphilesfile))
 
-    philes = []
-    if os.path.isfile(linkphilesfile):
+    if os.path.exists(linkphilesfile) and not os.path.isdir(linkphilesfile):
+        philes = []
         for line in fileinput.input(linkphilesfile):
             line = line.strip()
             if line.startswith("#") or not line:
@@ -155,104 +119,219 @@ def getlinkphiles(linkphilesfile):
             else:
                 # Default to ~./basename
                 philes.append([os.path.normpath(os.path.expanduser(line.strip())),
-                    os.path.normpath(os.path.expanduser("~/."+ os.path.basename(os.path.normpath(line))))])
+                    os.path.normpath(os.path.expanduser("~/.%s" % os.path.basename(os.path.normpath(line))))])
 
-    return philes
+        return philes
+    else:
+        raise IOError
 
 
 def unlinkphiles(linkphilesfile):
-    philes = getlinkphiles(linkphilesfile)
-
-    print e_arrow.format("Removing old links first")
-
+    philes = __getlinkphiles(linkphilesfile)
     for phile in philes:
         if os.path.islink(phile[1]):
             os.remove(phile[1])
+    print e_warning.format("Removed old links")
+
 
 def linkphiles(linkphilesfile):
-    philes = getlinkphiles(linkphilesfile)
+    philes = __getlinkphiles(linkphilesfile)
 
     for phile in philes:
         if not os.path.exists(phile[0]):
             # Skip nonexsistant sources
             print e_error.format("Link %s -> %s was not created,\nas the source does not exist." %
-                    phile[0], phile[1])
+                (phile[1], phile[0]))
             continue
 
         if os.path.islink(phile[1]):
             # Remove conflitcing link
-            print e_arrow.format("Removing link %s -> %s,\nas it confilts with a link that is being created." %
-                    phile[1], os.path.normpath(os.readlink(os.path.expanduser(phile[1]))))
+            print e_warning.format("Removing link %s -> %s,\nas it confilts with a link that is being created." %
+                (phile[1], os.path.normpath(os.readlink(os.path.expanduser(phile[1])))))
             os.remove(phile[1])
 
         if ((os.path.isfile(phile[1])
             or os.path.isdir(phile[1]))
             and not os.path.islink(phile[1])):
             # Backup file or dir if not symlink
-            os.rename(phile[1], phile[1] + ".backup")
-            print e_arrow.format("File \"%s\" has been backed up to \"%s\"." %
-                    (phile[1], phile[1] + ".backup"))
+            os.rename(phile[1], ("%s.backup" % phile[1]))
+            print e_warning.format("File \"%s\" has been backed up to \"%s\"." %
+                (phile[1], ("%s.backup" % phile[1])))
 
-        print e_success.format("Creating link %s -> %s" %
-                (phile[0], phile[1]))
+        print e_arrow.format("Creating link %s -> %s" %
+                (phile[1], phile[0]))
         os.symlink(phile[0], phile[1])
 
+    print e_success.format("All files have been linked.")
 
-def updatedotphiles():
 
-    # Unlink old files first, incase source changed or deleted
-    unlinkphiles(flags.linkphile)
-    initialize(flags.updateflag)
-    linkphiles(flags.linkphile)
-    os.system('vim -c "execute \\"BundleInstall\!\\" | q | q"')
+def relinkphiles(linkphilesfile):
+    unlinkphiles(linkphilesfile)
+    linkphiles(linkphilesfile)
 
-    print e_success.format("All done! Your dotphiles are now updated!")
 
-def installdotphiles():
+def gitclone(dotphiledir, repourl, branch):
+    dotphiledir = os.path.normpath(os.path.expanduser(dotphiledir))
 
-    install("git")
-    initialize()
-    linkphiles(flags.linkphile)
-    install("zsh")
-    chsh()
+    if not os.path.exists(dotphiledir):
+        print e_arrow.format("Downloading dotphiles...")
+        if os.system("git clone --branch %s --recursive %s %s" %
+            (branch, repourl, dotphilesdir)) is not 0:
+            raise OSError
+    else:
+        raise IOError
 
-    if queryyesno("Install Vim plugins now?", "yes"):
-        os.system('vim -c "execute \\"BundleInstall\\" | q | q"')
+def gitpull(dotphilesdir, branch):
+    dotphiledir = os.path.normpath(os.path.expanduser(dotphiledir))
 
-    os.system("`which env` zsh")
-    os.system("source " + os.path.join(flags.homedir, ".zshrc"))
+    if (os.path.exists(os.path.join(dotphiledir, ".git"))
+        and os.path.isdir(os.path.join(dotphiledir, ".git"))):
+        os.chdir(dotphiledir)
+        print e_arrow.format("Updating dotphiles...")
 
-    print e_success.format("All done! Your dotphiles are now installed!")
+        if os.system("git pull origin %s" % branch) is not 0:
+            raise OSError
+    else:
+        raise IOError
 
+
+def initialize(dotphilesdir, repourl, branch):
+    try:
+        gitclone(dotphilesdir, repourl, branch)
+    except IOError:
+        print e_error.format("Directory %s alrady exists.\nTry dotphiles update instead?")
+    except OSError:
+        print e_error.format("Something went wrong with git.\nTry cloning manually.")
+
+
+def vundleupdate():
+    if os.system('vim -c "execute \\"BundleInstall\\" | q | q"') is not 0:
+        raise OSError
+
+
+def chsh():
+    if "zsh" not in os.environ["SHELL"]:
+        if cmdExists("zsh"):
+            print ("Enter password to change shell to ZSH.")
+            sys.stdin = open('/dev/tty')
+            if os.system("chsh -s `which zsh`") is not 0:
+                print e_error.format("Shell not changed to ZSH. Try manually")
+            else:
+                print e_success.format("Changed shell to \"%s\"" % os.environ["SHELL"])
+        else:
+            print e_error.format("ZSH not installed, please install.")
+    else:
+        print e_success.format("Shell is aleady ZSH.")
 
 if __name__ == '__main__':
 
-    class Flags(object):
-        installflag = True
-        updateflag = False
-        homedir = os.path.expanduser("~")
-        dotphilesdir = os.path.join(homedir, ".dotphiles")
-        linkphile = os.path.join(dotphilesdir, "linkphiles")
+    def install(args):
+        print vars(args)
+        installbin("git")
+        initialize(args.dotphilesdir, args.repo, args.branch)
+        try:
+            linkphiles(args.linkphile)
+        except IOError:
+            print e_error.format("linkphile \"%s\" doesn't exist." % args.linkphile)
+            sys.exit(1)
 
-    flags = Flags()
+        installbin("zsh")
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--install', '-i', dest='installflag', action='store_true',
-            help='New instalation of dotphiles (Default)')
-    parser.add_argument('--update', '-u', dest='updateflag', action='store_true',
-            help='Upgrate current instalation (will overwite files!)')
-    parser.add_argument('--home', dest='homedir', action='store', metavar='PATH',
-            type=os.path.join, help='Home directory to install dotphiles to. Can be any directory. (Default "~/")')
-    parser.add_argument('--name', dest='dotphilesdir', action='store', metavar='name',
-            type=os.path.join, help='Directory name for dotphiles. (Default ".dotphiles")')
-    parser.add_argument('--link', dest='linkphile', action='store', metavar='PATH',
-            type=file, help='File so with to link dotphiles. (Default ~/.dotphiles/linkphiles)')
+        try:
+            vundleupdate()
+        except OSError:
+            print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
 
-    args = parser.parse_args(namespace=flags)
+        chsh()
 
-    print vars(flags)
 
-    if flags.updateflag:
-        updatedotphiles()
-    else:
-        installdotphiles()
+        os.system("`which env` zsh")
+        os.system("source %s" % os.path.join(args.home, ".zshrc"))
+
+        print e_success.format("All done! Your dotphiles are now installed!")
+
+    def update(args):
+        print vars(args)
+        # Unlink old files first, incase source changed or deleted
+        try:
+            unlinkphiles(args.linkphile)
+        except IOError:
+            print e_error.format("linkphile \"%s\" doesn't exist." % args.linkphile)
+            sys.exit(1)
+
+        try:
+            gitpull(args.dotphilesdir, args.branch)
+        except OSError:
+            print e_error.format("Something went wrong with git.\nTry pulling manually.")
+            print e_arrow.format("Relinking files...")
+            try:
+                linkphiles(args.linkphile)
+            except IOError:
+                print e_error.format("linkphile \"%s\" doesn't exist.\nTry linking with dotphiles link." % args.linkphile)
+            sys.exit(1)
+
+        try:
+            linkphiles(args.linkphile)
+        except IOError:
+            print e_error.format("linkphile \"%s\" doesn't exist.\nTry linking with dotphiles link." % args.linkphile)
+
+        try:
+            vundleupdate()
+        except OSError:
+            print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
+
+        print e_success.format("All done! Your dotphiles are now updated!")
+
+    def link(args):
+        print vars(args)
+        try:
+            if args.relink:
+                relinkphiles(args.linkphile)
+            elif args.unlink:
+                unlinkphiles(args.linkphile)
+            else:
+                linkphiles(args.linkphile)
+        except IOError:
+            print e_error.format("linkphile not found.")
+
+    parser = argparse.ArgumentParser(prog='dotphiles', description="Change me")
+    subparsers = parser.add_subparsers(help='sub-command --help')
+
+
+    parser_install = subparsers.add_parser('install', help='install --help')
+    parser_install.set_defaults(func=install)
+    parser_install.add_argument('--repourl', action='store', metavar='URL',
+            help='URL for the dotphile repo (default: "%(default)s")',
+            default='https://github.com/psophis/dotphiles.git')
+    parser_install.add_argument('--branch', action='store', default='master',
+            help='Branch to use for cloning (default: "%(default)s")')
+    parser_install.add_argument('--home', action='store', metavar='PATH',
+            type=os.path.join, default='~/',
+            help='Home directory to install dotphiles to. Can be any directory. (default: "%(default)s")')
+    parser_install.add_argument('--dotphilesdir', action='store', metavar='PATH',
+            type=os.path.join, default='.dotphiles',
+            help='Directory name for dotphiles. (default: "%(default)s")')
+    parser_install.add_argument('--linkphile', action='store', metavar='PATH',
+            type=os.path.join, default='~/.dotphiles/linkphiles',
+            help='File so with to link dotphiles. (default: "%(default)s")')
+    parser_install.add_argument('--force', action='store_true',
+            help='Force removal of old dotphiles and installation of vim plugins.')
+
+    parser_update = subparsers.add_parser('update', help='update --help')
+    parser_update.set_defaults(func=update)
+
+    parser_link = subparsers.add_parser('link', help='relink --help')
+    parser_link.set_defaults(func=link)
+    parser_link.add_argument('--linkphile', action='store', metavar='PATH',
+            type=os.path.join, default='~/.dotphiles/linkphiles',
+            help='Linkphile. (default: "%(default)s")')
+    parser_link_group = parser_link.add_mutually_exclusive_group()
+    parser_link_group.add_argument('--relink', action='store_true',
+            help='Relink all links listed in linkphile.')
+    parser_link_group.add_argument('--unlink', action='store_true',
+            help='Delete all links in linkphile.')
+
+
+    args = parser.parse_args()
+    args.func(args)
+
