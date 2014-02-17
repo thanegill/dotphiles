@@ -82,7 +82,7 @@ fi
 # http://hmarr.com/2010/jan/19/making-virtualenv-play-nice-with-git/
 
 # Load virtualenvwrapper is it and virtualenv exists otherwise try and install
-if [ $(whence virtualenv) ] && [  $(whence virtualenvwrapper.sh) ]; then
+if [ $(whence virtualenv) ] && [ $(whence virtualenvwrapper.sh) ]; then
     export WORKON_HOME=~/.virtualenvs
 
     source `whence virtualenvwrapper_lazy.sh`
@@ -160,12 +160,13 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # List direcory contents - ls
-if [[ $(whence -cp ls) = "/bin/ls" ]]; then
+if [ $(whence -cp ls) = "/bin/ls" ] && [ "$OSTYPE" == "darwin"* ]; then
     alias l='ls -Alh'
     alias lt='echo "--Newest--" && ls -Alht && echo "--Oldest--"'
     alias ltr='echo "--Oldest--" && ls -Alhrt && echo "--Newest--"'
 else
-    alias ls='ls --color=always --classify'
+    alias ls='ls --color=always'
+    alias ll='ls --color=always --format=long --human-readable --sort=none'
     alias l='ls --color=always --almost-all --format=long --human-readable --sort=none'
 fi
 
