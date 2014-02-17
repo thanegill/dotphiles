@@ -126,10 +126,10 @@ def linkphiles(linkphilesfile):
     print e_success.format("All files have been linked.")
 
 
-def gitclone(dotphiledir, repourl, branch):
-    dotphiledir = os.path.normpath(os.path.expanduser(dotphiledir))
+def gitclone(dotphilesdir, repourl, branch):
+    dotphilesdir = os.path.normpath(os.path.expanduser(dotphilesdir))
 
-    if not os.path.exists(dotphiledir):
+    if not os.path.exists(dotphilesdir):
         print e_arrow.format("Downloading dotphiles...")
         if os.system("git clone --branch %s --recursive %s %s" %
             (branch, repourl, dotphilesdir)) is not 0:
