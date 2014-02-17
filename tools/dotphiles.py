@@ -20,45 +20,6 @@ def cmdExists(cmd):
     return subprocess.call(("type %s" % cmd), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) is 0
 
 
-def queryyesno(question, default="yes"):
-    """Ask a yes/no question via raw_input() and return their answer.
-
-    "question" is a string that is presented to the user.
-    "default" is the presumed answer if the user just hits <Enter>.
-        It must be "yes" (the default), "no" or None (meaning
-        an answer is required of the user).
-
-    The "answer" return value is one of "yes" or "no".
-    """
-    valid = {"yes":True, "y":True, "ye":True, "no":False, "n":False}
-    if default == None:
-        prompt = " [y/n] "
-    elif default == "yes":
-        prompt = " [Y/n] "
-    elif default == "no":
-        prompt = " [y/N] "
-    else:
-        raise ValueError("invalid default answer: '%s'" % default)
-
-    while True:
-        sys.stdout.write(question + prompt)
-        sys.stdin = open('/dev/tty')
-
-        # try:
-        choice = raw_input().lower()
-        # except EOFError:
-            # if default is not None:
-                # return valid[default]
-        # else:
-        if default is not None and choice == '':
-            return valid[default]
-        elif choice in valid:
-            return valid[choice]
-        else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "\
-                             "(or 'y' or 'n').\n")
-
-
 def installbin(toinstall):
     """Install binary based on OS"""
 
@@ -66,7 +27,7 @@ def installbin(toinstall):
     if "darwin" in platform.platform().lower() and not cmdExists("gcc"):
         if os.system("xcode-select --install") is not 0:
             print e_error.format("Xcode command line tools failed to insall please insall\nmanually with \"xcode-select --install\".")
-            exit(1)
+            sys.exit(1)
 
     if not cmdExists(toinstall):
         # OSX
@@ -96,7 +57,7 @@ def installbin(toinstall):
 
 
 def __getlinkphiles(linkphilesfile):
-    # Get files to link
+    """Get files to link"""
     linkphilesfile = os.path.normpath(os.path.expanduser(linkphilesfile))
 
     if os.path.exists(linkphilesfile) and not os.path.isdir(linkphilesfile):
@@ -165,11 +126,6 @@ def linkphiles(linkphilesfile):
     print e_success.format("All files have been linked.")
 
 
-def relinkphiles(linkphilesfile):
-    unlinkphiles(linkphilesfile)
-    linkphiles(linkphilesfile)
-
-
 def gitclone(dotphiledir, repourl, branch):
     dotphiledir = os.path.normpath(os.path.expanduser(dotphiledir))
 
@@ -182,11 +138,11 @@ def gitclone(dotphiledir, repourl, branch):
         raise IOError
 
 def gitpull(dotphilesdir, branch):
-    dotphiledir = os.path.normpath(os.path.expanduser(dotphiledir))
+    dotphilesdir = os.path.normpath(os.path.expanduser(dotphilesdir))
 
-    if (os.path.exists(os.path.join(dotphiledir, ".git"))
-        and os.path.isdir(os.path.join(dotphiledir, ".git"))):
-        os.chdir(dotphiledir)
+    if (os.path.exists(os.path.join(dotphilesdir, ".git"))
+        and os.path.isdir(os.path.join(dotphilesdir, ".git"))):
+        os.chdir(dotphilesdir)
         print e_arrow.format("Updating dotphiles...")
 
         if os.system("git pull origin %s" % branch) is not 0:
@@ -195,18 +151,10 @@ def gitpull(dotphilesdir, branch):
         raise IOError
 
 
-def initialize(dotphilesdir, repourl, branch):
-    try:
-        gitclone(dotphilesdir, repourl, branch)
-    except IOError:
-        print e_error.format("Directory %s alrady exists.\nTry dotphiles update instead?")
-    except OSError:
-        print e_error.format("Something went wrong with git.\nTry cloning manually.")
-
-
 def vundleupdate():
-    if os.system('vim -c "execute \\"BundleInstall\\" | q | q"') is not 0:
+    if os.system('vim -c "execute \\"BundleInstall\!\\" | q | q"') is not 0:
         raise OSError
+    print e_success.format("Vim plugins installed.")
 
 
 def chsh():
@@ -227,8 +175,19 @@ if __name__ == '__main__':
 
     def install(args):
         print vars(args)
+
         installbin("git")
-        initialize(args.dotphilesdir, args.repo, args.branch)
+
+        try:
+            gitclone(args.dotphilesdir, args.repourl, args.branch)
+        except IOError:
+            print e_error.format("Directory %s alrady exists.\nTry `dotphiles update` instead?" %
+                args.dotphilesdir)
+            sys.exit(1)
+        except OSError:
+            print e_error.format("Something went wrong with git.\nTry cloning manually.")
+            sys.exit(1)
+
         try:
             linkphiles(args.linkphile)
         except IOError:
@@ -286,7 +245,8 @@ if __name__ == '__main__':
         print vars(args)
         try:
             if args.relink:
-                relinkphiles(args.linkphile)
+                unlinkphiles(args.linkphile)
+                linkphiles(args.linkphile)
             elif args.unlink:
                 unlinkphiles(args.linkphile)
             else:
@@ -309,7 +269,7 @@ if __name__ == '__main__':
             type=os.path.join, default='~/',
             help='Home directory to install dotphiles to. Can be any directory. (default: "%(default)s")')
     parser_install.add_argument('--dotphilesdir', action='store', metavar='PATH',
-            type=os.path.join, default='.dotphiles',
+            type=os.path.join, default='~/.dotphiles',
             help='Directory name for dotphiles. (default: "%(default)s")')
     parser_install.add_argument('--linkphile', action='store', metavar='PATH',
             type=os.path.join, default='~/.dotphiles/linkphiles',
@@ -319,6 +279,14 @@ if __name__ == '__main__':
 
     parser_update = subparsers.add_parser('update', help='update --help')
     parser_update.set_defaults(func=update)
+    parser_update.add_argument('--branch', action='store', default='master',
+            help='Branch to use for cloning (default: "%(default)s")')
+    parser_update.add_argument('--dotphilesdir', action='store', metavar='PATH',
+            type=os.path.join, default='~/.dotphiles',
+            help='Directory name for dotphiles. (default: "%(default)s")')
+    parser_update.add_argument('--linkphile', action='store', metavar='PATH',
+            type=os.path.join, default='~/.dotphiles/linkphiles',
+            help='File so with to link dotphiles. (default: "%(default)s")')
 
     parser_link = subparsers.add_parser('link', help='relink --help')
     parser_link.set_defaults(func=link)
