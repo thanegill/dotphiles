@@ -174,8 +174,6 @@ def chsh():
 if __name__ == '__main__':
 
     def install(args):
-        print vars(args)
-
         installbin("git")
 
         try:
@@ -210,7 +208,6 @@ if __name__ == '__main__':
         print e_success.format("All done! Your dotphiles are now installed!")
 
     def update(args):
-        print vars(args)
         # Unlink old files first, incase source changed or deleted
         try:
             unlinkphiles(args.linkphile)
@@ -242,7 +239,6 @@ if __name__ == '__main__':
         print e_success.format("All done! Your dotphiles are now updated!")
 
     def link(args):
-        print vars(args)
         try:
             if args.relink:
                 unlinkphiles(args.linkphile)
