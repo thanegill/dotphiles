@@ -3,7 +3,7 @@
     email = me@thanegill.com
 
 [core]
-    excludesfile = ~/.dotphiles/gitignore_global
+    excludesfile = ~/.dotphiles/git/gitignore_global
 
     # http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/
     trustctime = false
