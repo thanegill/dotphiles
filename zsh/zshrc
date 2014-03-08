@@ -51,6 +51,14 @@ source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
 
 
 # -------------- #
+#    ENV VARS    #
+# -------------- #
+
+# Turn off less history
+export LESSHISTFILE="-"
+
+
+# -------------- #
 #      PATH      #
 # -------------- #
 

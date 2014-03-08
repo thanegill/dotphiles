@@ -28,8 +28,6 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-" Let Vundle manage Vundle
-Bundle 'gmarik/vundle'
 
 "" Original repos on github
 Bundle 'jiangmiao/auto-pairs'
@@ -39,14 +37,17 @@ Bundle 'bling/vim-airline'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
-Bundle 'tpope/vim-markdown'
-Bundle 'terryma/vim-multiple-cursors'
 Bundle 'mhinz/vim-startify'
 Bundle 'tpope/vim-surround'
 Bundle 'bronson/vim-trailing-whitespace'
-Bundle 'jmcantrell/vim-virtualenv'
+
+"" Syntax reops
+Bundle 'tpope/vim-markdown'
+Bundle 'jnwhiteh/vim-golang'
 
 "" Disabled plugins for refernece
+" Bundle 'jmcantrell/vim-virtualenv'
+" Bundle 'terryma/vim-multiple-cursors'
 " Bundle 'MarcWeber/vim-addon-mw-utils'
 " Bundle 'tomtom/tlib_vim'
 " Bundle 'kien/ctrlp.vim'
@@ -58,6 +59,7 @@ Bundle 'jmcantrell/vim-virtualenv'
 
 "" Non-github repos
 " Bundle 'git://git.wincent.com/command-t.git'
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Bundle Settings
@@ -90,7 +92,7 @@ let g:startify_bookmarks = [
 "" VIM-Airline
 let g:airline_thme = 'solarized'
 
-"Remove seperator symbols
+" Remove seperator symbols
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 
@@ -99,7 +101,6 @@ let g:airline#extensions#virtualenv#enabled = 1
 
 
 "" NERDTree
-
 " Show hidden files
 let NERDTreeShowHidden=1
 
@@ -107,10 +108,10 @@ let NERDTreeShowHidden=1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
     \ && b:NERDTreeType == "primary") | q | endif
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 
 " Highlight lines that are over 80 charaters long TODO
 " http://stackoverflow.com/a/10993757
@@ -126,7 +127,7 @@ set ttyfast
 set timeout timeoutlen=3000 ttimeoutlen=50
 
 " Sets how many lines of history VIM has to remember
-set history=700
+set history=500
 
 " Enable filetype plugins
 filetype plugin on
@@ -142,12 +143,19 @@ let g:mapleader = ","
 " Fast saving
 nmap <leader>w :w!<cr>
 
+" Force saving files that require root permission
+cmap w!! w !sudo tee > /dev/null %
+
 " Buffers can exist in the background without being in a window.
 " http://items.sjbach.com/319/configuring-vim-right
 set hidden
 
 " Toggle  NERDTree
 map <leader>nn :NERDTreeToggle<cr>
+
+" Open URL under curser
+nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -425,20 +433,8 @@ set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD\ %{getcwd()}\ \ Line\ %l\,\ Colu
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
-" Delete trailing
-func! DeleteTrailingWS()
-  exe "normal mz"
-  %s/\s\+$//ge
-  exe "normal `z"
-endfunc
-
-" Delete trailing whitespace
-map <leader>dw :call DeleteTrailingWS()<cr>
-
-
-autocmd BufWrite *.py :call DeleteTrailingWS()
-autocmd BufWrite *.coffee :call DeleteTrailingWS()
-autocmd BufWrite *.sh :call DeleteTrailingWS()
+" Delete trailing whitespace (calls plugin)
+map <leader>dw :FixWhitespace<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
