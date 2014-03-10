@@ -2,8 +2,7 @@
 # <source> <destination>
 # destination defaults to ~/.<basename>
 ~/.dotphiles/zsh/zshrc
-~/.dotphiles/test #test comment
-~/.dotphiles/vim/vimrc
+        ~/.dotphiles/vim/vimrc
 ~/.dotphiles/vim/
 ~/.dotphiles/tmux/tmux.conf
 ~/.dotphiles/git/gitconfig
