@@ -200,10 +200,13 @@ if __name__ == '__main__':
 
         installbin("zsh")
 
-        try:
-            vundleupdate()
-        except OSError:
-            print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
+        if args.novim:
+            print e_arrow.format("Skipping Vim plugin install.")
+        else:
+            try:
+                vundleupdate()
+            except OSError:
+                print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
 
         chsh()
 
@@ -237,15 +240,19 @@ if __name__ == '__main__':
         except IOError:
             print e_error.format("linkphile \"%s\" doesn't exist.\nTry linking with dotphiles link." % args.linkphile)
 
-        try:
-            vundleupdate()
-        except OSError:
-            print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
+        if args.novim:
+            print e_arrow.format("Skipping Vim plugin updates")
+        else:
+            try:
+                vundleupdate()
+            except OSError:
+                print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
 
-        try:
-            vundleclean()
-        except OSError:
-            print e_error.format("Something went wrong while removing  Vim plugings.\nTry manually.")
+            try:
+                vundleclean()
+            except OSError:
+                print e_error.format("Something went wrong while removing  Vim plugings.\nTry manually.")
+
 
         print e_success.format("All done! Your dotphiles are now updated!")
 
@@ -283,6 +290,8 @@ if __name__ == '__main__':
             help='File so with to link dotphiles. (default: "%(default)s")')
     parser_install.add_argument('--force', action='store_true',
             help='Force removal of old dotphiles and installation of vim plugins.')
+    parser_install.add_argument('--novim', action='store_true',
+            help='Do not install Vim plugins. Vundle will still be install. Useful for faster install')
 
     parser_update = subparsers.add_parser('update', help='update --help')
     parser_update.set_defaults(func=update)
@@ -294,6 +303,8 @@ if __name__ == '__main__':
     parser_update.add_argument('--linkphile', action='store', metavar='PATH',
             type=os.path.join, default='~/.dotphiles/linkphiles',
             help='File so with to link dotphiles. (default: "%(default)s")')
+    parser_update.add_argument('--novim', action='store_true',
+            help='Do not update Vim plugins. Useful for faster update')
 
     parser_link = subparsers.add_parser('link', help='relink --help')
     parser_link.set_defaults(func=link)
