@@ -168,10 +168,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # List direcory contents - ls
-if [ $(whence -cp ls) = "/bin/ls" ] && [ "$OSTYPE" == "darwin"* ]; then
+if [[ $(whence -cp ls) = '/bin/ls' && $OSTYPE = "darwin"*  ]]; then
+    alias ll='ls -lh'
     alias l='ls -Alh'
-    alias lt='echo "--Newest--" && ls -Alht && echo "--Oldest--"'
-    alias ltr='echo "--Oldest--" && ls -Alhrt && echo "--Newest--"'
 else
     alias ls='ls --color=always'
     alias ll='ls --color=always --format=long --human-readable'
