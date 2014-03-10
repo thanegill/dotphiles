@@ -146,7 +146,13 @@ def gitpull(dotphilesdir, branch):
         print e_arrow.format("Updating dotphiles...")
 
         if os.system("git pull origin %s" % branch) is not 0:
-            raise OSError
+            raise oserror
+
+        if os.system("git submodule foreach git checkout master") is not 0:
+            raise oserror
+
+        if os.system("git submodule foreach git pull origin master") is not 0:
+            raise oserror
     else:
         raise IOError
 
@@ -287,11 +293,11 @@ if __name__ == '__main__':
             help='Directory name for dotphiles. (default: "%(default)s")')
     parser_install.add_argument('--linkphile', action='store', metavar='PATH',
             type=os.path.join, default='~/.dotphiles/linkphiles',
-            help='File so with to link dotphiles. (default: "%(default)s")')
+            help='File with to link dotphiles. (default: "%(default)s")')
     parser_install.add_argument('--force', action='store_true',
             help='Force removal of old dotphiles and installation of vim plugins.')
     parser_install.add_argument('--novim', action='store_true',
-            help='Do not install Vim plugins. Vundle will still be install. Useful for faster install')
+            help='Do not install Vim plugins. Vundle will still be install. Useful for faster install.')
 
     parser_update = subparsers.add_parser('update', help='update --help')
     parser_update.set_defaults(func=update)
@@ -302,9 +308,9 @@ if __name__ == '__main__':
             help='Directory name for dotphiles. (default: "%(default)s")')
     parser_update.add_argument('--linkphile', action='store', metavar='PATH',
             type=os.path.join, default='~/.dotphiles/linkphiles',
-            help='File so with to link dotphiles. (default: "%(default)s")')
+            help='File with to link dotphiles. (default: "%(default)s")')
     parser_update.add_argument('--novim', action='store_true',
-            help='Do not update Vim plugins. Useful for faster update')
+            help='Do not update Vim plugins. Useful for faster update.')
 
     parser_link = subparsers.add_parser('link', help='relink --help')
     parser_link.set_defaults(func=link)
