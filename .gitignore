@@ -2,4 +2,4 @@ vim/.netrwhist
 vim/backups/
 vim/bundle/*
 !vim/bundle/vundle/
-zsh/cache
+zsh/cache/
