@@ -28,6 +28,8 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+" let Vundle manage Vundle, required
+Bundle 'gmarik/vundle'
 
 "" Original repos on github
 Bundle 'jiangmiao/auto-pairs'

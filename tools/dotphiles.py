@@ -157,6 +157,12 @@ def vundleupdate():
     print e_success.format("Vim plugins installed.")
 
 
+def vundleclean():
+    if os.system('vim -c "execute \\"BundleClean\!\\" | q | q"') is not 0:
+        raise OSError
+    print e_success.format("Unused Vim plugins removed.")
+
+
 def chsh():
     if "zsh" not in os.environ["SHELL"]:
         if cmdExists("zsh"):
@@ -235,6 +241,11 @@ if __name__ == '__main__':
             vundleupdate()
         except OSError:
             print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
+
+        try:
+            vundleclean()
+        except OSError:
+            print e_error.format("Something went wrong while removing  Vim plugings.\nTry manually.")
 
         print e_success.format("All done! Your dotphiles are now updated!")
 
