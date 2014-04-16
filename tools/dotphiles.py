@@ -157,6 +157,23 @@ def gitpull(dotphilesdir, branch):
         raise IOError
 
 
+def gitsubupdate(dotphilesdir):
+    dotphilesdir = os.path.normpath(os.path.expanduser(dotphilesdir))
+
+    if (os.path.exists(os.path.join(dotphilesdir, ".git"))
+        and os.path.isdir(os.path.join(dotphilesdir, ".git"))):
+        os.chdir(dotphilesdir)
+        print e_arrow.format("Updating submoduals...")
+
+        if os.system("git submodule foreach git checkout master") is not 0:
+            raise oserror
+
+        if os.system("git submodule foreach git pull origin master") is not 0:
+            raise oserror
+    else:
+        raise IOError
+
+
 def vundleupdate():
     if os.system('vim -c "execute \\"BundleInstall\!\\" | q | q"') is not 0:
         raise OSError
@@ -169,19 +186,33 @@ def vundleclean():
     print e_success.format("Unused Vim plugins removed.")
 
 
-def chsh():
-    if "zsh" not in os.environ["SHELL"]:
-        if cmdExists("zsh"):
-            print ("Enter password to change shell to ZSH.")
-            sys.stdin = open('/dev/tty')
-            if os.system("chsh -s `which zsh`") is not 0:
-                print e_error.format("Shell not changed to ZSH. Try manually")
-            else:
-                print e_success.format("Changed shell to \"%s\"" % os.environ["SHELL"])
-        else:
-            print e_error.format("ZSH not installed, please install.")
+def changeshell(shell, etcshells):
+    """
+    Change shell of current user to shell
+    `shell` should be the full path of the shell executable
+    """
+
+    if not os.path.exists(etcshells):
+        raise IOError
+
+    shellavalible = False
+
+    for line in open(etcshells).readlines():
+        if shell in line:
+            shellavalible = True
+
+    if not shellavalible:
+        raise OSError
+
+    if shell in os.environ["SHELL"]:
+        print e_success.format("Shell is aleady %s." % shell)
     else:
-        print e_success.format("Shell is aleady ZSH.")
+        print ("Enter password to change shell to %s." % shell)
+        sys.stdin = open('/dev/tty')
+        if os.system("chsh -s %s" % shell) is not 0:
+            print e_error.format("Shell not changed to %s. Try manually" % shell)
+        else:
+            print e_success.format("Changed shell to \"%s\"" % os.environ["SHELL"])
 
 if __name__ == '__main__':
 
@@ -214,8 +245,7 @@ if __name__ == '__main__':
             except OSError:
                 print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
 
-        chsh()
-
+        chsh("zsh", "/etc/shells")
 
         os.system("`which env` zsh")
         os.system("source %s" % os.path.join(args.home, ".zshrc"))
@@ -235,6 +265,8 @@ if __name__ == '__main__':
         except OSError:
             print e_error.format("Something went wrong with git.\nTry pulling manually.")
             print e_arrow.format("Relinking files...")
+
+            # Relink files if update failed
             try:
                 linkphiles(args.linkphile)
             except IOError:
@@ -257,7 +289,7 @@ if __name__ == '__main__':
             try:
                 vundleclean()
             except OSError:
-                print e_error.format("Something went wrong while removing  Vim plugings.\nTry manually.")
+                print e_error.format("Something went wrong while removing Vim plugings.\nTry manually.")
 
 
         print e_success.format("All done! Your dotphiles are now updated!")
@@ -272,7 +304,19 @@ if __name__ == '__main__':
             else:
                 linkphiles(args.linkphile)
         except IOError:
-            print e_error.format("linkphile not found.")
+            print e_error.format("linkphile \"%s\" doesn't exist." % args.linkphile)
+            sys.exit(1)
+
+    def chsh(args):
+        try:
+            changeshell(args.shell, args.etcshells)
+        except IOError:
+            print e_error.format("\"%s\" doesn't exist." % args.etcshells)
+            sys.exit(1)
+        except OSError:
+            print e_error.format("\"%s\" is not in \"%s\"." % (args.shell, args.etcshells))
+            sys.exit(1)
+
 
     parser = argparse.ArgumentParser(prog='dotphiles', description="Change me")
     subparsers = parser.add_subparsers(help='sub-command --help')
@@ -314,14 +358,23 @@ if __name__ == '__main__':
 
     parser_link = subparsers.add_parser('link', help='relink --help')
     parser_link.set_defaults(func=link)
-    parser_link.add_argument('--linkphile', action='store', metavar='PATH',
+    parser_link.add_argument('--linkphile', action='store', metavar='path',
             type=os.path.join, default='~/.dotphiles/linkphiles',
-            help='Linkphile. (default: "%(default)s")')
+            help='linkphile. (default: "%(default)s")')
     parser_link_group = parser_link.add_mutually_exclusive_group()
     parser_link_group.add_argument('--relink', action='store_true',
-            help='Relink all links listed in linkphile.')
+            help='relink all links listed in linkphile.')
     parser_link_group.add_argument('--unlink', action='store_true',
-            help='Delete all links in linkphile.')
+            help='delete all links in linkphile.')
+
+    parser_chsh = subparsers.add_parser('chsh', help='chsh --help')
+    parser_chsh.set_defaults(func=chsh)
+    parser_chsh.add_argument('--shell', action='store', metavar='path',
+            type=os.path.join, default='/bin/zsh',
+            help='Path to shell exicutable. (default: "%(default)s"))')
+    parser_chsh.add_argument('--etcshells', action='store', metavar='path',
+            type=os.path.join, default='/etc/shells',
+            help='Path to /etc/shells if diffrent. (default: "%(default)s"))')
 
 
     args = parser.parse_args()
