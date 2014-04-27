@@ -5,7 +5,6 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.dotphiles/zsh
 
-
 export EDITOR=vim
 
 # Set to this to use case-sensitive completion
@@ -13,9 +12,6 @@ export EDITOR=vim
 
 # Comment this out to disable weekly auto-update checks
 # DISABLE_AUTO_UPDATE="true"
-
-# Uncomment following line if you want to disable colors in ls
-# DISABLE_LS_COLORS="true"
 
 # Uncomment following line if you want to disable autosetting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -107,12 +103,6 @@ if [ $(whence virtualenv) ] && [ $(whence virtualenvwrapper.sh) ]; then
 
     # That makes pip detect an active virtualenv and install to it,
     # without having to pass it the -E parameter.
-else
-    if [ $(whence pip) ]; then
-        echo "virtualenv and or virtuallenvwarpper not installed"
-    else
-        echo "pip not installed"
-    fi
 fi
 
 
@@ -169,6 +159,7 @@ fi
 
 # List direcory contents - ls
 if [[ $(whence -cp ls) = '/bin/ls' && $OSTYPE = "darwin"*  ]]; then
+    # OSX and standard/not updated gnuutils
     alias ll='ls -lh'
     alias l='ls -Alh'
 else
@@ -181,7 +172,7 @@ fi
 alias ax="chmod a+x"
 
 # Get your current public IP
-alias ip="curl icanhazip.com"
+alias externalip="curl icanhazip.com"
 
 # list TODO/FIX lines from the current project
 alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
