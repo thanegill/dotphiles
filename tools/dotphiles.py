@@ -146,13 +146,15 @@ def gitpull(dotphilesdir, branch):
         print e_arrow.format("Updating dotphiles...")
 
         if os.system("git pull origin %s" % branch) is not 0:
-            raise oserror
+            raise OSError
+
+        print e_arrow.format("Updating submoduals...")
 
         if os.system("git submodule foreach git checkout master") is not 0:
-            raise oserror
+            raise OSError
 
         if os.system("git submodule foreach git pull origin master") is not 0:
-            raise oserror
+            raise OSError
     else:
         raise IOError
 
@@ -166,10 +168,10 @@ def gitsubupdate(dotphilesdir):
         print e_arrow.format("Updating submoduals...")
 
         if os.system("git submodule foreach git checkout master") is not 0:
-            raise oserror
+            raise OSError
 
         if os.system("git submodule foreach git pull origin master") is not 0:
-            raise oserror
+            raise OSError
     else:
         raise IOError
 
