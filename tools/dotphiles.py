@@ -237,7 +237,7 @@ if __name__ == '__main__':
             print e_error.format("linkphile \"%s\" doesn't exist." % args.linkphile)
             sys.exit(1)
 
-        installbin("zsh")
+        installbin("vim")
 
         if args.novim:
             print e_arrow.format("Skipping Vim plugin install.")
@@ -246,6 +246,8 @@ if __name__ == '__main__':
                 vundleupdate()
             except OSError:
                 print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
+
+        installbin("zsh")
 
         chsh("zsh", "/etc/shells")
 
