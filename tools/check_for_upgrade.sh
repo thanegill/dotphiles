@@ -5,7 +5,7 @@ function _current_epoch() {
 }
 
 function _update_dotphiles_update() {
-  echo "LAST_EPOCH=$(_current_epoch)" > $HOME/.dotphiles/tmp/dotphiles-update
+  echo "LAST_EPOCH=$(_current_epoch)" > $HOME/.dotphiles/dotphiles-update
 }
 
 function _upgrade_dotphiles() {
@@ -20,9 +20,9 @@ if [[ -z "$epoch_target" ]]; then
   epoch_target=13
 fi
 
-if [ -f $HOME/.dotphiles/tmp/dotphiles-update ]
+if [ -f $HOME/.dotphiles/dotphiles-update ]
 then
-  . $HOME/.dotphiles/tmp/dotphiles-update
+  . $HOME/.dotphiles/dotphiles-update
 
   if [[ -z "$LAST_EPOCH" ]]; then
     _update_dotphiles_update && return 0;
