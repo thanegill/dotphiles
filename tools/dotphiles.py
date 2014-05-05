@@ -206,7 +206,7 @@ def changeshell(shell, etcshells):
     if not shellavalible:
         raise OSError
 
-    if shell in os.environ["SHELL"]:
+    if os.environ["SHELL"] in shell:
         print e_success.format("Shell is aleady %s." % shell)
     else:
         print ("Enter password to change shell to %s." % shell)
@@ -249,10 +249,16 @@ if __name__ == '__main__':
 
         installbin("zsh")
 
-        chsh("zsh", "/etc/shells")
+        try:
+            changeshell(args.shell, args.etcshells)
+        except IOError:
+            print e_error.format("\"%s\" doesn't exist." % args.etcshells)
+            sys.exit(1)
+        except OSError:
+            print e_error.format("\"%s\" is not in \"%s\"." % (args.shell, args.etcshells))
+            sys.exit(1)
 
-        os.system("`which env` zsh")
-        os.system("source %s" % os.path.join(args.home, ".zshrc"))
+        os.system(args.shell)
 
         print e_success.format("All done! Your dotphiles are now installed!")
 
@@ -322,7 +328,7 @@ if __name__ == '__main__':
             sys.exit(1)
 
 
-    parser = argparse.ArgumentParser(prog='dotphiles', description="Change me")
+    parser = argparse.ArgumentParser(prog='dotphiles')
     subparsers = parser.add_subparsers(help='sub-command --help')
 
 
