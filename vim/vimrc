@@ -3,6 +3,7 @@
 "    -> Vundle
 "    -> Bundle Settings
 "    -> General
+"    -> FileType Specific
 "    -> VIM user interface
 "    -> Colors and Fonts
 "    -> Files and backups
@@ -158,6 +159,15 @@ map <leader>nn :NERDTreeToggle<cr>
 " Open URL under curser
 nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => FileType Specific
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Markdown
+autocmd Filetype markdown setlocal wrap
+autocmd Filetype markdown setlocal linebreak
+autocmd Filetype markdown setlocal nolist
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
