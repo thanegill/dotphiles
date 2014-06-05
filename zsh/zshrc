@@ -25,6 +25,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.dotphiles/oh-my-zsh/custom/plugins/
 plugins=(\
 brew \
+brew-cask \
 colored-man \
 django \
 python \
@@ -45,6 +46,8 @@ THEME_RUBY=false
 # Load theme
 source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
 
+# brew-cask default to /Applications
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 # -------------- #
 #    ENV VARS    #
