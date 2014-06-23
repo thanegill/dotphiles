@@ -4,5 +4,6 @@
 ~/.dotphiles/zsh/zshrc
 ~/.dotphiles/vim/vimrc
 ~/.dotphiles/vim/
+~/.dotphiles/vim/xvimrc
 ~/.dotphiles/tmux/tmux.conf
 ~/.dotphiles/git/gitconfig
