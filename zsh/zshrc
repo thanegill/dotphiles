@@ -118,6 +118,7 @@ fi
 
 # Shortcuts
 alias vi='vim'
+alias g='git'
 
 # OSX Specific alises
 if [[ "$OSTYPE" == "darwin"* ]]; then
