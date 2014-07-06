@@ -162,14 +162,15 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # List direcory contents - ls
-if [[ $(whence -cp ls) = '/bin/ls' && $OSTYPE = "darwin"*  ]]; then
-    # OSX and standard/not updated gnuutils
-    alias ll='ls -lh'
-    alias l='ls -Alh'
-else
+if [[ "$(ls --version)" = *"GNU"* ]]; then
+    # GNU ls
     alias ls='ls --color=always'
     alias ll='ls --color=always --format=long --human-readable'
     alias l='ls --color=always --almost-all --format=long --human-readable'
+else
+    # Not GNU utils
+    alias ll='ls -lh'
+    alias l='ls -Alh'
 fi
 
 # Make executable
