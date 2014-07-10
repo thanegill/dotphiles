@@ -28,6 +28,7 @@ brew \
 brew-cask \
 colored-man \
 django \
+go \
 python \
 pip \
 ruby \
@@ -63,10 +64,10 @@ export LESSHISTFILE="-"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # OSX
-    export GOPATH=/usr/local/Cellar/go/1.2:$GOPATH
+    export GOPATH=$HOME/go
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
     export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
-    export PATH="$HOME/.dotphiles/bin:$GOPATH:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 else
     # Non-OSX
     export PATH="$HOME/.dotphiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
