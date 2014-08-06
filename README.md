@@ -8,7 +8,7 @@ My personal dot files.
 
 or
 
-    wget -q -O - phttps://raw.github.com/psophis/dotphiles/master/tools/dotphiles.py | python - install
+    wget -q -O - https://raw.github.com/psophis/dotphiles/master/tools/dotphiles.py | python - install
 
 ## Usage
 

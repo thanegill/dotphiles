@@ -1,12 +1,11 @@
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-  
     /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh $HOME/.dotphiles/tools/check_for_upgrade.sh
 fi
 
 # Initializes Oh My Zsh
 
-# add a function path
+# Add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
 
 # Load all of the config files in ~/oh-my-zsh that end in .zsh
@@ -14,7 +13,6 @@ fpath=($ZSH/functions $ZSH/completions $fpath)
 for config_file ($ZSH/lib/*.zsh); do
     source $config_file
 done
-
 
 is_plugin() {
     local base_dir=$1
@@ -29,14 +27,6 @@ for plugin ($plugins); do
         fpath=($ZSH/plugins/$plugin $fpath)
     fi
 done
-
-# Figure out the SHORT hostname
-if [ -n "$commands[scutil]" ]; then
-    # OS X
-    SHORT_HOST=$(scutil --get ComputerName)
-else
-    SHORT_HOST=${HOST/.*/}
-fi
 
 # Save the location of the current completion dump file.
 ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump"

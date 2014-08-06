@@ -47,8 +47,6 @@ THEME_RUBY=false
 # Load theme
 source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
 
-# brew-cask default to /Applications
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 # -------------- #
 #    ENV VARS    #
@@ -56,6 +54,9 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 # Turn off less history
 export LESSHISTFILE="-"
+
+# brew-cask default to /Applications
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 
 # -------------- #
@@ -70,7 +71,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 else
     # Non-OSX
-    export PATH="$HOME/.dotphiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export GOPATH=$HOME/go
+    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
 fi
 
@@ -180,5 +182,5 @@ alias ax="chmod a+x"
 # Get your current public IP
 alias externalip="curl icanhazip.com"
 
-# list TODO/FIX lines from the current project
+# list TODO lines from the current project
 alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
