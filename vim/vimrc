@@ -45,7 +45,6 @@ Bundle 'tpope/vim-surround'
 Bundle 'bronson/vim-trailing-whitespace'
 Bundle 'rizzatti/dash.vim'
 
-
 "" Syntax reops
 Bundle 'tpope/vim-markdown'
 Bundle 'jnwhiteh/vim-golang'
@@ -73,7 +72,6 @@ Bundle 'jnwhiteh/vim-golang'
 "" vim-markdown
 let g:vim_markdown_folding_disabled=1
 
-
 "" NERDcommenter
 let NERDCommentWholeLinesInVMode=1
 let NERDRemoveExtraSpaces=1
@@ -93,7 +91,6 @@ let g:startify_bookmarks = [
     \ '~/.tmux.conf'
     \ ]
 
-
 "" VIM-Airline
 let g:airline_thme = 'solarized'
 
@@ -103,7 +100,6 @@ let g:airline_right_sep = ''
 
 " Enable/disable virtualenv integration
 let g:airline#extensions#virtualenv#enabled = 1
-
 
 "" NERDTree
 " Show hidden files
@@ -170,6 +166,7 @@ nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
 autocmd Filetype markdown setlocal wrap
 autocmd Filetype markdown setlocal linebreak
 autocmd Filetype markdown setlocal nolist
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -414,14 +411,14 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Specify the behavior when switching between buffers
 try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
+    set switchbuf=useopen,usetab,newtab
+    set stal=2
 endtry
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
+    \     exe "normal! g`\"" |
     \ endif
 
 " Remember info about open buffers on close
@@ -524,9 +521,9 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("gui_running")
-  " GUI is running or is about to start.
-  " Set window size.
-  set lines=70 columns=110
+    " GUI is running or is about to start.
+    " Set window size.
+    set lines=70 columns=110
 else
     " disabled for now
     " This is console Vim.
@@ -582,21 +579,21 @@ endfunction
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
-   let l:currentBufNum = bufnr("%")
-   let l:alternateBufNum = bufnr("#")
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
 
-   if buflisted(l:alternateBufNum)
-     buffer #
-   else
-     bnext
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
    endif
 
-   if bufnr("%") == l:currentBufNum
-     new
-   endif
+    if bufnr("%") == l:currentBufNum
+        new
+      endif
 
-   if buflisted(l:currentBufNum)
-     execute("bdelete! ".l:currentBufNum)
-   endif
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
 endfunction
 
