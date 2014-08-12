@@ -1,8 +1,8 @@
-# -------------------- #
-#   OH-MY-ZSH Config   #
-# -------------------- #
+# -------------- #
+#   ZSH Config   #
+# -------------- #
 
-# Path to your oh-my-zsh configuration.
+# Path to your zsh configuration.
 ZSH=$HOME/.dotphiles/zsh
 
 export EDITOR=vim
@@ -27,8 +27,8 @@ ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
 # Which plugins would you like to load?
-# (plugins can be found in ~/.dotphiles/oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.dotphiles/oh-my-zsh/custom/plugins/
+# (plugins can be found in ~/.dotphiles/zsh/plugins/*)
+# Custom plugins may be added to ~/.dotphiles/zsh/custom/plugins/
 plugins=(\
 brew \
 brew-cask \
@@ -44,8 +44,13 @@ sublime \
 vagrant \
 )
 
-# Source oh-my-zsh
-source $HOME/.dotphiles/zsh/oh-my-zsh.sh
+# Check for updates on initial load
+if [ "$DOTPHILES_AUTO_UPDATE" != "true" ]; then
+    /usr/bin/env zsh $HOME/.dotphiles/tools/check_for_upgrade.sh
+fi
+
+# Source plugins
+source $HOME/.dotphiles/zsh/load-plugins.sh
 
 # Theme options
 THEME_RUBY=false
