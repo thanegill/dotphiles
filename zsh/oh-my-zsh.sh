@@ -1,9 +1,7 @@
 # Check for updates on initial load...
-if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
-    /usr/bin/env ZSH=$ZSH DISABLE_UPDATE_PROMPT=$DISABLE_UPDATE_PROMPT zsh $HOME/.dotphiles/tools/check_for_upgrade.sh
+if [ "$DOTPHILES_AUTO_UPDATE" != "true" ]; then
+    /usr/bin/env ZSH=$ZSH zsh $HOME/.dotphiles/tools/check_for_upgrade.sh
 fi
-
-# Initializes Oh My Zsh
 
 # Add a function path
 fpath=($ZSH/functions $ZSH/completions $fpath)
@@ -14,12 +12,14 @@ for config_file ($ZSH/lib/*.zsh); do
     source $config_file
 done
 
+
 is_plugin() {
     local base_dir=$1
     local name=$2
     test -f $base_dir/plugins/$name/$name.plugin.zsh \
       || test -f $base_dir/plugins/$name/_$name
 }
+
 # Add all defined plugins to fpath. This must be done
 # before running compinit.
 for plugin ($plugins); do
@@ -43,4 +43,5 @@ for plugin ($plugins); do
 done
 
 unset config_file
+unset -f is_plugin
 

@@ -10,11 +10,17 @@ export EDITOR=vim
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
-# Comment this out to disable weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
+# Comment this out to disable weekly dotphiles auto-update checks
+# DOTPHILES_AUTO_UPDATE="false"
 
+# Uncomment the following line to change how often to auto-update dotphiles (in days).
+# export UPDATE_DOTPHILES_DAYS=13
+#
 # Uncomment following line if you want to disable autosetting terminal title.
 # DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+ENABLE_CORRECTION="true"
 
 # Uncomment following line if you want red dots to
 # be displayed while waiting for completion
@@ -154,7 +160,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
     # cd to the path of the front Finder window
     cdf() {
-        target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+        local target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
         if [ "$target" != "" ]; then
             cd "$target"; unset target
         else
@@ -183,4 +189,4 @@ alias ax="chmod a+x"
 alias externalip="curl icanhazip.com"
 
 # list TODO lines from the current project
-alias todos="ack --recurse --group '(TODO|XXX|BUG|HACK|FIX(ME)?):'"
+alias todos="ack --recurse --group '(TODO|todo|Todo|XXX|BUG|HACK|FIX(ME)?):'"
