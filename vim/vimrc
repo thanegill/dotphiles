@@ -20,7 +20,7 @@
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Vundle
+" Vundle:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Required
@@ -66,7 +66,7 @@ Bundle 'jnwhiteh/vim-golang'
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Bundle Settings
+" Bundle Settings:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" vim-markdown
@@ -111,7 +111,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General
+" General:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Highlight lines that are over 80 charaters long TODO
@@ -159,7 +159,7 @@ nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => FileType Specific
+" FileType Specific:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Markdown
@@ -169,7 +169,7 @@ autocmd Filetype markdown setlocal nolist
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
+" VIM user interface:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" Mouse ""
@@ -183,8 +183,23 @@ set number
 " Set lines to the cursor - when moving vertically using j/k
 set so=5
 
-"" Completion ""
-set wildmode=list:longest
+"" Tab completion
+
+" Will insert tab at beginning of line,
+" Will use completion if not at beginning
+set wildmode=list:longest,list:full
+
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+
+inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <S-Tab> <c-n>
 
 " Enable ctrl-n and ctrl-p to scroll thru matches
 set wildmenu
@@ -206,6 +221,12 @@ set ruler
 
 " Highlight current line
 set cursorline
+
+" Text width
+set textwidth=80
+
+" Hightlight textwidth column
+set colorcolumn=+1
 
 " Height of the command bar
 set cmdheight=1
@@ -252,7 +273,7 @@ set showmode
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors and Fonts
+" Colors and Fonts:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Enable syntax highlighting
@@ -278,7 +299,7 @@ set ffs=unix,dos,mac
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files, backups and undo
+" Files, Backups and Undo:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" Turn backup off
@@ -293,7 +314,7 @@ set undofile
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab, indent, and folding
+" Text, tab, indent, and folding:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Use spaces instead of tabs
@@ -334,7 +355,7 @@ set nofoldenable
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Visual mode related
+" Visual mode related:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Visual mode pressing * or # searches for the current selection
@@ -343,7 +364,7 @@ vnoremap <silent> # :call VisualSelection('b')<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
+" Moving around, tabs, windows and buffers:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Disable arrow keys
@@ -424,9 +445,13 @@ autocmd BufReadPost *
 " Remember info about open buffers on close
 set viminfo^=%
 
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Status line
+" Status line:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Always show the status line
@@ -437,7 +462,7 @@ set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD\ %{getcwd()}\ \ Line\ %l\,\ Colu
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings
+" Editing mappings:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Remap VIM 0 to first non-blank character
@@ -448,7 +473,7 @@ map <leader>dw :FixWhitespace<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Search
+" Search:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
@@ -484,7 +509,7 @@ vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
+" Spell checking:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Pressing ,ss will toggle and untoggle spell checking
@@ -504,7 +529,7 @@ map <leader>s? z=
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Copy paste
+" Copy paste:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Toggle paste mode on and off
@@ -517,7 +542,7 @@ endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => GUI VIM (MacVIM, GVIM, etc..)
+" GUI VIM (MacVIM, GVIM, etc..):
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("gui_running")
@@ -537,7 +562,7 @@ endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Helper functions
+" Helper functions:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! CmdLine(str)
