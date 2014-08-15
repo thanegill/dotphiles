@@ -2,5 +2,5 @@ dotphiles-update
 vim/.netrwhist
 vim/backups/
 vim/bundle/*
-!vim/bundle/vundle/
+!vim/bundle/Vundle.vim/
 zsh/cache/
