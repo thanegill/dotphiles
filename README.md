@@ -1,4 +1,4 @@
-# .dotfiles
+# .dotphiles
 
 My personal dot files.
 

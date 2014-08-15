@@ -15,7 +15,7 @@ export EDITOR=vim
 
 # Uncomment the following line to change how often to auto-update dotphiles (in days).
 # export UPDATE_DOTPHILES_DAYS=13
-#
+
 # Uncomment following line if you want to disable autosetting terminal title.
 # DISABLE_AUTO_TITLE="true"
 
@@ -30,30 +30,28 @@ COMPLETION_WAITING_DOTS="true"
 # (plugins can be found in ~/.dotphiles/zsh/plugins/*)
 # Custom plugins may be added to ~/.dotphiles/zsh/custom/plugins/
 plugins=(\
-brew \
-brew-cask \
-colored-man \
-django \
-go \
-python \
-pip \
-ruby \
-rsync \
-rake \
-sublime \
-vagrant \
+    brew \
+    brew-cask \
+    colored-man \
+    django \
+    go \
+    python \
+    pip \
+    ruby \
+    rsync \
+    rake \
+    sublime \
+    terminalapp \
+    vagrant \
+    vim-interaction \
+    xcode \
 )
 
-# Check for updates on initial load
-if [ "$DOTPHILES_AUTO_UPDATE" != "true" ]; then
-    /usr/bin/env zsh $HOME/.dotphiles/tools/check_for_upgrade.sh
-fi
-
-# Source plugins
+# Load plugins
 source $HOME/.dotphiles/zsh/load-plugins.sh
 
 # Theme options
-THEME_RUBY=false
+THEME_RUBY="false"
 
 # Load theme
 source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
@@ -79,47 +77,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     export GOPATH=$HOME/go
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
     export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
-    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 else
     # Non-OSX
     export GOPATH=$HOME/go
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
-fi
-
-
-# -------------- #
-#   Ruby Stuff   #
-# -------------- #
-
-# Load RVM if it exists
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-
-# --------------------- #
-#   virtualenvwrapper   #
-# --------------------- #
-
-# http://hmarr.com/2010/jan/19/making-virtualenv-play-nice-with-git/
-
-# Load virtualenvwrapper is it and virtualenv exists otherwise try and install
-if [ $(whence virtualenv) ] && [ $(whence virtualenvwrapper.sh) ]; then
-    export WORKON_HOME=~/.virtualenvs
-
-    source `whence virtualenvwrapper_lazy.sh`
-
-    ## Tying to pip’s virtualenv support
-    # Via http://becomingguru.com/:
-    # Add this to your shell login script to make pip use the same
-    # directory for virtualenvs as virtualenvwrapper:
-    export PIP_VIRTUALENV_BASE=$WORKON_HOME
-
-    # and Via Nat:
-    # in addition to what becomingguru said, this line is key:
-    export PIP_RESPECT_VIRTUALENV=true
-
-    # That makes pip detect an active virtualenv and install to it,
-    # without having to pass it the -E parameter.
 fi
 
 
@@ -155,7 +118,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     }
 
     # Open Apps
-    alias byword='open -a "/Applications/Byword.app"'
     alias quicklook="qlmanage -p &>/dev/null"
     alias ql="quicklook"
     alias finder="open ."
@@ -182,7 +144,7 @@ if [[ "$(ls --version)" = *"GNU"* ]]; then
     alias ll='ls --color=always --format=long --human-readable'
     alias l='ls --color=always --almost-all --format=long --human-readable'
 else
-    # Not GNU utils
+    # Not GNU ls
     alias ll='ls -lh'
     alias l='ls -Alh'
 fi
@@ -195,3 +157,15 @@ alias externalip="curl icanhazip.com"
 
 # list TODO lines from the current project
 alias todos="ack --recurse --group '(TODO|todo|Todo|XXX|BUG|HACK|FIX(ME)?):'"
+
+# http://ruslanspivak.com/2010/06/02/urlencode-and-urldecode-from-a-command-line/
+# Enode url
+function urlencode() {
+    echo $@ | tr -d "\n" | xxd -plain | sed "s/\(..\)/%\1/g"
+}
+
+# Decode url
+function urldecode() {
+    printf $(echo -n $@ | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g')"\n"
+}
+

@@ -1,3 +1,8 @@
+# Check for updates on initial load
+if [ "$DOTPHILES_AUTO_UPDATE" != "true" ]; then
+    /usr/bin/env zsh $HOME/.dotphiles/tools/check_for_upgrade.sh
+fi
+
 is_plugin() {
     local base_dir=$1
     local name=$2

@@ -1,7 +1,6 @@
-#Pulled from:
-#https://help.github.com/articles/ignoring-files
-#http://thomashunter.name/blog/global-gitignore-vs-repository-gitignore/
-
+# Pulled from:
+# https://help.github.com/articles/ignoring-files
+# http://thomashunter.name/blog/global-gitignore-vs-repository-gitignore/
 
 # Compiled source #
 ###################
