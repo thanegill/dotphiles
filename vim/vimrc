@@ -4,8 +4,8 @@
 "
 " Sections:
 "    -> Vundle
-"    -> Plugin Settings
 "    -> General
+"    -> Plugin Settings
 "    -> FileType Specific
 "    -> VIM User Interface
 "    -> GUI VIM
@@ -55,54 +55,6 @@ Plugin 'tpope/vim-markdown'
 " All of your Plugins must be added before the following line
 call vundle#end()
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin Settings:
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"" vim-markdown
-let g:vim_markdown_folding_disabled=1
-
-"" NERDcommenter
-let NERDCommentWholeLinesInVMode=1
-let NERDRemoveExtraSpaces=1
-let NERDSpaceDelims=1
-
-"" Startify
-let g:startify_skiplist = [
-    \ 'COMMIT_EDITMSG',
-    \ ]
-let g:startify_show_files = 1
-let g:startify_show_files_number = 10
-let g:startify_show_sessions = 1
-let g:startify_change_to_vcs_root = 1
-let g:startify_bookmarks = [
-    \ '~/.vimrc',
-    \ '~/.zshrc',
-    \ '~/.tmux.conf'
-    \ ]
-
-"" VIM-Airline
-let g:airline_thme = 'solarized'
-
-" Remove seperator symbols
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-
-" Enable/disable virtualenv integration
-let g:airline#extensions#virtualenv#enabled = 1
-
-"" NERDTree
-" Show hidden files
-let NERDTreeShowHidden=1
-
-" Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
-    \ && b:NERDTreeType == "primary") | q | endif
-
-"" Vim-Trailing-Whitespace
-" Delete trailing whitespace (calls plugin)
-map <leader>dw :FixWhitespace<cr>
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General:
@@ -141,11 +93,61 @@ let g:mapleader = ","
 " Force saving files that require root permission
 cmap w!! w !sudo tee > /dev/null %
 
-" Toggle  NERDTree (has to be defined after the leader)
-map <leader>nn :NERDTreeToggle<cr>
-
 " Open URL under curser, OSX only
 nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin Settings:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" vim-markdown
+let g:vim_markdown_folding_disabled=1
+
+"" NERDcommenter
+let NERDCommentWholeLinesInVMode=1
+let NERDRemoveExtraSpaces=1
+let NERDSpaceDelims=1
+
+"" Startify
+let g:startify_skiplist = [
+    \ 'COMMIT_EDITMSG',
+    \ ]
+let g:startify_show_files = 1
+let g:startify_show_files_number = 10
+let g:startify_show_sessions = 1
+let g:startify_change_to_vcs_root = 1
+let g:startify_bookmarks = [
+    \ '~/.vimrc',
+    \ '~/.zshrc',
+    \ '~/.tmux.conf'
+    \ ]
+
+"" VIM-Airline
+" Solarized theme
+let g:airline_thme = 'solarized'
+
+" Remove seperator symbols
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+" Enable/disable virtualenv integration
+let g:airline#extensions#virtualenv#enabled = 1
+
+"" NERDTree
+" Show hidden files
+let NERDTreeShowHidden=1
+
+" Toggle NERDTree (has to be defined after the leader)
+map <leader>nn :NERDTreeToggle<cr>
+
+" Close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
+    \ && b:NERDTreeType == "primary") | q | endif
+
+"" Vim-Trailing-Whitespace
+" Delete trailing whitespace (calls plugin)
+map <leader>dw :FixWhitespace<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
