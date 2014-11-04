@@ -62,10 +62,10 @@ call vundle#end()
 
 " Highlight lines that are over 80 charaters long TODO
 " http://stackoverflow.com/a/10993757
-augroup vimrc_autocmds
-  autocmd BufEnter * highlight OverLength ctermbg=darkred ctermfg=white guibg=#592929
-  autocmd BufEnter * match OverLength /\%81v.*/
-augroup END
+" augroup vimrc_autocmds
+"   autocmd BufEnter * highlight OverLength ctermbg=darkred ctermfg=white guibg=#592929
+"   autocmd BufEnter * match OverLength /\%81v.*/
+" augroup END
 
 " Optimize for fast terminal connections
 set ttyfast
