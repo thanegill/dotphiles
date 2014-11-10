@@ -97,6 +97,9 @@ fi
 alias vi='vim'
 alias g='git'
 
+# Alias xdg-open to open if xdg-open exist
+whence xdg-open > /dev/null && alias open='xdg-open'
+
 # OSX Specific alises
 if [[ "$OSTYPE" == "darwin"* ]]; then
 
