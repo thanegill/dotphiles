@@ -44,7 +44,6 @@ plugins=(\
     terminalapp \
     vagrant \
     vim-interaction \
-    xcode \
 )
 
 # Load plugins
