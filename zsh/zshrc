@@ -33,16 +33,12 @@ plugins=(\
     brew \
     brew-cask \
     colored-man \
-    django \
     go \
     python \
     pip \
-    ruby \
     rsync \
     rake \
-    sublime \
     terminalapp \
-    vagrant \
     vim-interaction \
 )
 
