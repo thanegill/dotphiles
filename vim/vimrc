@@ -193,6 +193,9 @@ set cmdheight=1
 " Always show the status line
 set laststatus=2
 
+" Show uncompleted commands
+set showcmd
+
 " Will insert tab at beginning of line, will use completion if not at beginning
 set wildmode=list:longest,list:full
 
