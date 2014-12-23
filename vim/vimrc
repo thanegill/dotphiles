@@ -320,6 +320,8 @@ set foldmethod=indent
 " Deepest fold is 3 levels
 set foldnestmax=3
 
+set formatoptions=tcqronj
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Moving Around
