@@ -46,7 +46,6 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 
 " Syntax
-Plugin 'jnwhiteh/vim-golang'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
@@ -202,13 +201,7 @@ set wildmenu
 " Stuff to ignore when tab completing
 set wildignore=*.o,*.obj,*~,*.pyc
 set wildignore+=*vim/backups*
-set wildignore+=*sass-cache*
 set wildignore+=*DS_Store*
-set wildignore+=vendor/rails/**
-set wildignore+=vendor/cache/**
-set wildignore+=*.gem
-set wildignore+=log/**
-set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 
 " Buffers can exist in the background without being in a window.
