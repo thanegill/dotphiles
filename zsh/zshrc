@@ -30,17 +30,24 @@ COMPLETION_WAITING_DOTS="true"
 # (plugins can be found in ~/.dotphiles/zsh/plugins/*)
 # Custom plugins may be added to ~/.dotphiles/zsh/custom/plugins/
 plugins=(\
-    brew \
-    brew-cask \
     colored-man \
     go \
     python \
     pip \
     rsync \
     rake \
-    terminalapp \
     vim-interaction \
 )
+
+
+# If OSX add these plugins
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    plugins+=( \
+        brew \
+        brew-cask \
+        terminalapp \
+    )
+fi
 
 # Load plugins
 source $HOME/.dotphiles/zsh/load-plugins.sh
@@ -59,9 +66,6 @@ source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
 # Turn off less history
 export LESSHISTFILE="-"
 
-# brew-cask default to /Applications
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-
 
 # -------------- #
 #      PATH      #
@@ -69,15 +73,18 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # OSX
-    export GOPATH=$HOME/go
-    export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
-    export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+    export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
+    export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
+    export GOPATH=$HOME/go
+
+    # brew-cask default to /Applications
+    export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 else
     # Non-OSX
-    export GOPATH=$HOME/go
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
+    export GOPATH=$HOME/go
 fi
 
 
@@ -93,7 +100,10 @@ alias vi='vim'
 alias g='git'
 
 # Alias xdg-open to open if xdg-open exist
-whence xdg-open > /dev/null && alias open='xdg-open'
+hash xdg-open >/dev/null 2>&1 && alias open='xdg-open'
+
+# Recursively delete `.DS_Store` files
+alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 
 # OSX Specific alises
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -120,9 +130,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     alias ql="quicklook"
     alias finder="open ."
 
-    # Recursively delete `.DS_Store` files
-    alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
-
     # cd to the path of the front Finder window
     cdf() {
         local target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
@@ -133,6 +140,16 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         fi
     }
 
+fi
+
+# Set <Caps Lock> to <Ctrl> and single press <Ctrl> to <Esc>
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    if hash xcape >/dev/null 2>&1; then
+        setxkbmap -option 'caps:ctrl_modifier'
+        xcape -e 'Caps_Lock=Escape;Control_L=Escape;Control_R=Escape'
+    else
+        echo "Install xcape to remap Caps Lock"
+    fi
 fi
 
 # List direcory contents - ls
@@ -150,7 +167,7 @@ fi
 # Make executable
 alias ax="chmod a+x"
 
-# Get your current public IP
+# Get current public IP
 alias externalip="curl icanhazip.com"
 
 # list TODO lines from the current project
