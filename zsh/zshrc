@@ -73,18 +73,18 @@ export LESSHISTFILE="-"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # OSX
+    export GOPATH=$HOME/go
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
     export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
-    export GOPATH=$HOME/go
 
     # brew-cask default to /Applications
     export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 else
     # Non-OSX
+    export GOPATH=$HOME/go
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
-    export GOPATH=$HOME/go
 fi
 
 
