@@ -40,3 +40,7 @@
     clean = git-media-clean %f
     smudge = git-media-smudge %f
 
+
+[credential "https://github.com"]
+    username = psophis
+
