@@ -43,6 +43,7 @@ Bundle 'bronson/vim-trailing-whitespace'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
+Bundle 'kana/vim-smartinput'
 
 " Syntax
 
