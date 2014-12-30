@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 
 function current_epoch() {
     echo $(($(date +%s) / 60 / 60 / 24))
@@ -16,7 +16,7 @@ function upgrade_dotphiles() {
 
 epoch_target=$UPDATE_DOTPHILES_DAYS
 if [[ -z "$epoch_target" ]]; then
-    # Default to old behavior
+    # Default to 13 days
     epoch_target=13
 fi
 

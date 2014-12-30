@@ -23,27 +23,27 @@
 " Vundle:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Required by Vundle
+" Required by vundle
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
+set runtimepath+=~/.vim/bundle/vundle.vim
 call vundle#begin()
 
-" Let Vundle manage Vundle, required
-Plugin 'gmarik/vundle.vim'
+" Let Vundle manage vundle, required
+Bundle 'gmarik/vundle.vim'
 
 " Interface
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'bling/vim-airline'
-Plugin 'mhinz/vim-startify'
-Plugin 'scrooloose/nerdtree'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'bling/vim-airline'
+Bundle 'mhinz/vim-startify'
+Bundle 'scrooloose/nerdtree'
 
 " Functionality
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
+Bundle 'bronson/vim-trailing-whitespace'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-surround'
 
 " Syntax
 
@@ -85,9 +85,6 @@ nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Settings:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"" vim-markdown
-let g:vim_markdown_folding_disabled=1
 
 "" NERDcommenter
 let NERDCommentWholeLinesInVMode=1
@@ -140,10 +137,10 @@ map <leader>dw :FixWhitespace<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd Filetype markdown setlocal wrap
 autocmd Filetype markdown setlocal linebreak
 autocmd Filetype markdown setlocal nolist
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 " Git Commmit Message
 
