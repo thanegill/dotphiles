@@ -1,23 +1,22 @@
-" Original source: http://amix.dk/vim/vimrc.txt
-"
 " Sections:
-"    -> Vundle
-"    -> General
-"    -> Plugin Settings
-"    -> FileType Specific
-"    -> VIM User Interface
-"    -> GUI VIM
-"    -> Colors and Fonts
-"    -> Files, Backups and Undo
-"    -> Tab, Indent, and Folding
-"    -> Moving Around
-"    -> Tabs, Windows and Buffers
-"    -> Tab Completion
-"    -> Editing Mappings
-"    -> Search
-"    -> Spell Check
-"    -> Copy Paste
+"    - Vundle
+"    - General
+"    - Plugin Settings
+"    - FileType Specific
+"    - VIM User Interface
+"    - GUI VIM
+"    - Colors and Theme
+"    - Files, Backups and Undo
+"    - Tab, Indent, and Folding
+"    - Moving Around
+"    - Tabs, Windows and Buffers
+"    - Tab Completion
+"    - Editing Mappings
+"    - Search
+"    - Spell Check
+"    - Copy Paste
 
+" Original source: http://amix.dk/vim/vimrc.txt
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vundle:
@@ -47,7 +46,7 @@ Bundle 'tpope/vim-surround'
 
 " Syntax
 
-" All of your Plugins must be added before the following line
+" All of your plugins must be added before the following line
 call vundle#end()
 
 
@@ -74,12 +73,15 @@ set history=500
 " Set to auto read when a file is changed from the outside
 set autoread
 
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use unix as the standard file type
+set fileformats=unix,dos,mac
+
 " Map Leader to comma
 let mapleader = ","
 let g:mapleader = ","
-
-" Open URL under curser, OSX only
-nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -113,7 +115,7 @@ let g:airline_thme = 'solarized'
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 
-" Enable/disable virtualenv integration
+" Enable virtualenv integration
 let g:airline#extensions#virtualenv#enabled = 1
 
 "" NERDTree
@@ -150,9 +152,13 @@ autocmd FileType gitcommit DiffGitCached | wincmd p
 " Turn on spell check for commit messages
 autocmd BufRead COMMIT_EDITMSG setlocal spell!
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VIM User Interface:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Display tabs, trailing spaces, end of line and nonbreaking space visually
+set list listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
 
 " Mouse
 if has("mouse")
@@ -162,13 +168,15 @@ endif
 " Turn on line numbers
 set number
 
-" Set lines to the cursor - when moving vertically using j/k
+" Set lines to the cursor when moving vertically using j/k. Set to a high
+" number (999) to keep the cursor in the center at all times.
 set scrolloff=5
 
-" Set columns to the cursor - when moving horizontally using h/l
+" Set columns to the cursor when moving horizontally using h/l. Set to a high
+" number (999) to keep the cursor in the center at all times.
 set sidescrolloff=14
 
-" Always show current position
+" Always show current position in status bar.
 set ruler
 
 " Highlight current line
@@ -177,11 +185,8 @@ set cursorline
 " Text width
 set textwidth=80
 
-" Highlight textwidth column
+" Highlight textwidth column plus one
 set colorcolumn=+1
-
-" Height of the command bar
-set cmdheight=1
 
 " Always show the status line
 set laststatus=2
@@ -201,10 +206,6 @@ set wildignore+=*vim/backups*
 set wildignore+=*DS_Store*
 set wildignore+=*.png,*.jpg,*.gif
 
-" Buffers can exist in the background without being in a window.
-" http://items.sjbach.com/319/configuring-vim-right
-set hidden
-
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
@@ -218,13 +219,6 @@ set novisualbell
 set t_vb=
 set timeoutlen=500
 
-" Highlight lines that are over 80 characters long TODO
-" http://stackoverflow.com/a/10993757
-" augroup vimrc_autocmds
-"   autocmd BufEnter * highlight OverLength ctermbg=darkred ctermfg=white guibg=#592929
-"   autocmd BufEnter * match OverLength /\%81v.*/
-" augroup END
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " GUI VIM (MacVIM, GVIM, etc..):
@@ -232,13 +226,21 @@ set timeoutlen=500
 
 " GUI is running or is about to start
 if has("gui_running")
+
     " Set window size
     set lines=70 columns=90
+
+    " Hide GUI toolbar
+    set guioptions-=T
+
+    " Show the tab bar as as GUI tab bar.
+    set guioptions+=e
+
 endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Colors and Fonts:
+" Colors and Theme:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Enable syntax highlighting
@@ -249,38 +251,25 @@ colorscheme solarized
 set background=dark
 highlight clear SignColumn
 
-" Set extra options when running in GUI mode
-if has("gui_running")
-    set guioptions-=T
-    set guioptions+=e
-    set guitablabel=%M\ %t
-endif
-
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
-
-" Use unix as the standard file type
-set fileformats=unix,dos,mac
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Files, Backups and Undo:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"" Turn backup off
+" Turn backup off
 set noswapfile
 set nobackup
 set nowritebackup
 
-" Keep undo history across sessions, by storing in file
+" Keep undo history across sessions, by storing in file.
 silent !mkdir ~/.vim/backups > /dev/null 2>&1
 set undodir=~/.vim/backups
 set undofile
 
-" Remember info about open buffers on close
+" Remember info about open buffers on close.
 set viminfo^=%
 
-" Return to last edit position when opening files
+" Return to last edit position when opening files.
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \     exe "normal! g`\"" |
@@ -289,9 +278,6 @@ autocmd BufReadPost *
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Tab, Indent, and Folding:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Display tabs, trailing spaces, end of line and nonbreaking space visually
-set list listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
 
 " Use spaces instead of tabs
 set expandtab
@@ -318,7 +304,7 @@ set formatoptions=tcqronj
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Moving Around
+" Moving Around:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Treat long lines as break lines
@@ -350,7 +336,6 @@ vnoremap > >gv
 vnoremap < <gv
 
 " Move lines up/down
-" http://vim.wikia.com/wiki/Moving_lines_up_or_down#Mappings_to_move_lines
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 inoremap <C-j> <Esc>:m .+1<CR>==gi
@@ -363,36 +348,37 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 " Tabs, Windows and Buffers:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Close the current buffer
-map <leader>bx :Bclose<cr>
+" Buffers can exist in the background without being in a window.
+" http://items.sjbach.com/319/configuring-vim-right
+set hidden
 
-" Close all the buffers
-map <leader>bxa :1,1000 bd!<cr>
-
-" Tab management
-map <leader>tc :tabnew<cr>
-map <leader>tn :tabnext<cr>
-map <leader>tp :tabprevious<cr>
-map <leader>to :tabonly<cr>
-map <leader>tx :tabclose<cr>
-map <leader>tm :tabmove<cr>
-
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
-
-" Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
-
-" Specify the behavior when switching between buffers
+" Specify the behavior when switching between buffers,
 set switchbuf=useopen,usetab,newtab
 
 " Always show tab bar
 set showtabline=2
 
-" Open new split panes to right and bottom
+" Open new split panes to right and bottom.
 set splitright
 set splitbelow
+
+" Close current buffer
+nnoremap <leader>bx :Bclose<cr>
+
+" Close all buffers
+nnoremap <leader>bxa :1,1000 bd!<cr>
+
+" Tab management with similar binding to tmux.
+nnoremap <leader>tc :tabnew<cr>
+nnoremap <leader>tn :tabnext<cr>
+nnoremap <leader>tp :tabprevious<cr>
+nnoremap <leader>to :tabonly<cr>
+nnoremap <leader>tx :tabclose<cr>
+nnoremap <leader>tm :tabmove<cr>
+
+" Opens a new tab with the current buffer's path. Super useful when editing
+" files in the same directory.
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -420,17 +406,27 @@ inoremap <s-tab> <c-n>
 " Editing Mappings:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Remap VIM 0 to first non-blank character
-map 0 ^
+" Remap 0 to first non-blank character
+nnoremap 0 ^
+
+" Remap ^ to first column
+nnoremap ^ 0
 
 " Increment number by one
 nnoremap + <C-a>
 
-" Decrement number by one, useign `=` so I don't have to press shift
+" Decrement number by one, using `=` so I don't have to press shift.
 nnoremap = <C-x>
 
 " Force saving files that require root permission
 cmap w!! w !sudo tee > /dev/null %
+
+" Change working directory to the directory of the open buffer.
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Open URL under curser, OSX only
+nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Search:
@@ -445,11 +441,11 @@ set smartcase
 " Highlight search results
 set hlsearch
 
-" Makes search act like search in modern browsers
+" Highlight searches as they are typed.
 set incsearch
 
 " Disable search highlight
-map <silent> <leader><space> :nohlsearch<cr>
+map <silent> <leader><space> :silent :nohlsearch<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -483,29 +479,3 @@ map <leader>pp :setlocal paste!<cr>
 autocmd InsertLeave * set nopaste
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Other Testing:
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" This still needs some work:
-
-" Train yourself not to move with jklh;
-" search, jump or move by word instead
-" let s:fingertrainingflag = 1
-" function ToggleFingerTraining()
-    " if s:fingertrainingflag
-        " noremap j <ESC>
-        " noremap k <ESC>
-        " noremap h <ESC>
-        " noremap l <ESC>
-        " let s:fingertrainingflag = 0
-    " else
-        " noremap j gj
-        " noremap k gk
-        " unmap h
-        " unmap l
-    " endif
-" endfunction
-
-" Type :ToogleFingerTraining to use this
-" command ToggleFingerTraining call ToggleFingerTraining()
