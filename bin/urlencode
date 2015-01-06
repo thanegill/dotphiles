@@ -1,0 +1,5 @@
+#! /bin/bash
+#
+# http://ruslanspivak.com/2010/06/02/urlencode-and-urldecode-from-a-command-line/
+# Enode url
+echo $@ | tr -d "\n" | xxd -plain | sed "s/\(..\)/%\1/g"

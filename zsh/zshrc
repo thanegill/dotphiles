@@ -20,7 +20,7 @@ export EDITOR=vim
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment following line if you want red dots to
 # be displayed while waiting for completion
@@ -39,8 +39,7 @@ plugins=(\
     vim-interaction \
 )
 
-
-# If OSX add these plugins
+# If OSX add these plugins as well.
 if [[ "$OSTYPE" == "darwin"* ]]; then
     plugins+=( \
         brew \
@@ -92,9 +91,6 @@ fi
 #   Custom Aliases   #
 # ------------------ #
 
-# http://brettterpstra.com/2013/03/31/a-few-more-of-my-favorite-shell-aliases/
-# http://brettterpstra.com/2013/03/14/more-command-line-handiness/
-
 # Shortcuts
 alias vi='vim'
 alias g='git'
@@ -107,6 +103,11 @@ alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 
 # OSX Specific alises
 if [[ "$OSTYPE" == "darwin"* ]]; then
+
+    # Open Apps
+    alias quicklook="qlmanage -p &>/dev/null"
+    alias ql="quicklook"
+    alias finder="open ."
 
     function trash() {
         local trash_dir="${HOME}/.Trash"
@@ -124,11 +125,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         done
         IFS=$temp_ifs
     }
-
-    # Open Apps
-    alias quicklook="qlmanage -p &>/dev/null"
-    alias ql="quicklook"
-    alias finder="open ."
 
     # cd to the path of the front Finder window
     cdf() {
@@ -172,15 +168,4 @@ alias externalip="curl icanhazip.com"
 
 # list TODO lines from the current project
 alias todos="ack --recurse --group '(TODO|todo|Todo|XXX|BUG|HACK|FIX(ME)?):'"
-
-# http://ruslanspivak.com/2010/06/02/urlencode-and-urldecode-from-a-command-line/
-# Enode url
-function urlencode() {
-    echo $@ | tr -d "\n" | xxd -plain | sed "s/\(..\)/%\1/g"
-}
-
-# Decode url
-function urldecode() {
-    printf $(echo -n $@ | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g')"\n"
-}
 
