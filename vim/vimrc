@@ -40,10 +40,10 @@ Bundle 'scrooloose/nerdtree'
 
 " Functionality
 Bundle 'bronson/vim-trailing-whitespace'
-Bundle 'scrooloose/nerdcommenter'
+Bundle 'kana/vim-smartinput'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
-Bundle 'kana/vim-smartinput'
+Bundle 'scrooloose/nerdcommenter'
 
 " Syntax
 
@@ -139,11 +139,12 @@ map <leader>dw :FixWhitespace<cr>
 " FileType Specific:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Markdown
+"" Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd Filetype markdown setlocal wrap
 autocmd Filetype markdown setlocal linebreak
 autocmd Filetype markdown setlocal nolist
+autocmd Filetype markdown setlocal spell!
 
 " Git Commmit Message
 
@@ -151,7 +152,7 @@ autocmd Filetype markdown setlocal nolist
 autocmd FileType gitcommit DiffGitCached | wincmd p
 
 " Turn on spell check for commit messages
-autocmd BufRead COMMIT_EDITMSG setlocal spell!
+autocmd FileType gitcommit setlocal spell!
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
