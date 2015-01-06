@@ -20,26 +20,11 @@ function alias_value() {
 }
 
 #
-# Try to get the value of an alias,
-# otherwise return the input.
-#
-# Arguments:
-#    1. alias - The alias to get its value from
-# STDOUT:
-#    The value of alias $1, or $1 if there is no alias $1.
-# Return value:
-#    Always 0
-#
-function try_alias_value() {
-    alias_value "$1" || echo "$1"
-}
-
-#
 # Set variable "$1" to default value "$2" if "$1" is not yet defined.
 #
 # Arguments:
 #    1. name - The variable to set
-#    2. val  - The default value 
+#    2. val  - The default value
 # Return value:
 #    0 if the variable exists, 3 if it was set
 #
@@ -48,16 +33,3 @@ function default() {
     typeset -g "$1"="$2"   && return 3
 }
 
-#
-# Set enviroment variable "$1" to default value "$2" if "$1" is not yet defined.
-#
-# Arguments:
-#    1. name - The env variable to set
-#    2. val  - The default value 
-# Return value:
-#    0 if the env variable exists, 3 if it was set
-#
-function env_default() {
-    env | grep -q "^$1=" && return 0 
-    export "$1=$2"       && return 3
-}
