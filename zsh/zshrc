@@ -1,3 +1,4 @@
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "start of zshrc"
 # -------------- #
 #   ZSH Config   #
 # -------------- #
@@ -51,6 +52,8 @@ fi
 # Load plugins
 source $HOME/.dotphiles/zsh/load-plugins.sh
 
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "After plugins loaded"
+
 # Theme options
 THEME_RUBY="false"
 
@@ -58,6 +61,7 @@ THEME_RUBY="false"
 source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
 
 
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "After theme set"
 # -------------- #
 #    ENV VARS    #
 # -------------- #
@@ -71,11 +75,23 @@ export LESSHISTFILE="-"
 # -------------- #
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
+
+    # `brew --prefix` set staticly for speed
+    local brew_prefix="/usr/local"
+
+    # `brew --prefix coreutils` set staticly for speed
+    local brew_prefix_coreutils="/usr/local/opt/coreutils"
+
     # OSX
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "before"
     export GOPATH=$HOME/go
-    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
-    export MANPATH=$(brew --prefix coreutils)/libexec/gnuman:$MANPATH
-    export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "after GO"
+    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "after PATH"
+    export MANPATH=$brew_prefix_coreutils/libexec/gnuman:$MANPATH
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "after MANPATH"
+    export PYTHONPATH=$brew_prefix/lib/python2.7/site-packages:$PYTHONPATH
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "after PYTHONPATH"
 
     # brew-cask default to /Applications
     export HOMEBREW_CASK_OPTS="--appdir=/Applications"
@@ -86,6 +102,8 @@ else
     export PYTHONPATH=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'):$PYTHONPATH
 fi
 
+
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "After PATH"
 
 # ------------------ #
 #   Custom Aliases   #
@@ -169,3 +187,4 @@ alias externalip="curl icanhazip.com"
 # list TODO lines from the current project
 alias todos="ack --recurse --group '(TODO|todo|Todo|XXX|BUG|HACK|FIX(ME)?):'"
 
+echo $(/usr/local/opt/coreutils/libexec/gnubin/date +%S:%N) "End vimrc"
