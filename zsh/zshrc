@@ -1,4 +1,3 @@
-echo $(/bin/date +%S:%N) "start of zshrc"
 # -------------- #
 #   ZSH Config   #
 # -------------- #
@@ -52,8 +51,6 @@ fi
 # Load plugins
 source $HOME/.dotphiles/zsh/load-plugins.sh
 
-echo $(/bin/date +%S:%N) "After plugins loaded"
-
 # Theme options
 THEME_RUBY="false"
 
@@ -61,7 +58,6 @@ THEME_RUBY="false"
 source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
 
 
-echo $(/bin/date +%S:%N) "After theme set"
 # -------------- #
 #    ENV VARS    #
 # -------------- #
@@ -76,9 +72,6 @@ export LESSHISTFILE="-"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
 
-    # `brew --prefix` set staticly for speed
-    local brew_prefix="/usr/local"
-
     # `brew --prefix coreutils` set staticly for speed
     local brew_prefix_coreutils="/usr/local/opt/coreutils"
 
@@ -86,7 +79,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     export GOPATH=$HOME/go
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
     export MANPATH=$brew_prefix_coreutils/libexec/gnuman:$MANPATH
-    export PYTHONPATH=$brew_prefix/lib/python2.7/site-packages:$PYTHONPATH
 
     # brew-cask default to /Applications
     export HOMEBREW_CASK_OPTS="--appdir=/Applications"
@@ -96,8 +88,6 @@ else
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 fi
 
-
-echo $(/bin/date +%S:%N) "After PATH"
 
 # ------------------ #
 #   Custom Aliases   #
@@ -181,4 +171,3 @@ alias externalip="curl icanhazip.com"
 # list TODO lines from the current project
 alias todos="ack --recurse --group '(TODO|todo|Todo|XXX|BUG|HACK|FIX(ME)?):'"
 
-echo $(/bin/date +%S:%N) "End vimrc"
