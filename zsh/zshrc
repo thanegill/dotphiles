@@ -37,6 +37,7 @@ plugins=(\
     rsync \
     rake \
     vim-interaction \
+    virtualenvwrapper \
 )
 
 # If OSX add these plugins as well.

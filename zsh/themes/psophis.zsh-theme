@@ -62,7 +62,7 @@ function virtualenv_promt_info(){
     local virtualenv_path="$VIRTUAL_ENV"
     if [[ -n $virtualenv_path ]]; then
         local virtualenv_name=`basename $virtualenv_path`
-        print " %{${fg[blue]}%}[$virtualenv_name]"
+        print "%{${fg[blue]}%}[venv:$virtualenv_name]"
     fi
 }
 
