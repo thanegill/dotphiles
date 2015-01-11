@@ -35,6 +35,7 @@ Bundle 'gmarik/vundle.vim'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'bling/vim-airline'
+Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'mhinz/vim-startify'
 Bundle 'scrooloose/nerdtree'
 
@@ -124,7 +125,7 @@ let g:airline#extensions#virtualenv#enabled = 1
 let NERDTreeShowHidden=1
 
 " Toggle NERDTree (has to be defined after the leader)
-map <leader>nn :NERDTreeToggle<cr>
+map <leader>nn :NERDTreeTabsToggle<cr>
 
 " Close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
@@ -230,7 +231,7 @@ set timeoutlen=500
 if has("gui_running")
 
     " Set window size
-    set lines=70 columns=90
+    set lines=70 columns=115
 
     " Hide GUI toolbar
     set guioptions-=T
