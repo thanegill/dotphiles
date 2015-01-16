@@ -146,8 +146,6 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     if hash xcape >/dev/null 2>&1; then
         setxkbmap -option 'caps:ctrl_modifier'
         xcape -e 'Caps_Lock=Escape;Control_L=Escape;Control_R=Escape'
-    else
-        echo "Install xcape to remap Caps Lock"
     fi
 fi
 
