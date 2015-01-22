@@ -415,11 +415,11 @@ nnoremap 0 ^
 " Remap ^ to first column
 nnoremap ^ 0
 
-" Increment number by one
-nnoremap + <C-a>
+" Increment number by one, using `=` so I don't have to press shift.
+nnoremap = <C-a>
 
-" Decrement number by one, using `=` so I don't have to press shift.
-nnoremap = <C-x>
+" Decrement number by one
+nnoremap - <C-x>
 
 " Force saving files that require root permission
 cmap w!! w !sudo tee > /dev/null %
@@ -429,7 +429,6 @@ nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Open URL under curser, OSX only
 nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Search:
