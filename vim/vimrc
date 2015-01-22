@@ -60,6 +60,8 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'kana/vim-smartinput'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-commentary'
@@ -147,6 +149,12 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
 " Delete trailing whitespace (calls plugin)
 map <leader>dw :FixWhitespace<cr>
 
+"" EasyAlign
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+vmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <plug>(EasyAlign)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FileType Specific:
@@ -307,9 +315,9 @@ autocmd BufReadPost *
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Use spaces instead of tabs
-set expandtab
+" set expandtab
 set tabstop=4
-set softtabstop=4
+" set softtabstop=4
 set shiftwidth=4
 set smarttab
 set autoindent
