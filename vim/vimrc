@@ -230,6 +230,10 @@ set timeoutlen=500
 " GUI is running or is about to start
 if has("gui_running")
 
+    if has("gui_gtk2")
+        set guifont=DejaVu\ Sans\ Mono\ 9
+    endif
+
     " Set window size
     set lines=70 columns=115
 
