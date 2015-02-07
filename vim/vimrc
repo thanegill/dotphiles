@@ -473,6 +473,9 @@ set incsearch
 " Disable search highlight
 map <silent> <leader><space> :silent :nohlsearch<cr>
 
+" Search and replace word under cursor
+nnoremap # :%s/\<<C-r><C-w>\>/
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Spell Check:
