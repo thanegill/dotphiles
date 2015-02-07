@@ -1,5 +1,5 @@
 " Sections:
-"    - Vundle
+"    - NeoBundle
 "    - General
 "    - Plugin Settings
 "    - FileType Specific
@@ -19,38 +19,58 @@
 " Original source: http://amix.dk/vim/vimrc.txt
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vundle:
+" NeoBundle:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Required by vundle
-set nocompatible
-filetype off
-set runtimepath+=~/.vim/bundle/vundle.vim
-call vundle#begin()
+" Skip initialization for vim-tiny or vim-small
+if !1 | finish | endif
 
-" Let Vundle manage vundle, required
-Bundle 'gmarik/vundle.vim'
+if has('vim_starting')
+  if &compatible
+    set nocompatible
+  endif
+  " Required
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle, required
+NeoBundleFetch 'shougo/neobundle.vim'
+
+" Use vimproc to install/update asynchronously
+NeoBundle 'shougo/vimproc.vim', {
+\ 'build': {
+\     'mac': 'make',
+\     'unix': 'gmake',
+\     'linux': 'make',
+\     },
+\ }
 
 " Interface
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'bling/vim-airline'
-Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'mhinz/vim-startify'
-Bundle 'scrooloose/nerdtree'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'bling/vim-airline'
+NeoBundle 'jistr/vim-nerdtree-tabs'
+NeoBundle 'mhinz/vim-startify'
+NeoBundle 'scrooloose/nerdtree'
 
 " Functionality
-Bundle 'bronson/vim-trailing-whitespace'
-Bundle 'kana/vim-smartinput'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-surround'
-Bundle 'scrooloose/nerdcommenter'
+NeoBundle 'bronson/vim-trailing-whitespace'
+NeoBundle 'kana/vim-smartinput'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'scrooloose/nerdcommenter'
 
-" Syntax
+call neobundle#end()
 
-" All of your plugins must be added before the following line
-call vundle#end()
+" Required
+filetype plugin indent on
 
+" If there are uninstalled bundles found on startup, this will prompt you to
+" install them.
+NeoBundleCheck
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General:
@@ -483,5 +503,4 @@ map <leader>pp :setlocal paste!<cr>
 
 " Disable paste mode when leaving insert mode
 autocmd InsertLeave * set nopaste
-
 

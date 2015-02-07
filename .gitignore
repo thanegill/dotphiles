@@ -1,6 +1,6 @@
 dotphiles-update
 vim/.netrwhist
 vim/backups/
-!vim/bundle/vundle.vim/
+!vim/bundle/neobunble.vim
 vim/bundle/*
 zsh/cache/

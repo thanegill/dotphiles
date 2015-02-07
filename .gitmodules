@@ -4,6 +4,6 @@
 [submodule "bin/cellar/speedtest-cli"]
 	path = bin/cellar/speedtest-cli
 	url = git://github.com/sivel/speedtest-cli.git
-[submodule "vim/bundle/vundle.vim"]
-	path = vim/bundle/vundle.vim
-	url = https://github.com/gmarik/Vundle.vim.git
+[submodule "vim/bundle/neobundle.vim"]
+	path = vim/bundle/neobundle.vim
+	url = https://github.com/shougo/neobundle.vim
