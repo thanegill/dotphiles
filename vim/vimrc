@@ -41,18 +41,18 @@ NeoBundleFetch 'shougo/neobundle.vim'
 
 " Use vimproc to install/update asynchronously
 NeoBundle 'shougo/vimproc.vim', {
-\ 'build': {
-\     'mac': 'make',
-\     'unix': 'gmake',
-\     'linux': 'make',
-\     },
-\ }
+    \ 'build': {
+    \     'mac':   'make',
+    \     'unix':  'gmake',
+    \     'linux': 'make',
+    \     },
+    \ }
 
 " Interface
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'bling/vim-airline'
-NeoBundle 'jistr/vim-nerdtree-tabs'
+NeoBundle 'jistr/vim-nerdtree-tabs', {'depends': 'scrooloose/nerdtree'}
 NeoBundle 'mhinz/vim-startify'
 NeoBundle 'scrooloose/nerdtree'
 
@@ -62,11 +62,9 @@ NeoBundle 'kana/vim-smartinput'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'scrooloose/nerdcommenter'
+NeoBundle 'junegunn/vim-easy-align'
 
 call neobundle#end()
-
-" Required
-filetype plugin indent on
 
 " If there are uninstalled bundles found on startup, this will prompt you to
 " install them.
@@ -126,7 +124,7 @@ let g:startify_change_to_vcs_root = 1
 let g:startify_bookmarks = [
     \ '~/.vimrc',
     \ '~/.zshrc',
-    \ '~/.tmux.conf'
+    \ '~/.tmux.conf',
     \ ]
 
 "" VIM-Airline
@@ -167,7 +165,7 @@ autocmd Filetype markdown setlocal linebreak
 autocmd Filetype markdown setlocal nolist
 autocmd Filetype markdown setlocal spell!
 
-" Git Commmit Message
+"" Git Commmit Message
 
 " When commiting with git show diff in horizontal split using tpope/vim-fugitive
 autocmd FileType gitcommit DiffGitCached | wincmd p
@@ -254,8 +252,8 @@ if has("gui_running")
         set guifont=DejaVu\ Sans\ Mono\ 9
     endif
 
-    " Set window size
-    set lines=70 columns=115
+    " Set window size. 999 lines so that it's always vertically maximized
+    set lines=999 columns=115
 
     " Hide GUI toolbar
     set guioptions-=T
@@ -274,8 +272,10 @@ endif
 syntax enable
 
 set t_Co=256
-colorscheme solarized
 set background=dark
+try
+    colorscheme solarized
+endtry
 highlight clear SignColumn
 
 
