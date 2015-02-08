@@ -95,6 +95,9 @@ fi
 # ------------------ #
 
 # Shortcuts
+
+# Use neovim instead of vim if installed
+hash nvim >/dev/null 2>&1 && alias vim='nvim'
 alias vi='vim'
 alias g='git'
 
@@ -104,7 +107,7 @@ hash xdg-open >/dev/null 2>&1 && alias open='xdg-open'
 # Recursively delete `.DS_Store` files
 alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 
-# OSX Specific alises
+# OSX Specific aliases
 if [[ "$OSTYPE" == "darwin"* ]]; then
 
     # Open Apps
@@ -149,7 +152,7 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     fi
 fi
 
-# List direcory contents - ls
+# List directory contents - ls
 if [[ "$(ls --version)" = *"GNU"* ]]; then
     # GNU ls
     alias ls='ls --color=always'
