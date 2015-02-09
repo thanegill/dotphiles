@@ -222,9 +222,10 @@ def __git_submodual_update(dotphiles_directory):
         os.chdir(dotphiles_directory)
         print e_arrow.format('Updating submoduals...')
 
+        if os.system('submodule update --recursive --init') is not 0:
+            raise OSError
         if os.system('git submodule foreach git checkout master') is not 0:
             raise OSError
-
         if os.system('git submodule foreach git pull origin master') is not 0:
             raise OSError
     else:
