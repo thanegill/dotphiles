@@ -308,8 +308,8 @@ if __name__ == '__main__':
             print e_error.format('linkphile "%s" does not exist.' %
                     args.linkphile)
             sys.exit(1)
-            except OSError:
-                print e_error.format('Something went wrong while removing Vim plugings. Try manually.')
+        except OSError:
+            print e_error.format('Something went wrong while removing Vim plugings. Try manually.')
 
         print e_success.format('All done! Your dotphiles are now updated!')
 
