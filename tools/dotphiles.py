@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!env python2
 
 import os
 import sys
@@ -10,196 +10,255 @@ import fileinput
 import argparse
 
 
-e_success = "\033[1;32m{0}\033[0m"
-e_arrow   = "\033[1;34m{0}\033[0m"
-e_warning = "\033[1;33m{0}\033[0m"
-e_error   = "\033[1;31m{0}\033[0m"
+e_success = "\033[1;32m{0}\033[0m" # Green
+e_arrow   = "\033[1;34m{0}\033[0m" # White
+e_warning = "\033[1;33m{0}\033[0m" # Orange
+e_error   = "\033[1;31m{0}\033[0m" # Red
 
 
-def cmdExists(cmd):
-    return subprocess.call(("type %s" % cmd), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) is 0
+def __cmd_exists(cmd):
+    """
+    Checks to see if ``cmd`` is in the current $PATH
+    """
+    return subprocess.call(("hash %s" % cmd), shell=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE) is 0
 
 
-def installbin(toinstall):
-    """Install binary based on OS"""
+def __get_linkphiles(link_philes_file):
+    """
+    Using ``link_philes_file`` get's the files that need to be linked and
+    returns a dictionry of the sorce and destination to be linked
 
-    # Ensure that we can actually, like, compile anything.
-    if "darwin" in platform.platform().lower() and not cmdExists("gcc"):
-        if os.system("xcode-select --install") is not 0:
-            print e_error.format("Xcode command line tools failed to insall please insall\nmanually with \"xcode-select --install\".")
-            sys.exit(1)
+    format for link_philes_file is as follows:
 
-    if not cmdExists(toinstall):
-        # OSX
-        if "darwin" in platform.platform().lower():
-            # Install homebrew.
-            if not cmdExists("brew"):
-                print e_arrow.format("Installing Homebrew")
-                os.system("ruby -e \"$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)\"")
-            # If Homebrew was installed, install.
-            if cmdExists("brew"):
-                print e_arrow.format("Updating Brew")
-                os.system("brew update")
-                print e_arrow.format("Installing %s" % toinstall)
-                os.system("brew install %s" % toinstall)
+    ::
+        # Files to be linked
+        # <source> <destination>
+        # destination defaults to ~/.<basename>
+        ~/.dotphiles/zsh/zshrc
+        ~/.dotphiles/vim/
+        ~/.dotphiles/vim/ ~/.nvim
+        ~/.dotphiles/tmux/tmux.conf
+        ~/.dotphiles/git/gitconfig
 
-        # Ubuntu or Debian
-        elif "ubuntu" in platform.platform().lower() or "debian" in platform.platform().lower():
-            print e_arrow.format("Installing %s" % toinstall)
-            os.system("sudo apt-get -qy install %s" % toinstall)
+    """
+    # Normalize path and expand $HOME and ~
+    link_philes_file = os.path.normpath(os.path.expanduser(link_philes_file))
 
-        # CentOS or Fedora
-        elif "centos" in platform.platform().lower() or "fedora" in platform.platform().lower():
-            print e_arrow.format("Installing %s" % toinstall)
-            os.system("sudo yum -q -y install %s" % toinstall)
-    else:
-        print e_arrow.format("%s was already installed" % toinstall)
-
-
-def __getlinkphiles(linkphilesfile):
-    """Get files to link"""
-    linkphilesfile = os.path.normpath(os.path.expanduser(linkphilesfile))
-
-    if os.path.exists(linkphilesfile) and not os.path.isdir(linkphilesfile):
+    if os.path.exists(link_philes_file) and not os.path.isdir(link_philes_file):
         philes = []
-        for line in fileinput.input(linkphilesfile):
+        for line in fileinput.input(link_philes_file):
             line = line.strip()
-            if line.startswith("#") or not line:
+            if line.startswith('#') or not line:
                 # Skip comments and blank lines
                 continue
-
-            if "#" in line:
+            if '#' in line:
                 # Remove inline comments
-                line = line.split("#")[0].strip()
-
-            if " " in line:
-                # Split on slace if exist
-                line = line.strip().split(" ")
+                line = line.split('#')[0].strip()
+            if ' ' in line:
+                # Split on space if exist
+                line = line.strip().split(' ')
                 philes.append([os.path.normpath(os.path.expanduser(line[0])),
                     os.path.normpath(os.path.expanduser(line[1]))])
             else:
                 # Default to ~./basename
                 philes.append([os.path.normpath(os.path.expanduser(line.strip())),
-                    os.path.normpath(os.path.expanduser("~/.%s" % os.path.basename(os.path.normpath(line))))])
+                    os.path.normpath(os.path.expanduser("~/.%s" %
+                        os.path.basename(os.path.normpath(line))))])
 
         return philes
     else:
         raise IOError
 
 
-def unlinkphiles(linkphilesfile):
-    philes = __getlinkphiles(linkphilesfile)
+def install_binary(to_install):
+    """
+    Installs binary if ``to_install`` exist, if not installs using correct
+    package manager.
+
+    Supported OS's:
+
+    OS       package manager
+    ---------------------
+    OSX      brew
+    Ubuntu   apt-get
+    Debian   apt-get
+    CentOS   yum
+    Fedora   yum
+    """
+
+    if not __cmd_exists(to_install):
+        # OSX (brew)
+        if 'darwin' in platform.platform().lower():
+            # Ensure that we can actually compile anything on OSX.
+            if os.system('xcode-select --install') is not 0:
+                print e_error.format('Xcode command line tools failed to insall \
+                        please insall manually with "xcode-select --install".')
+                # Exit if xcode command line tools are not installed.
+                sys.exit(1)
+
+            # Install homebrew.
+            if not __cmd_exists('brew'):
+                print e_arrow.format('Installing Homebrew')
+                os.system('ruby -e "$(curl -fsSL \
+                        https://raw.github.com/mxcl/homebrew/go)"')
+
+            # If Homebrew was installed install ``to_install``.
+            if __cmd_exists('brew'):
+                print e_arrow.format('Updating Brew')
+                os.system('brew update')
+                print e_arrow.format("Installing %s" % to_install)
+                os.system("brew install %s" % to_install)
+
+        # Ubuntu or Debian (apt-get)
+        elif 'ubuntu' in platform.platform().lower() or 'debian' in \
+                platform.platform().lower():
+            print e_arrow.format("Installing %s" % to_install)
+            os.system("sudo apt-get -qy install %s" % to_install)
+
+        # CentOS or Fedora (yum)
+        elif 'centos' in platform.platform().lower() or 'fedora' in \
+                platform.platform().lower():
+            print e_arrow.format("Installing %s" % to_install)
+            os.system("sudo yum -q -y install %s" % to_install)
+    else:
+        print e_arrow.format("%s was already installed" % to_install)
+
+
+def unlinkphiles(link_philes_file):
+    """
+    Unlink files from ``link_philes_file``.
+    """
+    philes = __get_linkphiles(link_philes_file)
     for phile in philes:
         if os.path.islink(phile[1]):
             os.remove(phile[1])
-    print e_warning.format("Removed old links")
+    print e_warning.format('Removed old links')
 
 
-def linkphiles(linkphilesfile):
-    philes = __getlinkphiles(linkphilesfile)
+def linkphiles(link_philes_file):
+    """
+    Symbolically link files listed in ``link_philes_file`` where ``[0]`` is the
+    source and ``[1]`` is the destination.
+    """
+    philes = __get_linkphiles(link_philes_file)
 
     for phile in philes:
+        # Skip nonexistent sources
         if not os.path.exists(phile[0]):
-            # Skip nonexsistant sources
-            print e_error.format("Link %s -> %s was not created,\nas the source does not exist." %
-                (phile[1], phile[0]))
+            print e_error.format("Link %s -> %s was not created, as the source \
+                    does not exist."
+                    % (phile[1], phile[0]))
             continue
 
+        # Remove conflicting link
         if os.path.islink(phile[1]):
-            # Remove conflitcing link
-            print e_warning.format("Removing link %s -> %s,\nas it confilts with a link that is being created." %
-                (phile[1], os.path.normpath(os.readlink(os.path.expanduser(phile[1])))))
+            print e_warning.format("Removing link %s -> %s, as it conflicts \
+            with a link that is being created." % (phile[1],
+                os.path.normpath(os.readlink(os.path.expanduser(phile[1])))))
             os.remove(phile[1])
 
+        # Backup file or directory if not symlink
         if ((os.path.isfile(phile[1])
             or os.path.isdir(phile[1]))
             and not os.path.islink(phile[1])):
-            # Backup file or dir if not symlink
             os.rename(phile[1], ("%s.backup" % phile[1]))
             print e_warning.format("File \"%s\" has been backed up to \"%s\"." %
-                (phile[1], ("%s.backup" % phile[1])))
+                    (phile[1], ("%s.backup" % phile[1])))
 
-        print e_arrow.format("Creating link %s -> %s" %
-                (phile[1], phile[0]))
+        print e_arrow.format("Creating link %s -> %s" % (phile[1], phile[0]))
+
         os.symlink(phile[0], phile[1])
 
-    print e_success.format("All files have been linked.")
+    print e_success.format('All files have been linked.')
 
 
-def gitclone(dotphilesdir, repourl, branch):
-    dotphilesdir = os.path.normpath(os.path.expanduser(dotphilesdir))
+def git_clone(dotphiles_directory, repo_url, branch):
+    """
+    Clone dotphiles directory recursively.
+    """
+    dotphiles_directory = os.path.normpath(os.path.expanduser(dotphiles_directory))
 
-    if not os.path.exists(dotphilesdir):
-        print e_arrow.format("Downloading dotphiles...")
+    if not os.path.exists(dotphiles_directory):
+        print e_arrow.format('Downloading dotphiles...')
         if os.system("git clone --branch %s --recursive %s %s" %
-            (branch, repourl, dotphilesdir)) is not 0:
+            (branch, repo_url, dotphiles_directory)) is not 0:
             raise OSError
     else:
         raise IOError
 
-def gitpull(dotphilesdir, branch):
-    dotphilesdir = os.path.normpath(os.path.expanduser(dotphilesdir))
 
-    if (os.path.exists(os.path.join(dotphilesdir, ".git"))
-        and os.path.isdir(os.path.join(dotphilesdir, ".git"))):
-        os.chdir(dotphilesdir)
-        print e_arrow.format("Updating dotphiles...")
+def __is_git_repo(directory):
+    if (os.path.exists(os.path.join(directory, '.git'))
+        and os.path.isdir(os.path.join(directory, '.git'))):
+        return True
+    else:
+        return False
+
+
+def git_pull(dotphiles_directory, branch):
+    """
+    """
+    # Normalize dotphiles_directory and expand $HOME and ~
+    dotphiles_directory = os.path.normpath(os.path.expanduser(dotphiles_directory))
+
+    if __is_git_repo(dotphiles_directory):
+        os.chdir(dotphiles_directory)
+        print e_arrow.format('Updating dotphiles...')
 
         if os.system("git pull origin %s" % branch) is not 0:
             raise OSError
 
-        print e_arrow.format("Updating submoduals...")
+        __git_submodual_update(dotphiles_directory)
+    else:
+        raise IOError
 
-        if os.system("git submodule foreach git checkout master") is not 0:
+
+def __git_submodual_update(dotphiles_directory):
+    # Normalize dotphiles_directory and expand $HOME and ~
+    dotphiles_directory = os.path.normpath(os.path.expanduser(dotphiles_directory))
+
+    if __is_git_repo(dotphiles_directory):
+        os.chdir(dotphiles_directory)
+        print e_arrow.format('Updating submoduals...')
+
+        if os.system('git submodule foreach git checkout master') is not 0:
             raise OSError
 
-        if os.system("git submodule foreach git pull origin master") is not 0:
+        if os.system('git submodule foreach git pull origin master') is not 0:
             raise OSError
     else:
         raise IOError
 
 
-def gitsubupdate(dotphilesdir):
-    dotphilesdir = os.path.normpath(os.path.expanduser(dotphilesdir))
-
-    if (os.path.exists(os.path.join(dotphilesdir, ".git"))
-        and os.path.isdir(os.path.join(dotphilesdir, ".git"))):
-        os.chdir(dotphilesdir)
-        print e_arrow.format("Updating submoduals...")
-
-        if os.system("git submodule foreach git checkout master") is not 0:
-            raise OSError
-
-        if os.system("git submodule foreach git pull origin master") is not 0:
-            raise OSError
-    else:
-        raise IOError
-
-
-def vundleupdate():
-    if os.system('vim -c "execute \\"BundleInstall\!\\" | q | q"') is not 0:
-        raise OSError
-    print e_success.format("Vim plugins installed.")
-
-
-def vundleclean():
-    if os.system('vim -c "execute \\"BundleClean\!\\" | q | q"') is not 0:
-        raise OSError
-    print e_success.format("Unused Vim plugins removed.")
-
-
-def changeshell(shell, etcshells):
+def vim_update_plugins(dotphiles_directory):
     """
-    Change shell of current user to shell
-    `shell` should be the full path of the shell executable
+    Update/install plugins vim plugins using NeoBundle's neoinstall.
+    """
+    if os.system(os.path.join(dotphiles_directory,
+        'vim/bundle/neobundle.vim/bin/neoinstall')) is not 0:
+        raise OSError
+    print e_success.format('Vim plugins installed.')
+
+
+def vim_clean_plugins():
+    if os.system('vim +NeoBundleClean\! +qall') is not 0:
+        raise OSError
+    print e_success.format('Unused Vim plugins removed.')
+
+
+def change_shell(shell, etc_shells):
+    """
+    Change shell of current user to shell ``shell`` should be the full path of
+    the shell executable
     """
 
-    if not os.path.exists(etcshells):
+    if not os.path.exists(etc_shells):
         raise IOError
 
     shellavalible = False
 
-    for line in open(etcshells).readlines():
+    for line in open(etc_shells).readlines():
         if shell in line:
             shellavalible = True
 
@@ -207,102 +266,109 @@ def changeshell(shell, etcshells):
         raise OSError
 
     if os.environ["SHELL"] in shell:
-        print e_success.format("Shell is aleady %s." % shell)
+        print e_success.format("Shell is already %s." % shell)
     else:
         print ("Enter password to change shell to %s." % shell)
         sys.stdin = open('/dev/tty')
         if os.system("chsh -s %s" % shell) is not 0:
             print e_error.format("Shell not changed to %s. Try manually" % shell)
         else:
-            print e_success.format("Changed shell to \"%s\"" % os.environ["SHELL"])
+            print e_success.format("Changed shell to \"%s\"" %
+                    os.environ['SHELL'])
 
 if __name__ == '__main__':
 
     def install(args):
-        installbin("git")
+        install_binary('git')
 
         try:
-            gitclone(args.dotphilesdir, args.repourl, args.branch)
+            git_clone(args.dotphilesdir, args.repo_url, args.branch)
         except IOError:
-            print e_error.format("Directory %s alrady exists.\nTry `dotphiles update` instead?" %
-                args.dotphilesdir)
+            print e_error.format("Directory %s alrady exists. Try `dotphiles \
+                    update` instead?" % args.dotphilesdir)
             sys.exit(1)
         except OSError:
-            print e_error.format("Something went wrong with git.\nTry cloning manually.")
+            print e_error.format('Something went wrong with git. Try cloning \
+                    manually.')
             sys.exit(1)
 
         try:
             linkphiles(args.linkphile)
         except IOError:
-            print e_error.format("linkphile \"%s\" doesn't exist." % args.linkphile)
+            print e_error.format("linkphile \"%s\" doesn't exist." %
+                    args.linkphile)
             sys.exit(1)
 
-        installbin("vim")
+        install_binary('vim')
 
         if args.novim:
-            print e_arrow.format("Skipping Vim plugin install.")
+            print e_arrow.format('Skipping Vim plugin install.')
         else:
             try:
-                vundleupdate()
+                vim_update_plugins(args.dotphilesdir)
             except OSError:
-                print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
+                print e_error.format('Something went wrong while installing Vim \
+                        plugings. Try manually.')
 
-        installbin("zsh")
+        install_binary('zsh')
 
-        try:
-            changeshell(args.shell, args.etcshells)
-        except IOError:
-            print e_error.format("\"%s\" doesn't exist." % args.etcshells)
-            sys.exit(1)
-        except OSError:
-            print e_error.format("\"%s\" is not in \"%s\"." % (args.shell, args.etcshells))
-            sys.exit(1)
+        chsh(args)
 
-        os.system(args.shell)
-
-        print e_success.format("All done! Your dotphiles are now installed!")
+        print e_success.format('All done! Your dotphiles are now installed!')
 
     def update(args):
-        # Unlink old files first, incase source changed or deleted
+
+        # Unlink old files first, incase one was changed or deleted
         try:
             unlinkphiles(args.linkphile)
         except IOError:
-            print e_error.format("linkphile \"%s\" doesn't exist." % args.linkphile)
+            print e_error.format("linkphile \"%s\" doesn't exist." %
+                    args.linkphile)
             sys.exit(1)
 
+        # Pull new dotphiles repo
         try:
-            gitpull(args.dotphilesdir, args.branch)
+            git_pull(args.dotphilesdir, args.branch)
         except OSError:
-            print e_error.format("Something went wrong with git.\nTry pulling manually.")
-            print e_arrow.format("Relinking files...")
+            print e_error.format('Something went wrong with git. Try pulling \
+                    manually.')
+            print e_arrow.format('Relinking files...')
 
             # Relink files if update failed
             try:
                 linkphiles(args.linkphile)
             except IOError:
-                print e_error.format("linkphile \"%s\" doesn't exist.\nTry linking with dotphiles link." % args.linkphile)
+                print e_error.format("linkphile \"%s\" doesn't exist. Try \
+                        linking with dotphiles link." % args.linkphile)
             sys.exit(1)
 
+        # Link new dotphiles
         try:
             linkphiles(args.linkphile)
         except IOError:
-            print e_error.format("linkphile \"%s\" doesn't exist.\nTry linking with dotphiles link." % args.linkphile)
+            print e_error.format("linkphile \"%s\" doesn't exist. Try linking \
+                    with dotphiles link." % args.linkphile)
+            sys.exit(1)
 
+        # Update vim plugins
         if args.novim:
-            print e_arrow.format("Skipping Vim plugin updates")
+            # Skip vim plugins
+            print e_arrow.format('Skipping Vim plugin updates')
         else:
+            # Install and update plugins
             try:
-                vundleupdate()
+                vim_update_plugins(args.dotphilesdir)
             except OSError:
-                print e_error.format("Something went wrong while installing Vim plugings.\nTry manually.")
-
+                print e_error.format('Something went wrong while installing Vim \
+                        plugings. Try manually.')
+            # Cleanup old plugins
             try:
-                vundleclean()
+                vim_clean_plugins()
             except OSError:
-                print e_error.format("Something went wrong while removing Vim plugings.\nTry manually.")
+                print e_error.format('Something went wrong while removing Vim \
+                        plugings. Try manually.')
 
-
-        print e_success.format("All done! Your dotphiles are now updated!")
+        print e_success.format('All done! Your dotphiles are now updated!')
 
     def link(args):
         try:
@@ -314,19 +380,21 @@ if __name__ == '__main__':
             else:
                 linkphiles(args.linkphile)
         except IOError:
-            print e_error.format("linkphile \"%s\" doesn't exist." % args.linkphile)
+            print e_error.format("linkphile \"%s\" doesn't exist." %
+                    args.linkphile)
             sys.exit(1)
 
     def chsh(args):
         try:
-            changeshell(args.shell, args.etcshells)
+            change_shell(args.shell, args.etcshells)
+            os.system(args.shell)
         except IOError:
             print e_error.format("\"%s\" doesn't exist." % args.etcshells)
             sys.exit(1)
         except OSError:
-            print e_error.format("\"%s\" is not in \"%s\"." % (args.shell, args.etcshells))
+            print e_error.format("\"%s\" is not in \"%s\"." % (args.shell,
+                args.etcshells))
             sys.exit(1)
-
 
     parser = argparse.ArgumentParser(prog='dotphiles')
     subparsers = parser.add_subparsers(help='sub-command --help')
@@ -341,7 +409,8 @@ if __name__ == '__main__':
             help='Branch to use for cloning (default: "%(default)s")')
     parser_install.add_argument('--home', action='store', metavar='PATH',
             type=os.path.join, default='~/',
-            help='Home directory to install dotphiles to. Can be any directory. (default: "%(default)s")')
+            help='Home directory to install dotphiles to. Can be any directory. \
+            (default: "%(default)s")')
     parser_install.add_argument('--dotphilesdir', action='store', metavar='PATH',
             type=os.path.join, default='~/.dotphiles',
             help='Directory name for dotphiles. (default: "%(default)s")')
@@ -349,9 +418,11 @@ if __name__ == '__main__':
             type=os.path.join, default='~/.dotphiles/linkphiles',
             help='File with to link dotphiles. (default: "%(default)s")')
     parser_install.add_argument('--force', action='store_true',
-            help='Force removal of old dotphiles and installation of vim plugins.')
+            help='Force removal of old dotphiles and installation of vim \
+            plugins.')
     parser_install.add_argument('--novim', action='store_true',
-            help='Do not install Vim plugins. Vundle will still be install. Useful for faster install.')
+            help='Do not install Vim plugins. Vundle will still be install. \
+            Useful for faster install.')
 
     parser_update = subparsers.add_parser('update', help='update --help')
     parser_update.set_defaults(func=update)
@@ -385,7 +456,6 @@ if __name__ == '__main__':
     parser_chsh.add_argument('--etcshells', action='store', metavar='path',
             type=os.path.join, default='/etc/shells',
             help='Path to /etc/shells if diffrent. (default: "%(default)s"))')
-
 
     args = parser.parse_args()
     args.func(args)
