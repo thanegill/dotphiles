@@ -362,7 +362,7 @@ if __name__ == '__main__':
     parser_install.add_argument('--force', action='store_true',
             help='Force removal of old dotphiles and installation of vim plugins.')
     parser_install.add_argument('--novim', action='store_true',
-            help='Do not install Vim plugins. Vundle will still be install. Useful for faster install.')
+            help='Do not install Vim plugins. NeoBundle will still be install. Useful for faster install.')
 
     parser_update = subparsers.add_parser('update', help='update --help')
     parser_update.set_defaults(func=update)
