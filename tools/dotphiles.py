@@ -303,15 +303,55 @@ if __name__ == '__main__':
 
         # Unlink old files first, incase one was changed or deleted
         try:
+            unlinkphiles(args.linkphile)
             unlink_philes(args.linkphile)
         except IOError:
             print e_error.format('linkphile "%s" does not exist.' %
                     args.linkphile)
             sys.exit(1)
+
+        # Pull new dotphiles repo
+        try:
+            git_pull(args.dotphilesdir, args.branch)
         except OSError:
-            print e_error.format('Something went wrong while removing Vim plugings. Try manually.')
+            print e_error.format('Something went wrong with git. Try pulling manually.')
+            print e_arrow.format('Relinking files...')
+
+            # Relink files if update failed
+            try:
+                linkphiles(args.linkphile)
+            except IOError:
+                print e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
+                        args.linkphile)
+            sys.exit(1)
+
+        # Link new dotphiles
+        try:
+            linkphiles(args.linkphile)
+        except IOError:
+            print e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
+                    args.linkphile)
+            sys.exit(1)
+
+        # Update vim plugins
+        if args.novim:
+            # Skip vim plugins
+            print e_arrow.format('Skipping Vim plugin updates')
+        else:
+            # Install and update plugins
+            try:
+                vim_update_plugins(args.dotphilesdir)
+            except OSError:
+                print e_error.format('Something went wrong while installing Vim plugings. Try manually.')
+            # Cleanup old plugins
+            try:
+                vim_clean_plugins()
+            except OSError:
+                print e_error.format('Something went wrong while removing Vim plugings. Try manually.')
 
         print e_success.format('All done! Your dotphiles are now updated!')
+
+
 
     def link(args):
         try:
@@ -362,7 +402,7 @@ if __name__ == '__main__':
     parser_install.add_argument('--force', action='store_true',
             help='Force removal of old dotphiles and installation of vim plugins.')
     parser_install.add_argument('--novim', action='store_true',
-            help='Do not install Vim plugins. NeoBundle will still be install. Useful for faster install.')
+            help='Do not install Vim plugins. NeoBundle will still be installed. Useful for faster install.')
 
     parser_update = subparsers.add_parser('update', help='update --help')
     parser_update.set_defaults(func=update)
