@@ -303,7 +303,6 @@ if __name__ == '__main__':
 
         # Unlink old files first, incase one was changed or deleted
         try:
-            unlinkphiles(args.linkphile)
             unlink_philes(args.linkphile)
         except IOError:
             print e_error.format('linkphile "%s" does not exist.' %
@@ -319,7 +318,7 @@ if __name__ == '__main__':
 
             # Relink files if update failed
             try:
-                linkphiles(args.linkphile)
+                link_philes(args.linkphile)
             except IOError:
                 print e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
                         args.linkphile)
@@ -327,7 +326,7 @@ if __name__ == '__main__':
 
         # Link new dotphiles
         try:
-            linkphiles(args.linkphile)
+            link_philes(args.linkphile)
         except IOError:
             print e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
                     args.linkphile)
