@@ -54,6 +54,4 @@ if (( $+commands[$virtualenvwrapper] )); then
         set -A chpwd_functions workon_cwd
     fi
   fi
-else
-  print "zsh virtualenvwrapper plugin: Cannot find ${virtualenvwrapper}. Please install with \`pip install virtualenvwrapper\`."
 fi
