@@ -135,6 +135,9 @@ let g:airline_thme = 'solarized'
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 
+" Increase max sign in vim-gitgutter
+let g:gitgutter_max_signs = 16384
+
 " Enable virtualenv integration
 let g:airline#extensions#virtualenv#enabled = 1
 
