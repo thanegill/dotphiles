@@ -385,8 +385,8 @@ set switchbuf=useopen,usetab,newtab
 " Always show tab bar
 set showtabline=2
 
-" Open new split panes to right and bottom.
-set splitright
+" Open new split panes to left and bottom.
+set nosplitright
 set splitbelow
 
 " Close current buffer
