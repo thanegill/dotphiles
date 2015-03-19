@@ -183,8 +183,8 @@ def _git_submodual_update(repo_directory):
         raise IOError
 
 
-def git_clone(repo_directory, repo_url, branch):
-    """Recursively clones the given ``repo_url`` with branch ``branch`` into
+def git_clone(repo_directory, repourl, branch):
+    """Recursively clones the given ``repourl`` with branch ``branch`` into
     repo_directory ``repo_directory``.
     """
     # Normalize repo_directory and expand $HOME and ~
@@ -193,7 +193,7 @@ def git_clone(repo_directory, repo_url, branch):
     if not os.path.exists(repo_directory):
         print e_arrow.format('Downloading dotphiles...')
         if os.system('git clone --branch %s --recursive %s %s' %
-            (branch, repo_url, repo_directory)) is not 0:
+            (branch, repourl, repo_directory)) is not 0:
             raise OSError
         _git_submodual_update(repo_directory)
     else:
@@ -267,7 +267,7 @@ if __name__ == '__main__':
         install_binary('git')
 
         try:
-            git_clone(args.dotphilesdir, args.repo_url, args.branch)
+            git_clone(args.dotphilesdir, args.repourl, args.branch)
         except IOError:
             print e_error.format('Directory %s alrady exists. Try `dotphiles update` instead?' %
                     args.dotphilesdir)
