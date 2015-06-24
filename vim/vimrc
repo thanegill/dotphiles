@@ -64,6 +64,9 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'junegunn/vim-easy-align'
 
+" Syntax
+NeoBundle 'toyamarinyon/vim-swift'
+
 call neobundle#end()
 
 " If there are uninstalled bundles found on startup, this will prompt you to
@@ -122,7 +125,7 @@ let g:startify_show_files_number = 10
 let g:startify_show_sessions = 1
 let g:startify_change_to_vcs_root = 1
 let g:startify_bookmarks = [
-    \ '~/.vimrc',
+    \ '~/.vim/vimrc',
     \ '~/.zshrc',
     \ '~/.tmux.conf',
     \ ]
