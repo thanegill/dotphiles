@@ -333,7 +333,7 @@ set foldmethod=indent
 " Deepest fold is 3 levels
 set foldnestmax=3
 
-set formatoptions=tcqronj
+set formatoptions=tcroqnj
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -394,9 +394,6 @@ set showtabline=2
 " Open new split panes to left and bottom.
 set nosplitright
 set splitbelow
-
-" Close current buffer
-nnoremap <leader>bx :Bclose<cr>
 
 " Close all buffers
 nnoremap <leader>bxa :1,1000 bd!<cr>
@@ -487,7 +484,7 @@ nnoremap # :%s/\<<C-r><C-w>\>/
 " Spell Check:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Pressing ,ss will toggle and untoggle spell checking
+" Pressing <leader>ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
 
 " Spell check forword
