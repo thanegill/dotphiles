@@ -62,7 +62,7 @@ NeoBundle 'kana/vim-smartinput'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
-NeoBundle 'scrooloose/nerdcommenter'
+NeoBundle 'tpope/vim-commentary'
 NeoBundle 'junegunn/vim-easy-align'
 
 " Syntax
@@ -111,11 +111,6 @@ let g:mapleader = ","
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Settings:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"" NERDcommenter
-let NERDCommentWholeLinesInVMode=1
-let NERDRemoveExtraSpaces=1
-let NERDSpaceDelims=1
 
 "" Startify
 let g:startify_skiplist = [
