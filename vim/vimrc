@@ -58,11 +58,17 @@ NeoBundle 'scrooloose/nerdtree'
 " Functionality
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'kana/vim-smartinput'
+NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-commentary'
 NeoBundle 'junegunn/vim-easy-align'
+
+" Text Objects
+NeoBundle "kana/vim-textobj-user"
+NeoBundle 'saaguero/vim-textobj-pastedtext'
+NeoBundle 'glts/vim-textobj-comment'
 
 " Syntax
 NeoBundle 'toyamarinyon/vim-swift'
