@@ -53,7 +53,6 @@ NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'jistr/vim-nerdtree-tabs', {'depends': 'scrooloose/nerdtree'}
-NeoBundle 'mhinz/vim-startify'
 NeoBundle 'scrooloose/nerdtree'
 
 " Functionality
@@ -112,20 +111,6 @@ let g:mapleader = ","
 " Plugin Settings:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"" Startify
-let g:startify_skiplist = [
-    \ 'COMMIT_EDITMSG',
-    \ ]
-let g:startify_show_files = 1
-let g:startify_show_files_number = 10
-let g:startify_show_sessions = 1
-let g:startify_change_to_vcs_root = 1
-let g:startify_bookmarks = [
-    \ '~/.vim/vimrc',
-    \ '~/.zshrc',
-    \ '~/.tmux.conf',
-    \ ]
-
 "" VIM-Airline
 " Solarized theme
 let g:airline_thme = 'solarized'
@@ -134,11 +119,12 @@ let g:airline_thme = 'solarized'
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 
-" Increase max sign in vim-gitgutter
-let g:gitgutter_max_signs = 16384
-
 " Enable virtualenv integration
 let g:airline#extensions#virtualenv#enabled = 1
+
+"" Vim-GitGutter
+" Increase max signsv in vim-gitgutter
+let g:gitgutter_max_signs = 16384
 
 "" NERDTree
 " Show hidden files
@@ -179,6 +165,9 @@ autocmd FileType gitcommit setlocal spell!
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VIM User Interface:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Don't display into message
+set shortmess+=I
 
 " Display tabs, trailing spaces, end of line and nonbreaking space visually
 set list listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
