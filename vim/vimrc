@@ -186,6 +186,9 @@ endif
 " Turn on line numbers
 set number
 
+" Turn on relative line numbers
+set relativenumber
+
 " Set lines to the cursor when moving vertically using j/k. Set to a high
 " number (999) to keep the cursor in the center at all times.
 set scrolloff=5
