@@ -45,6 +45,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     plugins+=( \
         brew \
         brew-cask \
+        pod \
         terminalapp \
     )
 fi
@@ -97,8 +98,7 @@ fi
 # Shortcuts
 
 # Use neovim instead of vim if installed
-hash nvim >/dev/null 2>&1 && alias vim='nvim'
-alias vi='vim'
+hash nvim >/dev/null 2>&1 && alias vi='nvim'
 alias g='git'
 
 # Alias xdg-open to open if xdg-open exist
