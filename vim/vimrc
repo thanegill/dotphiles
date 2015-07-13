@@ -69,8 +69,8 @@ NeoBundle 'junegunn/vim-easy-align'
 
 " Text Objects
 NeoBundle "kana/vim-textobj-user"
-NeoBundle 'saaguero/vim-textobj-pastedtext'
-NeoBundle 'glts/vim-textobj-comment'
+NeoBundle 'saaguero/vim-textobj-pastedtext' "gb for last pasted text
+NeoBundle 'glts/vim-textobj-comment' "ac/ic for a comment
 
 " Syntax
 NeoBundle 'toyamarinyon/vim-swift'
