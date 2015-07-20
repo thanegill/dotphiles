@@ -97,9 +97,22 @@ fi
 
 # Shortcuts
 
+# No arguments: `git status`
+# With arguments: acts like `git`
+g() {
+    if [[ $# > 0 ]]; then
+        git $@
+    else
+        git st
+    fi
+}
+
+# Complete g like git
+compdef g=git
+
 # Use neovim instead of vim if installed
 hash nvim >/dev/null 2>&1 && alias vi='nvim'
-alias g='git'
+
 
 # Alias xdg-open to open if xdg-open exist
 hash xdg-open >/dev/null 2>&1 && alias open='xdg-open'
