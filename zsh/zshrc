@@ -5,7 +5,7 @@
 # Path to your zsh configuration.
 ZSH=$HOME/.dotphiles/zsh
 
-export EDITOR=vim
+export EDITOR=nvim
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
