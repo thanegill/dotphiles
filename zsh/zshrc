@@ -73,20 +73,14 @@ export LESSHISTFILE="-"
 # -------------- #
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-
     # `brew --prefix coreutils` set staticly for speed
     local brew_prefix_coreutils="/usr/local/opt/coreutils"
 
     # OSX
-    export GOPATH=$HOME/go
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
     export MANPATH=$brew_prefix_coreutils/libexec/gnuman:$MANPATH
-
-    # brew-cask default to /Applications
-    export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 else
     # Non-OSX
-    export GOPATH=$HOME/go
     export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 fi
 
@@ -113,7 +107,6 @@ compdef g=git
 # Use neovim instead of vim if installed
 hash nvim >/dev/null 2>&1 && alias vi='nvim'
 
-
 # Alias xdg-open to open if xdg-open exist
 hash xdg-open >/dev/null 2>&1 && alias open='xdg-open'
 
@@ -122,7 +115,6 @@ alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 
 # OSX Specific aliases
 if [[ "$OSTYPE" == "darwin"* ]]; then
-
     # Open Apps
     alias quicklook="qlmanage -p &>/dev/null"
     alias ql="quicklook"
@@ -154,7 +146,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
             echo 'No Finder window found' >&2
         fi
     }
-
 fi
 
 # Set <Caps Lock> to <Ctrl> and single press <Ctrl> to <Esc>
