@@ -5,7 +5,7 @@
 # Path to your zsh configuration.
 ZSH=$HOME/.dotphiles/zsh
 
-export EDITOR=nvim
+export EDITOR=vim
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -77,11 +77,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     local brew_prefix_coreutils="/usr/local/opt/coreutils"
 
     # OSX
-    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+    export PATH="$HOME/.dotphiles/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
     export MANPATH=$brew_prefix_coreutils/libexec/gnuman:$MANPATH
 else
     # Non-OSX
-    export PATH="$HOME/.dotphiles/bin:$GOPATH/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export PATH="$HOME/.dotphiles/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 fi
 
 
@@ -93,7 +93,7 @@ fi
 
 # No arguments: `git status`
 # With arguments: acts like `git`
-g() {
+function g() {
     if [[ $# > 0 ]]; then
         git $@
     else
@@ -104,8 +104,19 @@ g() {
 # Complete g like git
 compdef g=git
 
-# Use neovim instead of vim if installed
-hash nvim >/dev/null 2>&1 && alias vi='nvim'
+# Alias vi to $EDITOR, which in turn call editor()
+alias vi=editor
+
+# Use neovim instead of vim if installed or vi if all else fails
+function editor() {
+    if hash nvim >/dev/null 2>&1; then
+        nvim $@
+    elif hash vim >/dev/null 2>&1; then
+        vim $@
+    else
+        vi $@
+    fi
+}
 
 # Alias xdg-open to open if xdg-open exist
 hash xdg-open >/dev/null 2>&1 && alias open='xdg-open'
@@ -157,7 +168,7 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
 fi
 
 # List directory contents - ls
-if [[ "$(ls --version)" = *"GNU"* ]]; then
+if $(ls --version >/dev/null 2>&1) && [[ "$(ls --version)" = *"GNU"* ]]; then
     # GNU ls
     alias ls='ls --color=always'
     alias ll='ls --color=always --format=long --human-readable'
