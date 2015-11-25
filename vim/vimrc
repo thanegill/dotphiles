@@ -52,8 +52,6 @@ NeoBundle 'shougo/vimproc.vim', {
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'bling/vim-airline'
-NeoBundle 'jistr/vim-nerdtree-tabs', {'depends': 'scrooloose/nerdtree'}
-NeoBundle 'scrooloose/nerdtree'
 
 " Functionality
 NeoBundle 'bronson/vim-trailing-whitespace'
@@ -133,17 +131,6 @@ let g:airline#extensions#virtualenv#enabled = 1
 "" Vim-GitGutter
 " Increase max signsv in vim-gitgutter
 let g:gitgutter_max_signs = 16384
-
-"" NERDTree
-" Show hidden files
-let NERDTreeShowHidden=1
-
-" Toggle NERDTree (has to be defined after the leader)
-map <leader>nn :NERDTreeTabsToggle<cr>
-
-" Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
-    \ && b:NERDTreeType == "primary") | q | endif
 
 "" Vim-Trailing-Whitespace
 " Delete trailing whitespace (calls plugin)
