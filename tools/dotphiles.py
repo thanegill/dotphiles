@@ -386,7 +386,7 @@ if __name__ == '__main__':
     parser_install.set_defaults(func=install)
     parser_install.add_argument('--repourl', action='store', metavar='URL',
             help='URL for the dotphile repo (default: "%(default)s")',
-            default='https://github.com/psophis/dotphiles.git')
+            default='https://github.com/thanegill/dotphiles.git')
     parser_install.add_argument('--branch', action='store', default='master',
             help='Branch to use for cloning (default: "%(default)s")')
     parser_install.add_argument('--home', action='store', metavar='PATH',

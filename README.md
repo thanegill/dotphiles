@@ -4,11 +4,11 @@ My personal dot files.
 
 ## Installation
 
-    curl -L https://raw.github.com/psophis/dotphiles/master/tools/dotphiles.py | python - install
+    curl -L https://raw.github.com/thanegill/dotphiles/master/tools/dotphiles.py | python - install
 
 or
 
-    wget -q -O - https://raw.github.com/psophis/dotphiles/master/tools/dotphiles.py | python - install
+    wget -q -O - https://raw.github.com/thanegill/dotphiles/master/tools/dotphiles.py | python - install
 
 ## Usage
 
@@ -19,7 +19,7 @@ or
                       [--dotphilesdir PATH] [--linkphile PATH] [--force] [--novim]
         -h, --help           show this help message and exit
         --repourl URL        URL for the dotphile repo (default:
-                               "https://github.com/psophis/dotphiles.git")
+                               "https://github.com/thanegill/dotphiles.git")
         --branch BRANCH      Branch to use for cloning (default: "master")
         --home PATH          Home directory to install dotphiles to. Can be any
                                directory. (default: "~/")
