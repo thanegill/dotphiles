@@ -26,6 +26,8 @@
     st = status -s
     cm = commit
     co = checkout
+    d = diff
+    dc = diff --cached
 
     # Update all submoduals
     subup = submodule update --recursive --init
