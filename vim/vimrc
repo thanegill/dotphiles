@@ -479,7 +479,7 @@ set incsearch
 map <silent> <leader><space> :silent :nohlsearch<cr>
 
 " Search and replace word under cursor
-nnoremap # :%s/\<<C-r><C-w>\>/
+nnoremap # :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
