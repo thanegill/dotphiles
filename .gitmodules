@@ -1,6 +1,6 @@
 [submodule "init"]
 	path = init
-	url = https://github.com/psophis/Mac-Init
+	url = https://github.com/thanegill/Mac-Init
 [submodule "bin/cellar/speedtest-cli"]
 	path = bin/cellar/speedtest-cli
 	url = git://github.com/sivel/speedtest-cli.git
