@@ -38,12 +38,8 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.dotphiles/zsh/custom/plugins/
 plugins=(\
     colored-man \
-    go \
     python \
     pip \
-    rsync \
-    rake \
-    vim-interaction \
     virtualenvwrapper \
 )
 
@@ -53,7 +49,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         brew \
         brew-cask \
         pod \
-        terminalapp \
     )
 fi
 
