@@ -1,0 +1,472 @@
+" Sections:
+"    - NeoBundle
+"    - General
+"    - Plugin Settings
+"    - FileType Specific
+"    - VIM User Interface
+"    - GUI VIM
+"    - Colors and Theme
+"    - Files, Backups and Undo
+"    - Tab, Indent, and Folding
+"    - Moving Around
+"    - Tabs, Windows and Buffers
+"    - Tab Completion
+"    - Editing Mappings
+"    - Search
+"    - Spell Check
+"    - Copy Paste
+
+" Original source: http://amix.dk/vim/vimrc.txt
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NeoBundle:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Skip initialization for vim-tiny or vim-small
+if 0 | endif
+
+if has('vim_starting')
+  if &compatible
+    set nocompatible
+  endif
+  " Required
+  set runtimepath+=~/.dotphiles/vim/bundle/neobundle.vim/
+endif
+
+" Required
+call neobundle#begin(expand('~/.dotphiles/vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle, required
+NeoBundleFetch 'shougo/neobundle.vim'
+
+" Use vimproc to install/update asynchronously
+NeoBundle 'shougo/vimproc.vim', {
+    \ 'build': {
+    \     'mac':   'make',
+    \     'unix':  'gmake',
+    \     'linux': 'make',
+    \     },
+    \ }
+
+" Interface
+NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'bling/vim-airline'
+
+" Functionality
+NeoBundle 'bronson/vim-trailing-whitespace'
+NeoBundle 'editorconfig/editorconfig-vim'
+NeoBundle 'junegunn/vim-easy-align'
+NeoBundle 'kana/vim-smartinput'
+NeoBundle 'tpope/vim-abolish'
+NeoBundle 'tpope/vim-commentary'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-surround'
+
+" Text Objects
+NeoBundle "kana/vim-textobj-user"
+NeoBundle 'glts/vim-textobj-comment' "ac/ic for a comment
+NeoBundle 'saaguero/vim-textobj-pastedtext' "gb for last pasted text
+
+" Syntax
+NeoBundle 'toyamarinyon/vim-swift'
+
+call neobundle#end()
+
+" If there are uninstalled bundles found on startup, this will prompt you to
+" install them.
+NeoBundleCheck
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" Set key mapping timeout to remove mode switch in a terminal
+set timeout timeoutlen=3000 ttimeoutlen=50
+
+" Use unix as the standard file type
+set fileformats=unix,dos,mac
+
+" Map Leader to comma
+let mapleader = ","
+let g:mapleader = ","
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin Settings:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" VIM-Airline
+" Solarized theme
+let g:airline_thme = 'solarized'
+
+" Remove seperator symbols
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+" Enable virtualenv integration
+let g:airline#extensions#virtualenv#enabled = 1
+
+"" Vim-GitGutter
+" Increase max signsv in vim-gitgutter
+let g:gitgutter_max_signs = 16384
+
+"" Vim-Trailing-Whitespace
+" Delete trailing whitespace (calls plugin)
+map <leader>dw :FixWhitespace<cr>
+
+"" EasyAlign
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+vmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <plug>(EasyAlign)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FileType Specific:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" Markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd Filetype markdown setlocal wrap
+autocmd Filetype markdown setlocal linebreak
+autocmd Filetype markdown setlocal nolist
+autocmd Filetype markdown setlocal spell!
+let g:markdown_fenced_languages = [
+    \ 'sh',
+    \ 'css',
+    \ 'html',
+    \ 'javascript',
+    \ 'json=javascript',
+    \ 'php',
+    \ 'python',
+    \ 'ruby',
+    \ 'sass',
+    \ 'swift',
+    \ 'xml',
+\ ]
+
+"" Git Commmit Message
+
+" When commiting with git show diff in horizontal split using tpope/vim-fugitive
+autocmd FileType gitcommit DiffGitCached | wincmd p
+
+" Turn on spell check for commit messages
+autocmd FileType gitcommit setlocal spell!
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VIM User Interface:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Don't display into message
+set shortmess+=I
+
+" Display tabs, trailing spaces, end of line and nonbreaking space visually
+set list listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
+
+" Turn on line numbers
+set number
+
+" Always show current position in status bar.
+set ruler
+
+" Highlight current line
+set cursorline
+
+" Text width
+set textwidth=80
+
+" Highlight textwidth column plus one
+set colorcolumn=+1
+
+" Show uncompleted commands
+set showcmd
+
+" Will insert tab at beginning of line, will use completion if not at beginning
+set wildmode=list:longest,list:full
+
+" Stuff to ignore when tab completing
+set wildignore=*.o,*.obj,*~,*.pyc
+set wildignore+=*vim/backups*
+set wildignore+=*DS_Store*
+set wildignore+=*.png,*.jpg,*.gif
+
+" Configure backspace so it acts as it should act
+set whichwrap+=<,>,h,l
+
+" Show matching brackets when text indicator is over them
+set showmatch
+
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set timeoutlen=500
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" GUI VIM (MacVIM, GVIM, etc..):
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" GUI is running or is about to start
+if has("gui_running")
+
+    if has("gui_gtk2")
+        set guifont=DejaVu\ Sans\ Mono\ 9
+    endif
+
+    " Set window size. 999 lines so that it's always vertically maximized
+    set lines=999 columns=115
+
+    " Hide GUI toolbar
+    set guioptions-=T
+
+    " Show the tab bar as as GUI tab bar.
+    set guioptions+=e
+
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colors and Theme:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Enable syntax highlighting
+syntax enable
+
+set t_Co=256
+set background=dark
+try
+    colorscheme solarized
+endtry
+highlight clear SignColumn
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Files, Backups and Undo:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Turn backup off
+set noswapfile
+set nobackup
+set nowritebackup
+
+" Keep undo history across sessions, by storing in file.
+silent !mkdir ~/.vim/backups > /dev/null 2>&1
+set undodir=~/.vim/backups
+set undofile
+
+" Remember info about open buffers on close.
+set viminfo^=%
+
+" Return to last edit position when opening files.
+autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \     exe "normal! g`\"" |
+    \ endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tab, Indent, and Folding:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Use spaces instead of tabs
+set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set smartindent
+
+" Don't wrap lines
+set nowrap
+
+" Don't fold by default
+set nofoldenable
+
+" Fold based on indent
+set foldmethod=indent
+
+" Deepest fold is 3 levels
+set foldnestmax=3
+
+set formatoptions=tcroqnj
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Moving Around:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Treat long lines as break lines
+map k gk
+map j gj
+
+" Disable arrow keys
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+" Disable Backspace in normal/visual mode
+nnoremap <BS> <Nop>
+nnoremap <Del> <Nop>
+vnoremap <BS> <Nop>
+vnoremap <Del> <Nop>
+
+" Disable Return in normal/visual mode
+nnoremap <cr> <Nop>
+vnoremap <cr> <Nop>
+
+" Indent/unindented lines
+vnoremap > >gv
+vnoremap < <gv
+
+" Move lines up/down
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tabs, Windows and Buffers:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Buffers can exist in the background without being in a window.
+" http://items.sjbach.com/319/configuring-vim-right
+set hidden
+
+" Specify the behavior when switching between buffers,
+set switchbuf=useopen,usetab,newtab
+
+" Always show tab bar
+set showtabline=2
+
+" Open new split panes to left and bottom.
+set nosplitright
+set splitbelow
+
+" Close all buffers
+nnoremap <leader>bxa :1,1000 bd!<cr>
+
+" Tab management with similar binding to tmux.
+nnoremap <leader>tc :tabnew<cr>
+nnoremap <leader>tn :tabnext<cr>
+nnoremap <leader>tp :tabprevious<cr>
+nnoremap <leader>to :tabonly<cr>
+nnoremap <leader>tx :tabclose<cr>
+nnoremap <leader>tm :tabmove<cr>
+
+" Opens a new tab with the current buffer's path. Super useful when editing
+" files in the same directory.
+nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tab Completion
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" Tab completion
+function! Inserttabwrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+
+" Map <tab> to Inserttabwarpper()
+inoremap <tab> <c-r>=Inserttabwrapper()<cr>
+
+" Shift tab to backwards search
+inoremap <s-tab> <c-n>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Editing Mappings:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Remap 0 to first non-blank character
+nnoremap 0 ^
+
+" Remap ^ to first column
+nnoremap ^ 0
+
+" Increment number by one, using `=` so I don't have to press shift.
+nnoremap = <C-a>
+
+" Decrement number by one
+nnoremap - <C-x>
+
+" Force saving files that require root permission
+cmap w!! w !sudo tee > /dev/null %
+
+" Change working directory to the directory of the open buffer.
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Open URL under curser, OSX only
+nnoremap <silent><Leader>o :!open <cWORD><CR><CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Search:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Ignore case when searching
+set ignorecase
+
+" Highlight search results
+set hlsearch
+
+" Disable search highlight
+map <silent> <leader><space> :silent :nohlsearch<cr>
+
+" Search and replace word under cursor
+nnoremap # :%s/\<<C-r><C-w>\>//g<Left><Left>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Spell Check:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Pressing <leader>ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+
+" Spell check forword
+map <leader>sn ]s
+
+"Spell check Backwards
+map <leader>sp [s
+
+" Add to custom dictionary
+map <leader>sa zg
+
+" Suggest replacements
+map <leader>s? z=
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Copy Paste:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Toggle paste mode on and off
+map <leader>pp :setlocal paste!<cr>
+
+" Disable paste mode when leaving insert mode
+autocmd InsertLeave * set nopaste
+
