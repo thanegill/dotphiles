@@ -5,7 +5,14 @@
 # Path to your zsh configuration.
 ZSH=$HOME/.dotphiles/zsh
 
-export EDITOR=vim
+# Use neovim instead of vim if installed or vi if all else fails
+if hash nvim >/dev/null 2>&1; then
+    export EDITOR=nvim
+elif hash vim >/dev/null 2>&1; then
+    export EDITOR=vim
+else
+    export EDITOR=vi
+fi
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -104,19 +111,8 @@ function g() {
 # Complete g like git
 compdef g=git
 
-# Alias vi to $EDITOR, which in turn call editor()
-alias vi=editor
-
-# Use neovim instead of vim if installed or vi if all else fails
-function editor() {
-    if hash nvim >/dev/null 2>&1; then
-        nvim $@
-    elif hash vim >/dev/null 2>&1; then
-        vim $@
-    else
-        vi $@
-    fi
-}
+# Alias vi to $EDITOR
+alias vi=$EDITOR
 
 # Alias xdg-open to open if xdg-open exist
 hash xdg-open >/dev/null 2>&1 && alias open='xdg-open'
