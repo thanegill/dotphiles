@@ -6,6 +6,10 @@ os:
   - osx
   - linux
 
+before_script:
+  - zsh --version
+  - chsh -s $(which zsh)
+
 script:
   - ./bin/dotphiles install
   - source ~/.zshrc
