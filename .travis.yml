@@ -4,6 +4,7 @@ addons:
   apt:
     packages:
       - zsh
+      - vim
 
 os:
   - osx
@@ -11,9 +12,9 @@ os:
 
 before_script:
   - zsh --version
-  - echo $SHELL
   - sudo chsh -s $(which zsh)
 
 script:
   - ./bin/dotphiles install
-  - ./bin/dotphiles update
+  - source ~/.zshrc
+  - dotphiles update
