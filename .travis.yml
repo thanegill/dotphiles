@@ -11,7 +11,7 @@ os:
 
 before_script:
   - zsh --version
-  - chsh -s $(which zsh)
+  - zsh
 
 script:
   - ./bin/dotphiles install
