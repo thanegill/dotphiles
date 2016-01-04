@@ -1,6 +1,9 @@
 language: sh
 
-install: true
+addons:
+  apt:
+    packages:
+      - zsh
 
 os:
   - osx
