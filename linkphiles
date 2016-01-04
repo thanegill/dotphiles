@@ -4,6 +4,5 @@
 ~/.dotphiles/zsh/zshrc
 ~/.dotphiles/vim/
 ~/.dotphiles/vim/ ~/.config/nvim
-~/.dotphiles/vim/nvimrc ~/.config/nvim/init.vim
 ~/.dotphiles/tmux/tmux.conf
 ~/.dotphiles/git/gitconfig

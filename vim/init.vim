@@ -1,1 +1,1 @@
-/Users/thanegill/.dotphiles/vim/nvimrc
+nvimrc
