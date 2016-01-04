@@ -5,42 +5,47 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}✘"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}✔"
 
-# Checks if working tree is dirty (From git plugin)
+# Checks if working tree is dirty
 function parse_git_dirty() {
-    local SUBMODULE_SYNTAX=''
-    local GIT_STATUS=''
-    local CLEAN_MESSAGE='nothing to commit (working directory clean)'
-    if [[ "$(command git config --get oh-my-zsh.hide-status)" != "1" ]]; then
-        if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-            SUBMODULE_SYNTAX="--ignore-submodules=dirty"
-        fi
-        if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-            GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} -uno 2> /dev/null | tail -n1)
-        else
-            GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
-        fi
-        if [[ -n $GIT_STATUS ]]; then
-            echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-        else
-            echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
-        fi
-    else
-        echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  local STATUS=''
+  local FLAGS
+  FLAGS=('--porcelain')
+  if [[ "$(command git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
+    if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+      FLAGS+='--ignore-submodules=dirty'
     fi
+    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+      FLAGS+='--untracked-files=no'
+    fi
+    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
+  fi
+  if [[ -n $STATUS ]]; then
+    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  else
+    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  fi
 }
 
-# From git plugin
-function current_branch() {
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-    ref=$(git rev-parse --short HEAD 2> /dev/null) || return
-    echo ${ref#refs/heads/}
+# Outputs the name of the current branch
+# Usage example: git pull origin $(git_current_branch)
+# Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
+# it's not a symbolic ref, but in a Git repo.
+function git_current_branch() {
+  local ref
+  ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return  # no git repo.
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+  fi
+  echo ${ref#refs/heads/}
 }
 
 # Customized git status, oh-my-zsh currently does not allow render dirty status before branch
 function git_custom_status() {
-    local cb=$(current_branch)
+    local cb=$(git_current_branch)
     if [ -n "$cb" ]; then
-        echo " $(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+        echo " $(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX${cb}$ZSH_THEME_GIT_PROMPT_SUFFIX"
     fi
 }
 
