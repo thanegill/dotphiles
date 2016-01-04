@@ -192,7 +192,7 @@ def git_clone(repo_directory, repourl, branch):
 
     if not os.path.exists(repo_directory):
         print e_arrow.format('Downloading dotphiles...')
-        if os.system('git clone --branch %s --recursive %s %s' %
+        if os.system('git clone --depth 5 --branch %s --recursive %s %s' %
             (branch, repourl, repo_directory)) is not 0:
             raise OSError
         _git_submodule_update(repo_directory)
