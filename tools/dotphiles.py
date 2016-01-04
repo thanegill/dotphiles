@@ -166,7 +166,7 @@ def _is_git_repo(directory):
         and os.path.isdir(os.path.join(directory, '.git')))
 
 
-def _git_submodual_update(repo_directory):
+def _git_submodule_update(repo_directory):
     """Recursively updates all submodule for the git repository for the given
     ``repo_directory``.
     """
@@ -195,7 +195,7 @@ def git_clone(repo_directory, repourl, branch):
         if os.system('git clone --branch %s --recursive %s %s' %
             (branch, repourl, repo_directory)) is not 0:
             raise OSError
-        _git_submodual_update(repo_directory)
+        _git_submodule_update(repo_directory)
     else:
         raise IOError
 
@@ -212,7 +212,7 @@ def git_pull(repo_directory, branch):
         print e_arrow.format('Updating dotphiles...')
         if os.system('git pull origin %s' % branch) is not 0:
             raise OSError
-        _git_submodual_update(repo_directory)
+        _git_submodule_update(repo_directory)
     else:
         raise IOError
 
