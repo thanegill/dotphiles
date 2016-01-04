@@ -9,7 +9,8 @@
     trustctime = false
 
 [color]
-    # Use colors in Git commands that are capable of colored output when outputting to the terminal */
+    # Use colors in Git commands that are capable of colored output when
+    # outputting to the terminal
     ui = auto
     branch = auto
     diff = auto
@@ -37,7 +38,8 @@
     ignored = ls-files --others -i --exclude-standard
 
     # A better git log https://coderwall.com/p/euwpig
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s \
+    %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
 [filter "media"]
     clean = git-media-clean %f
