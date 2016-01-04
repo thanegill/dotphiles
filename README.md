@@ -49,9 +49,4 @@ dotphiles link [-h] [--linkphile path] [--relink | --unlink]
     --linkphile path     linkphile. (default: "~/.dotphiles/linkphiles")
     --relink             relink all links listed in linkphile.
     --unlink             delete all links in linkphile.
-
-dotphiles chsh [-h] [--shell path] [--etcshells path]
-    -h, --help           show this help message and exit
-    --shell path         Path to shell exicutable. (default: "/bin/zsh"))
-    --etcshells path     Path to /etc/shells if diffrent. (default: "/etc/shells"))
 ```

@@ -237,34 +237,6 @@ def vim_clean_plugins():
         raise OSError
     print e_success.format('Unused Vim plugins removed.')
 
-
-def change_shell(shell, etc_shells):
-    """Change shell of current user to shell ``shell`` should be the full path
-    of the shell executable.
-    """
-    if not os.path.exists(etc_shells):
-        raise IOError
-
-    shell_avalible = False
-
-    for line in open(etc_shells).readlines():
-        if shell in line:
-            shell_avalible = True
-
-    if not shell_avalible:
-        raise OSError
-
-    if os.environ['SHELL'] in shell:
-        print e_success.format('Shell is already %s.' % shell)
-    else:
-        print ('Enter password to change shell to %s.' % shell)
-        sys.stdin = open('/dev/tty')
-        if os.system('chsh -s %s' % shell) is not 0:
-            print e_error.format('Shell not changed to %s. Try manually' % shell)
-        else:
-            print e_success.format('Changed shell to "%s"' %
-                    os.environ['SHELL'])
-
 if __name__ == '__main__':
 
     def install(args):
@@ -298,8 +270,6 @@ if __name__ == '__main__':
                 print e_error.format('Something went wrong while installing Vim plugings. Try manually.')
 
         install_binary('zsh')
-
-        chsh(args)
 
         print e_success.format('All done! Your dotphiles are now installed!')
 
@@ -370,18 +340,6 @@ if __name__ == '__main__':
                     args.linkphile)
             sys.exit(1)
 
-    def chsh(args):
-        try:
-            change_shell(args.shell, args.etcshells)
-            os.system(args.shell)
-        except IOError:
-            print e_error.format('"%s" does not exist.' % args.etcshells)
-            sys.exit(1)
-        except OSError:
-            print e_error.format('"%s" is not in "%s".' %
-                    (args.shell, args.etcshells))
-            sys.exit(1)
-
     parser = argparse.ArgumentParser(prog='dotphiles')
     subparsers = parser.add_subparsers(help='sub-command --help')
 
@@ -430,15 +388,6 @@ if __name__ == '__main__':
             help='relink all links listed in linkphile.')
     parser_link_group.add_argument('--unlink', action='store_true',
             help='delete all links in linkphile.')
-
-    parser_chsh = subparsers.add_parser('chsh', help='chsh --help')
-    parser_chsh.set_defaults(func=chsh)
-    parser_chsh.add_argument('--shell', action='store', metavar='path',
-            type=os.path.join, default='/bin/zsh',
-            help='Path to shell exicutable. (default: "%(default)s"))')
-    parser_chsh.add_argument('--etcshells', action='store', metavar='path',
-            type=os.path.join, default='/etc/shells',
-            help='Path to /etc/shells if diffrent. (default: "%(default)s"))')
 
     args = parser.parse_args()
     args.func(args)
