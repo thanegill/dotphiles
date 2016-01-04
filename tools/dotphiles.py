@@ -151,6 +151,10 @@ def link_philes(link_philes_file):
             print e_warning.format('File "%s" has been backed up to "%s".' %
                     (phile[1], ('%s.backup' % phile[1])))
 
+        if not os.path.exists(os.path.dirname(phile[1])):
+            os.makedirs(os.path.dirname(phile[1]))
+            print e_arrow.format('Create directry %s' % os.path.dirname(phile[1]))
+
         print e_arrow.format('Creating link %s -> %s' % (phile[1], phile[0]))
 
         os.symlink(phile[0], phile[1])
