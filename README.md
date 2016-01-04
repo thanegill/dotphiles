@@ -1,4 +1,5 @@
 # .dotphiles
+[![Build Status](https://travis-ci.org/thanegill/dotphiles.svg?branch=master)](https://travis-ci.org/thanegill/dotphiles)
 
 My personal dot files.
 
