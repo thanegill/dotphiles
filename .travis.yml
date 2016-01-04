@@ -1,7 +1,11 @@
-language: zsh
+language: sh
 
 os:
   - osx
   - linux
 
-script: curl -L https://raw.github.com/psophis/dotphiles/master/tools/dotphiles.py | python - install
+script:
+  - cd ~
+  - curl -L https://raw.github.com/psophis/dotphiles/master/tools/dotphiles.py | python - install
+  - source ~/.zshrc
+  - dotphile update
