@@ -177,7 +177,7 @@ def _git_submodule_update(repo_directory):
         os.chdir(repo_directory)
         print e_arrow.format('Updating submoduals...')
 
-        if os.system('submodule foreach git pull origin master') is not 0:
+        if os.system('git submodule foreach git pull origin master') is not 0:
             raise OSError
     else:
         raise IOError
