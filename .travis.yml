@@ -11,7 +11,7 @@ os:
 
 before_script:
   - zsh --version
-  - zsh
+  - echo $SHELL
 
 script:
   - ./bin/dotphiles install
