@@ -30,7 +30,7 @@
     dc = diff --cached
 
     # Update all submoduals
-    subup = submodule update --recursive --init
+    subup = submodule foreach git pull origin master
 
     # Remove submodual http://stackoverflow.com/a/13185967
     subrm = "!f(){ git rm --cached \"$1\";rm -r \"$1\";git config -f .gitmodules --remove-section \"submodule.$1\";git config -f .git/config --remove-section \"submodule.$1\";git add .gitmodules; }; f"
