@@ -12,6 +12,7 @@ os:
 before_script:
   - zsh --version
   - echo $SHELL
+  - sudo chsh -s $(which zsh)
 
 script:
   - ./bin/dotphiles install
