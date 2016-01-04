@@ -5,4 +5,4 @@
 ~/.dotphiles/vim/
 ~/.dotphiles/vim/ ~/.config/nvim
 ~/.dotphiles/tmux/tmux.conf
-~/.dotphiles/git/gitconfig
+~/.dotphiles/git/ ~/.config/git
