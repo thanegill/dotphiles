@@ -137,6 +137,7 @@ nmap ga <plug>(EasyAlign)
 
 "" Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd BufNewFile,BufReadPost *.md.erb set filetype=markdown
 autocmd Filetype markdown setlocal wrap
 autocmd Filetype markdown setlocal linebreak
 autocmd Filetype markdown setlocal nolist
