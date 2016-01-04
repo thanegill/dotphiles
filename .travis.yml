@@ -15,6 +15,4 @@ before_script:
 
 script:
   - ./bin/dotphiles install
-  - source ~/.zshrc
-  - echo $PATH
-  - dotphile update
+  - ./bin/dotphile update
