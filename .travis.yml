@@ -15,4 +15,4 @@ before_script:
 
 script:
   - ./bin/dotphiles install
-  - ./bin/dotphile update
+  - ./bin/dotphiles update
