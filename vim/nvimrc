@@ -117,7 +117,7 @@ let g:airline_right_sep = ''
 let g:airline#extensions#virtualenv#enabled = 1
 
 "" Vim-GitGutter
-" Increase max signsv in vim-gitgutter
+" Increase max signs in vim-gitgutter
 let g:gitgutter_max_signs = 16384
 
 "" Vim-Trailing-Whitespace
@@ -378,7 +378,7 @@ nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Tab Completion
+" Tab Completion:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" Tab completion

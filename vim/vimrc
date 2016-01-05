@@ -1,12 +1,12 @@
-" Optimize for fast terminal connections
-set ttyfast
-
 " vimrc
 " Setting for vim that have been either disabled or set as default in neovim.
 
-" Sets how many lines of history VIM has to remember
 source ~/.dotphiles/vim/nvimrc
 
+" Optimize for fast terminal connections
+set ttyfast
+
+" Sets how many lines of history VIM has to remember
 set history=500
 
 " Set to auto read when a file is changed from the outside
