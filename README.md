@@ -32,7 +32,7 @@ dotphiles install [-h] [--repourl URL] [--branch BRANCH] [--home PATH]
                            "~/.dotphiles/linkphiles")
     --force              Force removal of old dotphiles and installation of vim
                            plugins.
-    --novim              Do not install Vim plugins. Vundle will still be
+    --novim              Do not install Vim plugins. NeoBundle will still be
                            install. Useful for faster install.]
 
 dotphiles update [-h] [--branch BRANCH] [--dotphilesdir PATH] [--linkphile PATH]
