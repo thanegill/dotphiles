@@ -73,8 +73,36 @@ function virtualenv_promt_info(){
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
+ASYNC_PROC=0
 function precmd() {
-    print -rP "$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)"
+    function async() {
+        # save to temp file
+        printf "%s" "$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${HOME}/.zsh_tmp_prompt"
+
+        # signal parent
+        kill -s USR1 $$
+    }
+
+    # kill child if necessary
+    if [[ "${ASYNC_PROC}" != 0 ]]; then
+        kill -s HUP $ASYNC_PROC >/dev/null 2>&1 || :
+    fi
+
+    # start background computation
+    async &!
+    ASYNC_PROC=$!
+}
+
+function TRAPUSR1() {
+    # read from temp file
+    # Clear entire line and go to begging of line
+    print -P "\033[2K\r$(cat ${HOME}/.zsh_tmp_prompt)"
+
+    # reset proc number
+    ASYNC_PROC=0
+
+    # redisplay
+    zle && zle reset-prompt
 }
 
 PROMPT='%(?.%{$fg[green]%}.%{$fg[red]%})➜%{$reset_color%} '
