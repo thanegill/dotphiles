@@ -56,7 +56,7 @@ source $HOME/.dotphiles/zsh/load-plugins.sh
 THEME_RUBY="false"
 
 # Load theme
-source "$HOME/.dotphiles/zsh/themes/psophis.zsh-theme"
+source "$HOME/.dotphiles/zsh/prompt.zsh"
 
 
 # -------------- #
