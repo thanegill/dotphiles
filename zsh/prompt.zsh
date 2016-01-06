@@ -1,5 +1,7 @@
-#! /bin/zsh/
+#!/usr/bin/env zsh
 
+# Theme options
+THEME_RUBY="false"
 
 PROMPT_GIT_PREFIX="[git:"
 PROMPT_GIT_SUFFIX="]%{$reset_color%}"
