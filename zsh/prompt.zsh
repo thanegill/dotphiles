@@ -1,9 +1,13 @@
 #! /bin/zsh/
 
-ZSH_THEME_GIT_PROMPT_PREFIX="[git:"
-ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}✘"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}✔"
+
+PROMPT_GIT_PREFIX="[git:"
+PROMPT_GIT_SUFFIX="]%{$reset_color%}"
+PROMPT_GIT_DIRTY="%{$fg[red]%}✘"
+PROMPT_GIT_CLEAN="%{$fg[green]%}✔"
+
+# Setup the prompt with pretty colors
+setopt prompt_subst
 
 # Checks if working tree is dirty
 function parse_git_dirty() {
@@ -20,9 +24,9 @@ function parse_git_dirty() {
     STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
   fi
   if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    echo "$PROMPT_GIT_DIRTY"
   else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    echo "$PROMPT_GIT_CLEAN"
   fi
 }
 
@@ -45,7 +49,7 @@ function git_current_branch() {
 function git_custom_status() {
     local cb=$(git_current_branch)
     if [ -n "$cb" ]; then
-        echo " $(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX${cb}$ZSH_THEME_GIT_PROMPT_SUFFIX"
+        echo " $(parse_git_dirty)$PROMPT_GIT_PREFIX${cb}$PROMPT_GIT_SUFFIX"
     fi
 }
 
