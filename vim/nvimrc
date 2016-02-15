@@ -51,7 +51,8 @@ NeoBundle 'shougo/vimproc.vim', {
 " Interface
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'bling/vim-airline'
+NeoBundle 'vim-airline/vim-airline'
+NeoBundle 'vim-airline/vim-airline-themes'
 
 " Functionality
 NeoBundle 'bronson/vim-trailing-whitespace'
@@ -107,7 +108,7 @@ let g:mapleader = ","
 
 "" VIM-Airline
 " Solarized theme
-let g:airline_thme = 'solarized'
+let g:airline_theme = 'solarized'
 
 " Remove seperator symbols
 let g:airline_left_sep = ''
