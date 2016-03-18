@@ -36,7 +36,6 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.dotphiles/zsh/custom/plugins/
 plugins=(\
     colored-man-pages \
-    virtualenvwrapper \
     zsh-completions \
 )
 
