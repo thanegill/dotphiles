@@ -103,7 +103,7 @@ function TRAPUSR1() {
     # read from temp file
     # Clear entire line and go to begging of line
     print -P "\033[2K\r$(cat ${HOME}/.zsh_tmp_prompt)"
-
+    rm "${HOME}/.zsh_tmp_prompt"
     # reset proc number
     ASYNC_PROC=0
 
