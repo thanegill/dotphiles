@@ -15,6 +15,11 @@
     branch = auto
     diff = auto
     status = auto
+    pager = true
+    interactive = auto
+
+[diff]
+   algorithm = patience
 
 [merge]
     # Include summaries of merged commits in newly created merge commit messages
