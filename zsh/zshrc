@@ -51,9 +51,6 @@ fi
 # Load plugins
 source $ZSH/load-plugins.zsh
 
-# Load Path
-source $ZSH/path.zsh
-
 # Load theme
 source $ZSH/prompt.zsh
 
@@ -71,3 +68,5 @@ source $ZSH/update-dotphiles.zsh
 # Turn off less history
 export LESSHISTFILE="-"
 
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
