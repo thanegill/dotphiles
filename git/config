@@ -35,6 +35,7 @@
     co = checkout
     d = diff
     dc = diff --cached
+    remotes = remote -v
 
     # Update all submoduals
     subup = submodule foreach git pull origin master
