@@ -1,20 +1,7 @@
-#!/usr/bin/env zsh
-# -------------- #
-#   ZSH Config   #
-# -------------- #
-
-# Path to your zsh configuration.
-ZSH=$HOME/.dotphiles/zsh
-
-source $ZSH/zshenv
-
-# Use neovim instead of vim if installed or vi if all else fails
-if hash nvim >/dev/null 2>&1; then
-    export EDITOR=nvim
-elif hash vim >/dev/null 2>&1; then
-    export EDITOR=vim
-else
-    export EDITOR=vi
+# Reset $PATH if path_helper exists, path_helper fucks up the path on macOS,
+# which is called in /etc/zprofile
+if [ -f /usr/libexec/path_helper ]; then
+    source $ZDOTDIR/zshenv
 fi
 
 # Set to this to use case-sensitive completion
@@ -51,21 +38,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # Load plugins
-source $ZSH/load-plugins.zsh
-
+source $ZDOTDIR/load-plugins.zsh
 # Load theme
-source $ZSH/prompt.zsh
-
+source $ZDOTDIR/prompt.zsh
+# Set $EDITOR
+source $ZDOTDIR/editor.zsh
 # Load Aliases
-source $ZSH/aliases.zsh
-
+source $ZDOTDIR/aliases.zsh
 # Check for dotphiles update
-source $ZSH/update-dotphiles.zsh
-
-
-# -------------- #
-#    ENV VARS    #
-# -------------- #
-
-# Turn off less history
-export LESSHISTFILE="-"
+source $ZDOTDIR/update-dotphiles.zsh

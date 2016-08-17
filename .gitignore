@@ -4,3 +4,5 @@ vim/backups/
 !vim/bundle/neobunble.vim
 vim/bundle/*
 zsh/cache/
+zsh/.zcompdump
+zsh/.zsh_history

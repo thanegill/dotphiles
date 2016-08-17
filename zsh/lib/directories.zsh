@@ -1,5 +1,3 @@
-# Changing/making/removing directory
-
 # Basic directory operations
 alias -- -='cd -'
 

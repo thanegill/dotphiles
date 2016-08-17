@@ -1,10 +1,3 @@
-#!/usr/bin/env zsh
-# ------------------ #
-#   Custom Aliases   #
-# ------------------ #
-
-# Shortcuts
-
 # No arguments: `git status`
 # With arguments: acts like `git`
 function g() {
@@ -21,11 +14,14 @@ compdef g=git
 # Alias vi to $EDITOR
 alias vi=$EDITOR
 
+# Edit zshrc
+alias zshrc="$EDITOR $ZDOTDIR/.zshrc"
+
 # Alias xdg-open to open if xdg-open exist
 hash xdg-open >/dev/null 2>&1 && alias open='xdg-open'
 
 # Recursively delete `.DS_Store` files
-alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
+alias clean_DS_Store="find . -name '*.DS_Store' -type f -ls -delete"
 
 # OSX Specific aliases
 if [[ "$OSTYPE" == "darwin"* ]]; then
