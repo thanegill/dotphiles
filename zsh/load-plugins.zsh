@@ -7,9 +7,6 @@ is_plugin() {
         || test -f $base_dir/plugins/$name/_$name
 }
 
-# Add a function path
-fpath=($ZDOTDIR/functions $ZDOTDIR/completions $fpath)
-
 # Load all of the config files in $ZDOTDIR/lib that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for config_file ($ZDOTDIR/lib/*.zsh); do
