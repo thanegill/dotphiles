@@ -83,7 +83,7 @@ ASYNC_PROC=0
 function precmd() {
     function async() {
         # save to temp file
-        printf "%s" "$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${HOME}/.zsh_tmp_prompt"
+        printf "%s" "$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${ZDOTDIR}/.zsh_tmp_prompt"
 
         # signal parent
         kill -s USR1 $$
@@ -102,8 +102,8 @@ function precmd() {
 function TRAPUSR1() {
     # read from temp file
     # Clear entire line and go to begging of line
-    print -P "\033[2K\r$(cat ${HOME}/.zsh_tmp_prompt)"
-    rm "${HOME}/.zsh_tmp_prompt"
+    print -P "\033[2K\r$(cat ${ZDOTDIR}/.zsh_tmp_prompt)"
+    rm "${ZDOTDIR}/.zsh_tmp_prompt"
     # reset proc number
     ASYNC_PROC=0
 
