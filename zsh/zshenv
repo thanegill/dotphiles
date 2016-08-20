@@ -6,9 +6,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
     # `brew --prefix coreutils` set staticly for speed
     local brew_prefix_coreutils="/usr/local/opt/coreutils"
-    export PATH="$HOME/.dotphiles/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:$PATH"
+    export PATH="$HOME/.dotphiles/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
     export MANPATH=$brew_prefix_coreutils/libexec/gnuman:$MANPATH
 else
-    # Non-OSX
     export PATH="$HOME/.dotphiles/bin:$PATH"
+    # Non-OSX
 fi
+
+# Add RVM to PATH for scripting
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && export PATH="$PATH:$HOME/.rvm/bin"

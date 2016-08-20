@@ -47,3 +47,7 @@ source $ZDOTDIR/editor.zsh
 source $ZDOTDIR/aliases.zsh
 # Check for dotphiles update
 source $ZDOTDIR/update-dotphiles.zsh
+
+# Load RVM into a shell session as a function
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
