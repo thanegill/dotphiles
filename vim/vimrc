@@ -1,5 +1,5 @@
 " vimrc
-" Setting for vim that have been either disabled or set as default in neovim.
+" Settings for vim that have been either disabled or set as default in neovim.
 
 source ~/.dotphiles/vim/nvimrc
 

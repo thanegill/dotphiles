@@ -24,7 +24,7 @@ COMPLETION_WAITING_DOTS="true"
 # (plugins can be found in ~/.dotphiles/zsh/plugins/*)
 # Custom plugins may be added to ~/.dotphiles/zsh/custom/plugins/
 plugins=(\
-    colored-man-pages \
+    solarized-man \
     zsh-completions \
 )
 

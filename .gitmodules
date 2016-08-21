@@ -10,3 +10,6 @@
 [submodule "ssh"]
 	path = ssh
 	url = https://github.com/thanegill/ssh.git
+[submodule "zsh/plugins/solarized-man"]
+	path = zsh/plugins/solarized-man
+	url = https://github.com/zlsun/solarized-man.git
