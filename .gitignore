@@ -5,4 +5,5 @@ vim/backups/
 vim/bundle/*
 zsh/cache/
 zsh/.zcompdump
+zsh/.zcompcache/
 zsh/.zsh_history
