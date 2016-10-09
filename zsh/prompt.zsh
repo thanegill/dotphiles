@@ -77,13 +77,20 @@ function virtualenv_promt_info(){
     fi
 }
 
+function ssh() {
+    if [[ -n $SSH_TTY || -n $SSH_CONNECTION || -n $SSH_CLIENT ]]; then
+        echo "$fg[red]ssh %{$reset_color%}"
+    fi
+
+}
+
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 ASYNC_PROC=0
 function precmd() {
     function async() {
         # save to temp file
-        printf "%s" "$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${ZDOTDIR}/.zsh_tmp_prompt"
+        printf "%s" "$(ssh)$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${ZDOTDIR}/.zsh_tmp_prompt"
 
         # signal parent
         kill -s USR1 $$
@@ -112,4 +119,3 @@ function TRAPUSR1() {
 }
 
 PROMPT='%(?.%{$fg[green]%}.%{$fg[red]%})➜%{$reset_color%} '
-
