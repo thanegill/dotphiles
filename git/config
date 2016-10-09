@@ -53,3 +53,7 @@
 [credential "https://github.com"]
     username = thanegill
 
+[credential "http://git.vanguard.vashonsd.org"]
+    username = tgill
+[hub]
+	protocol = https
