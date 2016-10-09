@@ -77,7 +77,7 @@ function virtualenv_promt_info(){
     fi
 }
 
-function ssh() {
+function is_ssh() {
     if [[ -n $SSH_TTY || -n $SSH_CONNECTION || -n $SSH_CLIENT ]]; then
         echo "$fg[red]ssh %{$reset_color%}"
     fi
@@ -90,7 +90,7 @@ ASYNC_PROC=0
 function precmd() {
     function async() {
         # save to temp file
-        printf "%s" "$(ssh)$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${ZDOTDIR}/.zsh_tmp_prompt"
+        printf "%s" "$(is_ssh)$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${ZDOTDIR}/.zsh_tmp_prompt"
 
         # signal parent
         kill -s USR1 $$
