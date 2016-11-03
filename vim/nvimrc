@@ -472,3 +472,10 @@ map <leader>pp :setlocal paste!<cr>
 " Disable paste mode when leaving insert mode
 autocmd InsertLeave * set nopaste
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom Commands:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Open in Marked 2
+command Marked :! open -a /Applications/Marked\ 2.app/ "%"
