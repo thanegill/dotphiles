@@ -16,9 +16,7 @@ set autoread
 set encoding=utf8
 
 " Mouse
-if has("mouse")
-    set mouse=a
-endif
+set mouse=a
 
 " Always show the status line
 set laststatus=2
