@@ -11,6 +11,10 @@ PROMPT_GIT_CLEAN="%{$fg[green]%}✔"
 # Setup the prompt with pretty colors
 setopt prompt_subst
 
+# Reset Prompt
+unset PROMPT
+unset RPROMPT
+
 # Checks if working tree is dirty
 function parse_git_dirty() {
   local STATUS=''
