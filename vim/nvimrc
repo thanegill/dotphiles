@@ -388,7 +388,7 @@ function! Inserttabwrapper()
     if !col || getline('.')[col - 1] !~ '\k'
         return "\<tab>"
     else
-        return "\<c-p>"
+        return "\<c-n>"
     endif
 endfunction
 
@@ -396,7 +396,7 @@ endfunction
 inoremap <tab> <c-r>=Inserttabwrapper()<cr>
 
 " Shift tab to backwards search
-inoremap <s-tab> <c-n>
+inoremap <s-tab> <c-p>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
