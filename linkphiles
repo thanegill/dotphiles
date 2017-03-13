@@ -6,4 +6,5 @@
 ~/.dotphiles/vim/ ~/.config/nvim
 ~/.dotphiles/tmux/tmux.conf
 ~/.dotphiles/git/
+~/.dotphiles/git/ ~/.config/git
 ~/.dotphiles/ssh/config ~/.ssh/config
