@@ -9,7 +9,7 @@ function update_dotphiles_update() {
 }
 
 function upgrade_dotphiles() {
-    /usr/bin/python $HOME/.dotphiles/tools/dotphiles.py update
+    /usr/bin/env python $HOME/.dotphiles/tools/dotphiles.py update
     # Update the dotphiles file
     update_dotphiles_update
 }
