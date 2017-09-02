@@ -393,10 +393,10 @@ function! Inserttabwrapper()
 endfunction
 
 " Map <tab> to Inserttabwarpper()
-inoremap <tab> <c-r>=Inserttabwrapper()<cr>
+inoremap <tab> <c-o>=Inserttabwrapper()<cr>
 
 " Shift tab to backwards search
-inoremap <s-tab> <c-p>
+inoremap <s-tab> <c-x>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
