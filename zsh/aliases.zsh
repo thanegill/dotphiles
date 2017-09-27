@@ -87,3 +87,14 @@ alias externalip="curl icanhazip.com"
 # list TODO lines from the current project
 alias todos="ack --recurse --group '(TODO|todo|Todo|XXX|BUG|HACK|FIX(ME)?):'"
 
+function rdp() {
+    if hash xfreerdp >/dev/null 2>&1; then
+        if [[ $# -eq  0 || $# > 2 ]]; then
+            echo "Usage: rdp user host"
+        else
+            xfreerdp /u:$1 /v:$2 /cert-ignore /clipboard /fonts /auto-reconnect /smart-sizing:1836x1377 /size:1224x918 /home-drive -grab-keyboard
+        fi
+    else
+        echo "xfreerdp not installed"
+    fi
+}
