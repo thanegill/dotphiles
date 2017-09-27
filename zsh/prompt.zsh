@@ -90,11 +90,13 @@ function is_ssh() {
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
+TMP_PROMPT="$(mktemp)"
+
 ASYNC_PROC=0
 function precmd() {
     function async() {
         # save to temp file
-        printf "%s" "$(is_ssh)$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > "${ZDOTDIR}/.zsh_tmp_prompt"
+        printf "%s" "$(is_ssh)$(user_host)$(git_custom_status)$(virtualenv_promt_info)$(rvm_promt_version)$(get_pwd)" > $TMP_PROMPT
 
         # signal parent
         kill -s USR1 $$
@@ -113,8 +115,8 @@ function precmd() {
 function TRAPUSR1() {
     # read from temp file
     # Clear entire line and go to begging of line
-    print -P "\033[2K\r$(cat ${ZDOTDIR}/.zsh_tmp_prompt)"
-    rm "${ZDOTDIR}/.zsh_tmp_prompt"
+    print -P "\033[2K\r$(cat $TMP_PROMPT)"
+    rm $TMP_PROMPT
     # reset proc number
     ASYNC_PROC=0
 
