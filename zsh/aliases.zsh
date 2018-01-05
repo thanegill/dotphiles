@@ -85,7 +85,7 @@ alias ax="chmod a+x"
 alias externalip="curl icanhazip.com"
 
 # list TODO lines from the current project
-alias todos="ack --recurse --group '(TODO|todo|Todo|XXX|BUG|HACK|FIX(ME)?):'"
+alias todos="ack '(TODO|todo|Todo|(?<!DE)BUG|XXX|HACK|FIX(ME)?)'"
 
 function rdp() {
     if hash xfreerdp >/dev/null 2>&1; then
