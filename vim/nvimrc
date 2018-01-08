@@ -10,11 +10,11 @@
 "    - Tab, Indent, and Folding
 "    - Moving Around
 "    - Tabs, Windows and Buffers
-"    - Tab Completion
 "    - Editing Mappings
 "    - Search
 "    - Spell Check
 "    - Copy Paste
+
 
 " Original source: http://amix.dk/vim/vimrc.txt
 
@@ -65,6 +65,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'ervandew/supertab'
 
 " Text Objects
 NeoBundle "kana/vim-textobj-user"
@@ -376,27 +377,6 @@ nnoremap <leader>tm :tabmove<cr>
 " Opens a new tab with the current buffer's path. Super useful when editing
 " files in the same directory.
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Tab Completion:
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"" Tab completion
-function! Inserttabwrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-n>"
-    endif
-endfunction
-
-" Map <tab> to Inserttabwarpper()
-inoremap <tab> <c-o>=Inserttabwrapper()<cr>
-
-" Shift tab to backwards search
-inoremap <s-tab> <c-x>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
