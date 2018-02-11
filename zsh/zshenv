@@ -3,14 +3,12 @@ export ZDOTDIR="$HOME/.dotphiles/zsh"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # OSX
 
-    # `brew --prefix coreutils` set staticly for speed
-    local brew_prefix_coreutils="/usr/local/opt/coreutils"
-    export PATH="$HOME/.dotphiles/bin:$brew_prefix_coreutils/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-    export MANPATH=$brew_prefix_coreutils/libexec/gnuman:$MANPATH
+    export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+    export MANPATH=$HOME/.nix-profile/share/man:$MANPATH
 else
     export PATH="$HOME/.dotphiles/bin:$PATH"
     # Non-OSX
 fi
 
-# Add RVM to PATH for scripting
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && export PATH="$PATH:$HOME/.rvm/bin"
+# Add nix
+source "$HOME/.nix-profile/etc/profile.d/nix.sh"
