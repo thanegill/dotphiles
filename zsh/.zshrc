@@ -31,8 +31,6 @@ plugins=(\
 # If OSX add these plugins as well.
 if [[ "$OSTYPE" == "darwin"* ]]; then
     plugins+=( \
-        brew \
-        brew-cask \
         pod \
     )
 fi
