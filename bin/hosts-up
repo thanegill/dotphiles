@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+nmap -sn $1 -oG - | head -n-1 | tail -n+2 | column -t
