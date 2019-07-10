@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 import os
 import sys
@@ -45,27 +45,27 @@ def install_binary(to_install):
 
             # Install homebrew.
             if not _cmd_exists('brew'):
-                print e_arrow.format('Installing Homebrew')
+                print(e_arrow.format('Installing Homebrew'))
                 os.system('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
 
             # If Homebrew was installed install ``to_install``.
             if _cmd_exists('brew'):
-                print e_arrow.format('Updating Brew')
+                print(e_arrow.format('Updating Brew'))
                 os.system('brew update')
-                print e_arrow.format('Installing %s' % to_install)
+                print(e_arrow.format('Installing %s' % to_install))
                 os.system('brew install %s' % to_install)
 
         # Ubuntu or Debian (apt-get)
         elif ('ubuntu' or 'debian') in platform.platform().lower():
-            print e_arrow.format('Installing %s' % to_install)
+            print(e_arrow.format('Installing %s' % to_install))
             os.system('sudo apt-get -qy install %s' % to_install)
 
         # CentOS or Fedora (yum)
         elif ('centos' or 'fedora') in platform.platform().lower():
-            print e_arrow.format('Installing %s' % to_install)
+            print(e_arrow.format('Installing %s' % to_install))
             os.system('sudo yum -q -y install %s' % to_install)
     else:
-        print e_arrow.format('%s was already installed' % to_install)
+        print(e_arrow.format('%s was already installed' % to_install))
 
 
 def _get_link_philes(link_philes_file):
@@ -121,7 +121,7 @@ def unlink_philes(link_philes_file):
     for phile in philes:
         if os.path.islink(phile[1]):
             os.remove(phile[1])
-    print e_warning.format('Removed old links')
+    print(e_warning.format('Removed old links'))
 
 
 def link_philes(link_philes_file):
@@ -133,14 +133,14 @@ def link_philes(link_philes_file):
     for phile in philes:
         # Skip nonexistent sources
         if not os.path.exists(phile[0]):
-            print e_error.format('Link %s -> %s was not created, as the source does not exist.'
-                    % (phile[1], phile[0]))
+            print(e_error.format('Link %s -> %s was not created, as the source does not exist.'
+                    % (phile[1], phile[0])))
             continue
 
         # Remove conflicting link
         if os.path.islink(phile[1]):
-            print e_warning.format('Removing link %s -> %s, as it conflicts with a link that is being created.' %
-                    (phile[1], os.path.normpath(os.readlink(os.path.expanduser(phile[1])))))
+            print(e_warning.format('Removing link %s -> %s, as it conflicts with a link that is being created.' %
+                    (phile[1], os.path.normpath(os.readlink(os.path.expanduser(phile[1]))))))
             os.remove(phile[1])
 
         # Backup file or directory if not symlink
@@ -148,18 +148,18 @@ def link_philes(link_philes_file):
             or os.path.isdir(phile[1]))
             and not os.path.islink(phile[1])):
             os.rename(phile[1], ('%s.backup' % phile[1]))
-            print e_warning.format('File "%s" has been backed up to "%s".' %
-                    (phile[1], ('%s.backup' % phile[1])))
+            print(e_warning.format('File "%s" has been backed up to "%s".' %
+                    (phile[1], ('%s.backup' % phile[1]))))
 
         if not os.path.exists(os.path.dirname(phile[1])):
             os.makedirs(os.path.dirname(phile[1]))
-            print e_arrow.format('Create directry %s' % os.path.dirname(phile[1]))
+            print(e_arrow.format('Create directry %s' % os.path.dirname(phile[1])))
 
-        print e_arrow.format('Creating link %s -> %s' % (phile[1], phile[0]))
+        print(e_arrow.format('Creating link %s -> %s' % (phile[1], phile[0])))
 
         os.symlink(phile[0], phile[1])
 
-    print e_success.format('All files have been linked.')
+    print(e_success.format('All files have been linked.'))
 
 
 def _is_git_repo(directory):
@@ -179,7 +179,7 @@ def _git_submodule_update(repo_directory):
 
     if _is_git_repo(repo_directory):
         os.chdir(repo_directory)
-        print e_arrow.format('Updating submoduals...')
+        print(e_arrow.format('Updating submoduals...'))
 
         if os.system('git submodule foreach git pull origin master') is not 0:
             raise OSError
@@ -195,7 +195,7 @@ def git_clone(repo_directory, repourl, branch):
     repo_directory = os.path.normpath(os.path.expanduser(repo_directory))
 
     if not os.path.exists(repo_directory):
-        print e_arrow.format('Downloading dotphiles...')
+        print(e_arrow.format('Downloading dotphiles...'))
         if os.system('git clone --depth 5 --branch %s --recursive %s %s' %
             (branch, repourl, repo_directory)) is not 0:
             raise OSError
@@ -213,7 +213,7 @@ def git_pull(repo_directory, branch):
 
     if _is_git_repo(repo_directory):
         os.chdir(repo_directory)
-        print e_arrow.format('Updating dotphiles...')
+        print(e_arrow.format('Updating dotphiles...'))
         if os.system('git pull origin %s' % branch) is not 0:
             raise OSError
         _git_submodule_update(repo_directory)
@@ -227,7 +227,7 @@ def vim_update_plugins(dotphiles_directory):
     if os.system(os.path.join(dotphiles_directory,
         'vim/bundle/neobundle.vim/bin/neoinstall')) is not 0:
         raise OSError
-    print e_success.format('Vim plugins installed.')
+    print(e_success.format('Vim plugins installed.'))
 
 
 def vim_clean_plugins():
@@ -235,159 +235,160 @@ def vim_clean_plugins():
     """
     if os.system('vim +NeoBundleClean\! +qall') is not 0:
         raise OSError
-    print e_success.format('Unused Vim plugins removed.')
+    print(e_success.format('Unused Vim plugins removed.'))
+
+
+def install(args):
+    install_binary('git')
+
+    try:
+        git_clone(args.dotphilesdir, args.repourl, args.branch)
+    except IOError:
+        print(e_error.format('Directory %s alrady exists. Try `dotphiles update` instead?' %
+                args.dotphilesdir))
+        sys.exit(1)
+    except OSError:
+        print(e_error.format('Something went wrong with git. Try cloning manually.'))
+        sys.exit(1)
+
+    try:
+        link_philes(args.linkphile)
+    except IOError:
+        print(e_error.format('linkphile "%s" does not exist.' %
+                args.linkphile))
+        sys.exit(1)
+
+    install_binary('vim')
+
+    if args.novim:
+        print(e_arrow.format('Skipping Vim plugin install.'))
+    else:
+        try:
+            vim_update_plugins(args.dotphilesdir)
+        except OSError:
+            print(e_error.format('Something went wrong while installing Vim plugings. Try manually.'))
+
+    install_binary('zsh')
+
+    print(e_success.format('All done! Your dotphiles are now installed!'))
+
+def update(args):
+
+    # Unlink old files first, incase one was changed or deleted
+    try:
+        unlink_philes(args.linkphile)
+    except IOError:
+        print(e_error.format('linkphile "%s" does not exist.' %
+                args.linkphile))
+        sys.exit(1)
+
+    # Pull new dotphiles repo
+    try:
+        git_pull(args.dotphilesdir, args.branch)
+    except OSError:
+        print(e_error.format('Something went wrong with git. Try pulling manually.'))
+        print(e_arrow.format('Relinking files...'))
+
+        # Relink files if update failed
+        try:
+            link_philes(args.linkphile)
+        except IOError:
+            print(e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
+                    args.linkphile))
+        sys.exit(1)
+
+    # Link new dotphiles
+    try:
+        link_philes(args.linkphile)
+    except IOError:
+        print(e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
+                args.linkphile))
+        sys.exit(1)
+
+    # Update vim plugins
+    if args.novim:
+        # Skip vim plugins
+        print(e_arrow.format('Skipping Vim plugin updates'))
+    else:
+        # Install and update plugins
+        try:
+            vim_update_plugins(args.dotphilesdir)
+        except OSError:
+            print(e_error.format('Something went wrong while installing Vim plugings. Try manually.'))
+        # Cleanup old plugins
+        try:
+            vim_clean_plugins()
+        except OSError:
+            print(e_error.format('Something went wrong while removing Vim plugings. Try manually.'))
+
+    print(e_success.format('All done! Your dotphiles are now updated!'))
+
+
+
+def link(args):
+    try:
+        if args.relink:
+            unlink_philes(args.linkphile)
+            link_philes(args.linkphile)
+        elif args.unlink:
+            unlink_philes(args.linkphile)
+        else:
+            link_philes(args.linkphile)
+    except IOError:
+        print(e_error.format('linkphile "%s" does not exist.' %
+                args.linkphile))
+        sys.exit(1)
+
+parser = argparse.ArgumentParser(prog='dotphiles')
+subparsers = parser.add_subparsers(help='sub-command --help')
+
+
+parser_install = subparsers.add_parser('install', help='install --help')
+parser_install.set_defaults(func=install)
+parser_install.add_argument('--repourl', action='store', metavar='URL',
+        help='URL for the dotphile repo (default: "%(default)s")',
+        default='https://github.com/thanegill/dotphiles.git')
+parser_install.add_argument('--branch', action='store', default='master',
+        help='Branch to use for cloning (default: "%(default)s")')
+parser_install.add_argument('--home', action='store', metavar='PATH',
+        type=os.path.join, default='~/',
+        help='Home directory to install dotphiles to. Can be any directory. (default: "%(default)s")')
+parser_install.add_argument('--dotphilesdir', action='store', metavar='PATH',
+        type=os.path.join, default='~/.dotphiles',
+        help='Directory name for dotphiles. (default: "%(default)s")')
+parser_install.add_argument('--linkphile', action='store', metavar='PATH',
+        type=os.path.join, default='~/.dotphiles/linkphiles',
+        help='File with to link dotphiles. (default: "%(default)s")')
+parser_install.add_argument('--force', action='store_true',
+        help='Force removal of old dotphiles and installation of vim plugins.')
+parser_install.add_argument('--novim', action='store_true',
+        help='Do not install Vim plugins. NeoBundle will still be installed. Useful for faster install.')
+
+parser_update = subparsers.add_parser('update', help='update --help')
+parser_update.set_defaults(func=update)
+parser_update.add_argument('--branch', action='store', default='master',
+        help='Branch to use for cloning (default: "%(default)s")')
+parser_update.add_argument('--dotphilesdir', action='store', metavar='PATH',
+        type=os.path.join, default='~/.dotphiles',
+        help='Directory name for dotphiles. (default: "%(default)s")')
+parser_update.add_argument('--linkphile', action='store', metavar='PATH',
+        type=os.path.join, default='~/.dotphiles/linkphiles',
+        help='File with to link dotphiles. (default: "%(default)s")')
+parser_update.add_argument('--novim', action='store_true',
+        help='Do not update Vim plugins. Useful for faster update.')
+
+parser_link = subparsers.add_parser('link', help='relink --help')
+parser_link.set_defaults(func=link)
+parser_link.add_argument('--linkphile', action='store', metavar='path',
+        type=os.path.join, default='~/.dotphiles/linkphiles',
+        help='linkphile. (default: "%(default)s")')
+parser_link_group = parser_link.add_mutually_exclusive_group()
+parser_link_group.add_argument('--relink', action='store_true',
+        help='relink all links listed in linkphile.')
+parser_link_group.add_argument('--unlink', action='store_true',
+        help='delete all links in linkphile.')
 
 if __name__ == '__main__':
-
-    def install(args):
-        install_binary('git')
-
-        try:
-            git_clone(args.dotphilesdir, args.repourl, args.branch)
-        except IOError:
-            print e_error.format('Directory %s alrady exists. Try `dotphiles update` instead?' %
-                    args.dotphilesdir)
-            sys.exit(1)
-        except OSError:
-            print e_error.format('Something went wrong with git. Try cloning manually.')
-            sys.exit(1)
-
-        try:
-            link_philes(args.linkphile)
-        except IOError:
-            print e_error.format('linkphile "%s" does not exist.' %
-                    args.linkphile)
-            sys.exit(1)
-
-        install_binary('vim')
-
-        if args.novim:
-            print e_arrow.format('Skipping Vim plugin install.')
-        else:
-            try:
-                vim_update_plugins(args.dotphilesdir)
-            except OSError:
-                print e_error.format('Something went wrong while installing Vim plugings. Try manually.')
-
-        install_binary('zsh')
-
-        print e_success.format('All done! Your dotphiles are now installed!')
-
-    def update(args):
-
-        # Unlink old files first, incase one was changed or deleted
-        try:
-            unlink_philes(args.linkphile)
-        except IOError:
-            print e_error.format('linkphile "%s" does not exist.' %
-                    args.linkphile)
-            sys.exit(1)
-
-        # Pull new dotphiles repo
-        try:
-            git_pull(args.dotphilesdir, args.branch)
-        except OSError:
-            print e_error.format('Something went wrong with git. Try pulling manually.')
-            print e_arrow.format('Relinking files...')
-
-            # Relink files if update failed
-            try:
-                link_philes(args.linkphile)
-            except IOError:
-                print e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
-                        args.linkphile)
-            sys.exit(1)
-
-        # Link new dotphiles
-        try:
-            link_philes(args.linkphile)
-        except IOError:
-            print e_error.format('linkphile "%s" does not exist. Try linking with dotphiles link.' %
-                    args.linkphile)
-            sys.exit(1)
-
-        # Update vim plugins
-        if args.novim:
-            # Skip vim plugins
-            print e_arrow.format('Skipping Vim plugin updates')
-        else:
-            # Install and update plugins
-            try:
-                vim_update_plugins(args.dotphilesdir)
-            except OSError:
-                print e_error.format('Something went wrong while installing Vim plugings. Try manually.')
-            # Cleanup old plugins
-            try:
-                vim_clean_plugins()
-            except OSError:
-                print e_error.format('Something went wrong while removing Vim plugings. Try manually.')
-
-        print e_success.format('All done! Your dotphiles are now updated!')
-
-
-
-    def link(args):
-        try:
-            if args.relink:
-                unlink_philes(args.linkphile)
-                link_philes(args.linkphile)
-            elif args.unlink:
-                unlink_philes(args.linkphile)
-            else:
-                link_philes(args.linkphile)
-        except IOError:
-            print e_error.format('linkphile "%s" does not exist.' %
-                    args.linkphile)
-            sys.exit(1)
-
-    parser = argparse.ArgumentParser(prog='dotphiles')
-    subparsers = parser.add_subparsers(help='sub-command --help')
-
-
-    parser_install = subparsers.add_parser('install', help='install --help')
-    parser_install.set_defaults(func=install)
-    parser_install.add_argument('--repourl', action='store', metavar='URL',
-            help='URL for the dotphile repo (default: "%(default)s")',
-            default='https://github.com/thanegill/dotphiles.git')
-    parser_install.add_argument('--branch', action='store', default='master',
-            help='Branch to use for cloning (default: "%(default)s")')
-    parser_install.add_argument('--home', action='store', metavar='PATH',
-            type=os.path.join, default='~/',
-            help='Home directory to install dotphiles to. Can be any directory. (default: "%(default)s")')
-    parser_install.add_argument('--dotphilesdir', action='store', metavar='PATH',
-            type=os.path.join, default='~/.dotphiles',
-            help='Directory name for dotphiles. (default: "%(default)s")')
-    parser_install.add_argument('--linkphile', action='store', metavar='PATH',
-            type=os.path.join, default='~/.dotphiles/linkphiles',
-            help='File with to link dotphiles. (default: "%(default)s")')
-    parser_install.add_argument('--force', action='store_true',
-            help='Force removal of old dotphiles and installation of vim plugins.')
-    parser_install.add_argument('--novim', action='store_true',
-            help='Do not install Vim plugins. NeoBundle will still be installed. Useful for faster install.')
-
-    parser_update = subparsers.add_parser('update', help='update --help')
-    parser_update.set_defaults(func=update)
-    parser_update.add_argument('--branch', action='store', default='master',
-            help='Branch to use for cloning (default: "%(default)s")')
-    parser_update.add_argument('--dotphilesdir', action='store', metavar='PATH',
-            type=os.path.join, default='~/.dotphiles',
-            help='Directory name for dotphiles. (default: "%(default)s")')
-    parser_update.add_argument('--linkphile', action='store', metavar='PATH',
-            type=os.path.join, default='~/.dotphiles/linkphiles',
-            help='File with to link dotphiles. (default: "%(default)s")')
-    parser_update.add_argument('--novim', action='store_true',
-            help='Do not update Vim plugins. Useful for faster update.')
-
-    parser_link = subparsers.add_parser('link', help='relink --help')
-    parser_link.set_defaults(func=link)
-    parser_link.add_argument('--linkphile', action='store', metavar='path',
-            type=os.path.join, default='~/.dotphiles/linkphiles',
-            help='linkphile. (default: "%(default)s")')
-    parser_link_group = parser_link.add_mutually_exclusive_group()
-    parser_link_group.add_argument('--relink', action='store_true',
-            help='relink all links listed in linkphile.')
-    parser_link_group.add_argument('--unlink', action='store_true',
-            help='delete all links in linkphile.')
 
     args = parser.parse_args()
     args.func(args)
