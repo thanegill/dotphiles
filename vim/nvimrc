@@ -165,7 +165,7 @@ let g:markdown_fenced_languages = [
 "" Git Commmit Message
 
 " When commiting with git show diff in horizontal split using tpope/vim-fugitive
-autocmd FileType gitcommit DiffGitCached | wincmd p
+autocmd FileType gitcommit DiffGitCached | wincmd p | resize 20
 
 " Turn on spell check for commit messages
 autocmd FileType gitcommit setlocal spell!
