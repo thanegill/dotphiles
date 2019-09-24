@@ -142,10 +142,14 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.md.erb set filetype=markdown
 autocmd Filetype markdown setlocal wrap
 autocmd Filetype markdown setlocal linebreak
+autocmd Filetype markdown setlocal breakindent
 autocmd Filetype markdown setlocal nolist
 autocmd Filetype markdown setlocal spell!
+autocmd Filetype markdown setlocal textwidth=0
 let g:markdown_fenced_languages = [
     \ 'sh',
+    \ 'bash=sh',
+    \ 'zsh',
     \ 'css',
     \ 'html',
     \ 'javascript',
@@ -229,7 +233,7 @@ if has("gui_running")
     endif
 
     " Set window size. 999 lines so that it's always vertically maximized
-    set lines=999 columns=115
+    set lines=999 columns=120
 
     " Hide GUI toolbar
     set guioptions-=T
@@ -419,7 +423,7 @@ set hlsearch
 map <silent> <leader><space> :silent :nohlsearch<cr>
 
 " Search and replace word under cursor
-nnoremap # :%s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap # :%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
